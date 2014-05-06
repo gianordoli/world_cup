@@ -17,5 +17,11 @@ class Player{
     end.x = x2;
     end.y = y2;
   }
+  
+  void display(){
+    noFill();
+    stroke(0, 100);
+    line(start.x, start.y, end.x, end.y);
+  }
 
 }

@@ -25,13 +25,17 @@ void setup(){
 }
 
 void draw(){
-//  background(255);
+  background(255);
   shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   
   for (Country c : allCountries) {
     c.display();
   }
-  noLoop();
+  
+  for (Player p : allPlayers) {
+    p.display();
+  }  
+
 //  endRecord();
 //  exit();
 }
@@ -77,11 +81,7 @@ void setPlayersPositions(){
         break;
       }
     }
-    if(y2 == 0){
-      println(thisPlayer.name + "\t" + thisPlayer.country + "\t" + thisPlayer.club + "\t" + thisPlayer.clubCountry);
-    }
     thisPlayer.setPos(x1, y1, x2, y2);
-    line(x1, y1, x2, y2);
   }
 }
 

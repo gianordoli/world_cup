@@ -13,40 +13,18 @@ void setup() {
   session = new TembooSession("gianordoli", "myFirstApp", myCredentials[0]);
   allResults = new JSONArray();  
   
-  createJSONArray("countries.txt");
-  parseCoordinates();
-  exit();  
-}
+//  createJSONArray("countries.txt");
+//  parseCoordinates();
 
-void createJSONArray(String countriesFilename){
-  
-  String[] allCountries = loadStrings(countriesFilename);
+  String[] allCountries = loadStrings("countries.txt");
   countriesCoordinates = new String[allCountries.length];
   
   for(int i = 0; i < allCountries.length; i++){
     // Run the FindByAddress Choreo function
     runFindByAddressChoreo(allCountries[i], i);
   }
-//  println(allResults);
-  saveJSONArray(allResults, "coordinates.json");  
-}
 
-void parseCoordinates(){
-  for(int i = 0; i < allResults.size(); i++){
-    JSONObject obj = allResults.getJSONObject(i);
-    JSONObject query = obj.getJSONObject("query");
-    JSONObject results = query.getJSONObject("results");
-    JSONObject Result = results.getJSONObject("Result");
-    String country = Result.getString("country");
-    String latitude = Result.getString("offsetlat");
-    String longitude = Result.getString("offsetlon");    
-//    String latitude = Result.getString("latitude");
-//    String longitude = Result.getString("longitude");
-    println("latitude: " + latitude + ", longitude: " + longitude);
-  
-    countriesCoordinates[i] = country + "\t" + latitude + "\t" + longitude;    
-  }
-  saveStrings("coordinates.tsv", countriesCoordinates);
+  exit();  
 }
 
 void runFindByAddressChoreo(String address, int index) {
@@ -68,4 +46,25 @@ void runFindByAddressChoreo(String address, int index) {
   // Print results
 //  println(findByAddressResults.getResponse());
     allResults.append(parseJSONObject(findByAddressResults.getResponse()));
+    
+    String country, latitude, longitude;
+    
+    JSONObject obj = parseJSONObject(findByAddressResults.getResponse());
+    JSONObject query = obj.getJSONObject("query");
+    JSONObject results = query.getJSONObject("results");
+    if(address.equals("England") || address.equals("Scotland") || address.equals("Wales")){
+      JSONArray ResultArray = results.getJSONArray("Result");
+      country = ResultArray.getJSONObject(1).getString("state");
+      latitude = ResultArray.getJSONObject(1).getString("offsetlat");
+      longitude = ResultArray.getJSONObject(1).getString("offsetlon");
+    }else{
+      JSONObject Result = results.getJSONObject("Result");
+      country = Result.getString("country");
+      latitude = Result.getString("offsetlat");
+      longitude = Result.getString("offsetlon"); 
+    }
+    println("country:" + country + "\t latitude: " + latitude + "\t longitude: " + longitude);
+    countriesCoordinates[index] = country + "\t" + latitude + "\t" + longitude;
+    saveJSONArray(allResults, "coordinates.json");
+    saveStrings("coordinates.tsv", countriesCoordinates);
 }

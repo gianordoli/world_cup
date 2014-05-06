@@ -32,7 +32,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:02Z",
+    "created": "2014-05-06T20:02:58Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -68,7 +68,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:03Z",
+    "created": "2014-05-06T20:02:59Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -104,7 +104,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T15:42:27Z",
+    "created": "2014-05-06T20:03:00Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -140,7 +140,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:04Z",
+    "created": "2014-05-06T20:03:00Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -176,7 +176,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:05Z",
+    "created": "2014-05-06T20:03:01Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -212,7 +212,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:06Z",
+    "created": "2014-05-06T19:59:53Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -248,7 +248,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:07Z",
+    "created": "2014-05-06T20:03:03Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -284,7 +284,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:08Z",
+    "created": "2014-05-06T20:03:04Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -320,7 +320,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:08Z",
+    "created": "2014-05-06T19:36:17Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -356,7 +356,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:09Z",
+    "created": "2014-05-06T20:03:05Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -392,7 +392,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:10Z",
+    "created": "2014-05-06T19:59:58Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -428,7 +428,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:11Z",
+    "created": "2014-05-06T20:03:07Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -464,7 +464,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:12Z",
+    "created": "2014-05-06T20:00:00Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -500,7 +500,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:13Z",
+    "created": "2014-05-06T20:03:09Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -536,7 +536,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:13Z",
+    "created": "2014-05-06T20:03:10Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -545,33 +545,34 @@
       "line4": "United States",
       "street": null,
       "state": null,
-      "offsetlat": "38.89037",
+      "offsetlat": "37.167931",
       "house": null,
       "city": null,
       "xstreet": null,
       "name": null,
       "countycode": null,
-      "longitude": "-77.03196",
+      "longitude": "-123.0456",
       "woetype": "12",
       "unittype": null,
-      "offsetlon": "-77.03196",
+      "offsetlon": "-95.845016",
       "statecode": null,
       "hash": null,
       "postal": null,
       "woeid": "23424977",
       "neighborhood": null,
+      "uzip": null,
       "country": "United States",
       "unit": null,
       "county": null,
       "quality": "10",
-      "radius": "3217700",
-      "latitude": "38.89037",
+      "radius": "6245800",
+      "latitude": "45.176384",
       "line1": null,
       "line3": null,
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:14Z",
+    "created": "2014-05-06T20:03:10Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -607,7 +608,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:15Z",
+    "created": "2014-05-06T20:03:11Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -643,7 +644,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:16Z",
+    "created": "2014-05-06T20:03:12Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -679,7 +680,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:17Z",
+    "created": "2014-05-06T20:03:13Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -715,7 +716,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:18Z",
+    "created": "2014-05-06T20:03:14Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -751,7 +752,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:19Z",
+    "created": "2014-05-06T20:03:15Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -787,7 +788,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:20Z",
+    "created": "2014-05-06T20:03:15Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -823,7 +824,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:21Z",
+    "created": "2014-05-06T20:03:16Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -859,7 +860,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:22Z",
+    "created": "2014-05-06T20:03:17Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -895,7 +896,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:13:36Z",
+    "created": "2014-05-06T20:03:18Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -931,43 +932,75 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:23Z",
+    "created": "2014-05-06T19:36:30Z",
     "lang": "en-US"
   }},
   {"query": {
-    "results": {"Result": {
-      "countrycode": "GB",
-      "line4": "United Kingdom",
-      "street": null,
-      "state": null,
-      "offsetlat": "54.314072",
-      "house": null,
-      "city": null,
-      "xstreet": null,
-      "name": null,
-      "countycode": null,
-      "longitude": "-5.822485",
-      "woetype": "12",
-      "unittype": null,
-      "offsetlon": "-2.23001",
-      "statecode": null,
-      "hash": null,
-      "postal": null,
-      "woeid": "23424975",
-      "neighborhood": null,
-      "uzip": null,
-      "country": "United Kingdom",
-      "unit": null,
-      "county": null,
-      "quality": "10",
-      "radius": "1145100",
-      "latitude": "55.008391",
-      "line1": null,
-      "line3": null,
-      "line2": null
-    }},
-    "count": 1,
-    "created": "2014-05-06T16:35:24Z",
+    "results": {"Result": [
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "England",
+        "offsetlat": "51.50643",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-0.12721",
+        "woetype": "12",
+        "unittype": null,
+        "offsetlon": "-0.12721",
+        "statecode": "ENG",
+        "hash": null,
+        "postal": null,
+        "woeid": "23424975",
+        "neighborhood": null,
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "541300",
+        "latitude": "51.50643",
+        "line1": null,
+        "line3": null,
+        "line2": "England"
+      },
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "England",
+        "offsetlat": "52.88356",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-2.30546",
+        "woetype": "8",
+        "unittype": null,
+        "offsetlon": "-1.97406",
+        "statecode": "ENG",
+        "hash": null,
+        "postal": null,
+        "woeid": "24554868",
+        "neighborhood": null,
+        "uzip": "ST14 8",
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "548600",
+        "latitude": "52.84145",
+        "line1": null,
+        "line3": null,
+        "line2": "England"
+      }
+    ]},
+    "count": 2,
+    "created": "2014-05-06T20:03:20Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -1003,7 +1036,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:25Z",
+    "created": "2014-05-06T20:03:21Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -1039,7 +1072,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:26Z",
+    "created": "2014-05-06T19:36:33Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -1075,7 +1108,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:27Z",
+    "created": "2014-05-06T20:03:22Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -1111,7 +1144,7 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:28Z",
+    "created": "2014-05-06T20:03:23Z",
     "lang": "en-US"
   }},
   {"query": {
@@ -1147,7 +1180,466 @@
       "line2": null
     }},
     "count": 1,
-    "created": "2014-05-06T16:35:29Z",
+    "created": "2014-05-06T20:03:24Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "CA",
+      "line4": "Canada",
+      "street": null,
+      "state": null,
+      "offsetlat": "56.954681",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "-96.811451",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "-98.308968",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424775",
+      "neighborhood": null,
+      "uzip": "R0B",
+      "country": "Canada",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "6405400",
+      "latitude": "62.395819",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:25Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "UA",
+      "line4": "Ukraine",
+      "street": null,
+      "state": null,
+      "offsetlat": "48.382881",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "31.173445",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "31.173441",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424976",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Ukraine",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "1006900",
+      "latitude": "48.382885",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:26Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "TR",
+      "line4": "Turkey",
+      "street": null,
+      "state": null,
+      "offsetlat": "38.957741",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "35.2469",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "35.431702",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424969",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Turkey",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "1066800",
+      "latitude": "38.957735",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:27Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "AE",
+      "line4": "United Arab Emirates",
+      "street": null,
+      "state": null,
+      "offsetlat": "24.46919",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "54.37175",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "54.37175",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424738",
+      "neighborhood": null,
+      "country": "United Arab Emirates",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "271900",
+      "latitude": "24.46919",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:28Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "QA",
+      "line4": "Qatar",
+      "street": null,
+      "state": null,
+      "offsetlat": "25.3188",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "51.59226",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "51.196758",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424930",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Qatar",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "104400",
+      "latitude": "25.330205",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:29Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": [
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "Scotland",
+        "offsetlat": "55.95416",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-3.20277",
+        "woetype": "12",
+        "unittype": null,
+        "offsetlon": "-3.20277",
+        "statecode": "SCT",
+        "hash": null,
+        "postal": null,
+        "woeid": "23424975",
+        "neighborhood": null,
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "649900",
+        "latitude": "55.95416",
+        "line1": null,
+        "line3": null,
+        "line2": "Scotland"
+      },
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "Scotland",
+        "offsetlat": "56.652859",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-4.691075",
+        "woetype": "8",
+        "unittype": null,
+        "offsetlon": "-3.99667",
+        "statecode": "SCT",
+        "hash": null,
+        "postal": null,
+        "woeid": "12578048",
+        "neighborhood": null,
+        "uzip": null,
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "650900",
+        "latitude": "57.74383",
+        "line1": null,
+        "line3": null,
+        "line2": "Scotland"
+      }
+    ]},
+    "count": 2,
+    "created": "2014-05-06T20:03:30Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "SA",
+      "line4": "Saudi Arabia",
+      "street": null,
+      "state": null,
+      "offsetlat": "24.26119",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "45.087477",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "45.120331",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424938",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Saudi Arabia",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "1177700",
+      "latitude": "24.217325",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:30Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": [
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "Wales",
+        "offsetlat": "51.48127",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-3.18072",
+        "woetype": "12",
+        "unittype": null,
+        "offsetlon": "-3.18072",
+        "statecode": "WLS",
+        "hash": null,
+        "postal": null,
+        "woeid": "23424975",
+        "neighborhood": null,
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "187800",
+        "latitude": "51.48127",
+        "line1": null,
+        "line3": null,
+        "line2": "Wales"
+      },
+      {
+        "countrycode": "GB",
+        "line4": "United Kingdom",
+        "street": null,
+        "state": "Wales",
+        "offsetlat": "52.404449",
+        "house": null,
+        "city": null,
+        "xstreet": null,
+        "name": null,
+        "countycode": null,
+        "longitude": "-4.031845",
+        "woetype": "8",
+        "unittype": null,
+        "offsetlon": "-3.98512",
+        "statecode": "WLS",
+        "hash": null,
+        "postal": null,
+        "woeid": "12578049",
+        "neighborhood": null,
+        "uzip": "SY23",
+        "country": "United Kingdom",
+        "unit": null,
+        "county": null,
+        "quality": "20",
+        "radius": "188200",
+        "latitude": "52.40519",
+        "line1": null,
+        "line3": null,
+        "line2": "Wales"
+      }
+    ]},
+    "count": 2,
+    "created": "2014-05-06T20:03:32Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "NO",
+      "line4": "Norway",
+      "street": null,
+      "state": null,
+      "offsetlat": "64.556534",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "17.800664",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "12.66617",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424910",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Norway",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "1753400",
+      "latitude": "64.574046",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:33Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "DK",
+      "line4": "Denmark",
+      "street": null,
+      "state": null,
+      "offsetlat": "56.276089",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "11.63398",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "9.51695",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424796",
+      "neighborhood": null,
+      "uzip": null,
+      "country": "Denmark",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "396300",
+      "latitude": "56.15554",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T20:03:34Z",
+    "lang": "en-US"
+  }},
+  {"query": {
+    "results": {"Result": {
+      "countrycode": "SE",
+      "line4": "Sweden",
+      "street": null,
+      "state": null,
+      "offsetlat": "62.198448",
+      "house": null,
+      "city": null,
+      "xstreet": null,
+      "name": null,
+      "countycode": null,
+      "longitude": "17.56622",
+      "woetype": "12",
+      "unittype": null,
+      "offsetlon": "17.55142",
+      "statecode": null,
+      "hash": null,
+      "postal": null,
+      "woeid": "23424954",
+      "neighborhood": null,
+      "uzip": "86296",
+      "country": "Sweden",
+      "unit": null,
+      "county": null,
+      "quality": "10",
+      "radius": "1671000",
+      "latitude": "62.198448",
+      "line1": null,
+      "line3": null,
+      "line2": null
+    }},
+    "count": 1,
+    "created": "2014-05-06T19:36:46Z",
     "lang": "en-US"
   }}
 ]

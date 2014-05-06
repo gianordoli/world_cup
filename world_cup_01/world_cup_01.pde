@@ -20,17 +20,18 @@ void setup(){
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
+  setPlayersPositions();
 //  debug();
 }
 
 void draw(){
-  background(255);
+//  background(255);
   shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   
   for (Country c : allCountries) {
     c.display();
-  }  
-  
+  }
+  noLoop();
 //  endRecord();
 //  exit();
 }
@@ -55,11 +56,37 @@ void loadCountries(String filename){
   } 
 }
 
+void setPlayersPositions(){
+  PVector center = new PVector(width/2, height/2);
+  float radius = 150*mm;
+  
+  for(int i = 0; i < allPlayers.size(); i++){
+    
+    Player thisPlayer = allPlayers.get(i);
+    float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.25 * PI);
+    float x1 = center.x + cos(angle) * radius;
+    float y1 = center.y + sin(angle) * radius;
+    float x2 = 0;
+    float y2 = 0;
+    
+    for(int j = 0; j < allCountries.size(); j++){
+      Country thisCountry = allCountries.get(j);
+      if(thisPlayer.clubCountry.equals(thisCountry.name)){
+        x2 = thisCountry.pos.x;
+        y2 = thisCountry.pos.y;
+        break;
+      }
+    }
+    if(y2 == 0){
+      println(thisPlayer.name + "\t" + thisPlayer.country + "\t" + thisPlayer.club + "\t" + thisPlayer.clubCountry);
+    }
+    thisPlayer.setPos(x1, y1, x2, y2);
+    line(x1, y1, x2, y2);
+  }
+}
+
 void debug(){
   for(Player p : allPlayers){
-    println(p.name + ", " + p.country + ", " + p.club + ", " + p.clubCountry);
+    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end); 
   }
-  for(Country c : allCountries){
-    println(c.name + ", " + c.lat + ", " + c.lng);
-  }  
 }

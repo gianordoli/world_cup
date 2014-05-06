@@ -1,25 +1,27 @@
 class Country {
 
   String name;
-  float lat;
-  float lng;
+  PVector pos;
 
-  Country(String _name, float _lat, float _lng) {
+  Country(String _name, float lat, float lng) {
     name = _name;
-    lat = _lat;
-    lng = _lng;
+    pos = new PVector();
+    setPos(lat, lng);
+  }
+  
+  void setPos(float lat, float lng){
+    // Equirectangular projection
+    pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
+    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);       
   }
 
   void display() {
-    // Equirectangular projection
-    float x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    float y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
     
     noStroke();
     fill(240, 255, 255);
-    ellipse(x, y, 5, 5);
+    ellipse(pos.x, pos.y, 5, 5);
     
-    text(name, x, y);
+    text(name, pos.x, pos.y);
   }
 }
 

@@ -6,13 +6,16 @@ TembooSession session;
 
 void setup() {
   String[] myCredentials = loadStrings("credentials.txt");
-//  print(myCredentials[0]);
   session = new TembooSession("gianordoli", "myFirstApp", myCredentials[0]);
-  // Run the FindByAddress Choreo function
-  runFindByAddressChoreo();
+  
+  String[] allCountries = loadStrings("countries.txt");
+  for(String c : allCountries){
+    // Run the FindByAddress Choreo function
+    runFindByAddressChoreo(c);
+  }
 }
 
-void runFindByAddressChoreo() {
+void runFindByAddressChoreo(String address) {
   // Create the Choreo object using your Temboo session
   FindByAddress findByAddressChoreo = new FindByAddress(session);
 
@@ -21,7 +24,7 @@ void runFindByAddressChoreo() {
 
   // Set inputs
   findByAddressChoreo.setResponseFormat("json");
-  findByAddressChoreo.setAddress("Brazil");
+  findByAddressChoreo.setAddress(address);
 
   // Run the Choreo and store the results
   FindByAddressResultSet findByAddressResults = findByAddressChoreo.run();

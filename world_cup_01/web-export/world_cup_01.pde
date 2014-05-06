@@ -1,20 +1,36 @@
 //import processing.pdf.*;
 int mm = 3;
 ArrayList<Player> allPlayers;
-PShape map;
 ArrayList<Country> allCountries;
+
+PShape worldMap;
+PVector worldMapPos;
+PVector worldMapSize;
 
 void setup(){
   size(1212, 798);
+  colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
+
+  worldMap = loadShape("world_map_equirectangular.svg");
+  worldMapPos = new PVector(40*mm, 70*mm);
+  worldMapSize = new PVector(width - 100*mm, height - 100*mm);
+
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
-  debug();
+//  debug();
 }
 
 void draw(){
+  background(255);
+  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  
+  for (Country c : allCountries) {
+    c.display();
+  }  
+  
 //  endRecord();
 //  exit();
 }
@@ -53,7 +69,7 @@ class Country {
   float lat;
   float lng;
 
-  PlaceMarker(String _name, float _lat, float _lng) {
+  Country(String _name, float _lat, float _lng) {
     name = _name;
     lat = _lat;
     lng = _lng;
@@ -61,16 +77,13 @@ class Country {
 
   void display() {
     // Equirectangular projection
-    float x = map(lng, -180, 180, 0, width); 
-    float y = map(lat, 90, -90, 0, height);
+    float x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
+    float y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
     
     noStroke();
-    fill(255, 0, 0, 50);
-    ellipse(x, y, 15, 15);
-    fill(255, 0, 0, 200);
+    fill(240, 255, 255);
     ellipse(x, y, 5, 5);
     
-    fill(255);
     text(name, x, y);
   }
 }

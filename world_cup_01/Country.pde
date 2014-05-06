@@ -12,8 +12,8 @@ class Country {
 
   void display() {
     // Equirectangular projection
-    float x = map(lng, -180, 180, mapPos.x, mapPos.x + mapSize.x); 
-    float y = map(lat, 90, -90, mapPos.y, mapPos.y + mapSize.y);
+    float x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
+    float y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
     
     noStroke();
     fill(240, 255, 255);

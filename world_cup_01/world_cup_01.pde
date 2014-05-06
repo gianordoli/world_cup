@@ -3,29 +3,29 @@ int mm = 3;
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
 
-PShape map;
-PVector mapPos;
-PVector mapSize;
+PShape worldMap;
+PVector worldMapPos;
+PVector worldMapSize;
 
 void setup(){
   size(1212, 798);
   colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
-  map = loadShape("world_map_equirectangular.svg");
-  mapPos = new PVector(40*mm, 70*mm);
-  mapSize = new PVector(width - 100*mm, height - 100*mm);
+  worldMap = loadShape("world_map_equirectangular.svg");
+  worldMapPos = new PVector(40*mm, 70*mm);
+  worldMapSize = new PVector(width - 100*mm, height - 100*mm);
 
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
-  debug();
+//  debug();
 }
 
 void draw(){
   background(255);
-  shape(map, mapPos.x, mapPos.y, mapSize.x, mapSize.y);
+  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   
   for (Country c : allCountries) {
     c.display();

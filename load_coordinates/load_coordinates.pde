@@ -38,8 +38,10 @@ void parseCoordinates(){
     JSONObject results = query.getJSONObject("results");
     JSONObject Result = results.getJSONObject("Result");
     String country = Result.getString("country");
-    String latitude = Result.getString("latitude");
-    String longitude = Result.getString("longitude");
+    String latitude = Result.getString("offsetlat");
+    String longitude = Result.getString("offsetlon");    
+//    String latitude = Result.getString("latitude");
+//    String longitude = Result.getString("longitude");
     println("latitude: " + latitude + ", longitude: " + longitude);
   
     countriesCoordinates[i] = country + "\t" + latitude + "\t" + longitude;    

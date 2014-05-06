@@ -3,18 +3,18 @@ int mm = 3;
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
 
-PImage map;
-//PShape map;
+PShape map;
 PVector mapPos;
 PVector mapSize;
 
 void setup(){
   size(1212, 798);
+  colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
-  map = loadImage("worldmap-equirectangular-s.jpg");
-  mapPos = new PVector(10*mm, 10*mm);
-  mapSize = new PVector(width - 20*mm, height - 20*mm);
+  map = loadShape("world_map_equirectangular.svg");
+  mapPos = new PVector(40*mm, 70*mm);
+  mapSize = new PVector(width - 100*mm, height - 100*mm);
 
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();
@@ -24,7 +24,8 @@ void setup(){
 }
 
 void draw(){
-  image(map, mapPos.x, mapPos.y, mapSize.x, mapSize.y);
+  background(255);
+  shape(map, mapPos.x, mapPos.y, mapSize.x, mapSize.y);
   
   for (Country c : allCountries) {
     c.display();

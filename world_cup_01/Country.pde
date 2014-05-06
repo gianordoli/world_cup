@@ -16,12 +16,9 @@ class Country {
     float y = map(lat, 90, -90, mapPos.y, mapPos.y + mapSize.y);
     
     noStroke();
-    fill(255, 0, 0, 50);
-    ellipse(x, y, 15, 15);
-    fill(255, 0, 0, 200);
+    fill(240, 255, 255);
     ellipse(x, y, 5, 5);
     
-    fill(255);
     text(name, x, y);
   }
 }

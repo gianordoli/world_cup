@@ -25,8 +25,8 @@ class PlaceMarker {
     text(name, x, y);
   }
 
-  String toString() {
-    return name + " (" + lat + ", " + lng + ")";
-  }
+//  String toString() {
+//    return name + " (" + lat + ", " + lng + ")";
+//  }
 }
 

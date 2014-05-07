@@ -12,7 +12,7 @@ void setup(){
       countries.append(myLine[3]);
     }    
   }
-//  println(allCountries);
+  println(countries);
   
   String[] countriesArray = new String[countries.size()];
   for(int i = 0; i < countries.size(); i++){

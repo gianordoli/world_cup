@@ -8,7 +8,9 @@ PVector worldMapPos;
 PVector worldMapSize;
 
 void setup(){
-  size(1212, 798);
+//  JS:
+//  size(1212, 798);
+  size(404*mm, 266*mm);
   colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
@@ -20,6 +22,7 @@ void setup(){
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
+  visualSorting();
   setPlayersPositions();
 //  debug();
 }
@@ -58,6 +61,35 @@ void loadCountries(String filename){
     Country myCountry = new Country(name, lat, lng);
     allCountries.add(myCountry);
   } 
+}
+
+
+void visualSorting(){
+  String[] values = loadStrings("countries_visual_sorting.txt");
+  
+  //This temporary ArrayList will store the objects sorted
+  ArrayList<Player> tempList = new ArrayList<Player>();
+  
+  //Looping through each sorted value
+  for(int i = 0; i < values.length; i++){
+//    println(values[i]);
+    
+    //Looping through each object
+    for(int j = 0; j < allPlayers.size(); j++){
+      String thisValue = allPlayers.get(j).clubCountry;
+      
+      //If the sorted value is found...
+      if(values[i].equals(thisValue)){
+        //Add the object to the temporary list and jump to the next iteration
+        tempList.add(allPlayers.get(j));
+        allPlayers.remove(allPlayers.get(j));
+//        break;
+      }
+    }
+  }
+  
+  //Replace the original list with the sorted one
+  allPlayers = tempList;
 }
 
 void setPlayersPositions(){

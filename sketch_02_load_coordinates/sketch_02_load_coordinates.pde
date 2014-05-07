@@ -16,7 +16,13 @@ void setup() {
 //  createJSONArray("countries.txt");
 //  parseCoordinates();
 
-  String[] allCountries = loadStrings("countries.txt");
+  String[] allCountries = loadStrings("countries_translated.txt");
+//  String[] allCountries = loadStrings("countries.txt");
+  for(int i =0; i < allCountries.length; i++){
+    allCountries[i] = trim(allCountries[i]);
+    allCountries[i] = allCountries[i].toLowerCase();
+    println(allCountries[i]);
+  }
   countriesCoordinates = new String[allCountries.length];
   
   for(int i = 0; i < allCountries.length; i++){
@@ -52,7 +58,8 @@ void runFindByAddressChoreo(String address, int index) {
     JSONObject obj = parseJSONObject(findByAddressResults.getResponse());
     JSONObject query = obj.getJSONObject("query");
     JSONObject results = query.getJSONObject("results");
-    if(address.equals("England") || address.equals("Scotland") || address.equals("Wales")){
+    if(address.equals("england") || address.equals("scotland") || address.equals("wales")){
+      println("United Kingdom");
       JSONArray ResultArray = results.getJSONArray("Result");
       country = ResultArray.getJSONObject(1).getString("state");
       latitude = ResultArray.getJSONObject(1).getString("offsetlat");

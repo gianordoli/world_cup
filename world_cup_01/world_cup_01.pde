@@ -20,6 +20,7 @@ void setup(){
   worldMapSize = new PVector(width - 50*mm, height - 50*mm);
 
   sortedCountries = loadStrings("countries_visual_sorting.txt");
+//  sortedCountries = loadStrings("countries_sorted_by_angle.txt");
 
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();

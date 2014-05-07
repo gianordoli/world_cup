@@ -12,12 +12,8 @@ void setup() {
   String[] myCredentials = loadStrings("credentials.txt");
   session = new TembooSession("gianordoli", "myFirstApp", myCredentials[0]);
   allResults = new JSONArray();  
-  
-//  createJSONArray("countries.txt");
-//  parseCoordinates();
 
-  String[] allCountries = loadStrings("countries_translated.txt");
-//  String[] allCountries = loadStrings("countries.txt");
+  String[] allCountries = loadStrings("countries_list_en.txt");
   for(int i =0; i < allCountries.length; i++){
     allCountries[i] = trim(allCountries[i]);
     allCountries[i] = allCountries[i].toLowerCase();
@@ -72,6 +68,6 @@ void runFindByAddressChoreo(String address, int index) {
     }
     println("country:" + country + "\t latitude: " + latitude + "\t longitude: " + longitude);
     countriesCoordinates[index] = country + "\t" + latitude + "\t" + longitude;
-    saveJSONArray(allResults, "coordinates.json");
-    saveStrings("coordinates.tsv", countriesCoordinates);
+    saveJSONArray(allResults, "coordinates_en.json");
+    saveStrings("coordinates_en.tsv", countriesCoordinates);
 }

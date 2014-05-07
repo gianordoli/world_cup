@@ -9,7 +9,8 @@ void setup() {
   worldMap = loadImage("worldmap-equirectangular-s.jpg");
   center = new PVector(width/2, height/2 - 100);
   
-  queryAndCreatePlaces("coordinates.tsv");
+//  queryAndCreatePlaces("coordinates.tsv");
+  queryAndCreatePlaces("coordinates_pt.tsv");
   setPositions(placeMarkers);
   setAngles(placeMarkers);
   sortBy(placeMarkers, "angle");
@@ -34,6 +35,9 @@ void draw() {
 
 void queryAndCreatePlaces(String filename) {
   String[] tableString = loadStrings(filename);
+  for(int i =0; i < tableString.length; i++){
+    tableString[i] = trim(tableString[i]);
+  }  
   for(String lineString : tableString){
     String[] myLine = split(lineString, "\t");
     String name = myLine[0];
@@ -116,5 +120,5 @@ void saveSorted(ArrayList myList){
 //    println(pm.name + "\t" + pm.pos.x + "\t" + pm.pos.y + "\t" + pm.angle);
     sortedValues[i] = pm.name;
   }
-  saveStrings("countries_sorted_by_angle.txt", sortedValues);
+  saveStrings("countries_sorted_by_angle_pt.txt", sortedValues);
 }

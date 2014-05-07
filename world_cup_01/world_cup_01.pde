@@ -19,13 +19,16 @@ void setup(){
   worldMapPos = new PVector(10*mm, 70*mm);
   worldMapSize = new PVector(width - 50*mm, height - 50*mm);
 
-  sortedCountries = loadStrings("countries_visual_sorting.txt");
-//  sortedCountries = loadStrings("countries_sorted_by_angle.txt");
-
+//  sortedCountries = loadStrings("countries_visual_sorting.txt");
+  sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
+  for(int i =0; i < sortedCountries.length; i++){
+    sortedCountries[i] = trim(sortedCountries[i]);
+  }  
+  
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
-  loadCountries("coordinates.tsv");
+  loadCountriesCoordinates("coordinates_pt.tsv");
   setCountriesColors();  
   sortPlayersCountry();
   sortPlayersClub();
@@ -53,15 +56,15 @@ void loadPlayers(String filename){
   String[] tableString = loadStrings(filename);
   for(String lineString : tableString){
     String[] myLine = split(lineString, "\t");
-    allPlayers.add(new Player(myLine[1], myLine[0], myLine[2], myLine[3]));
+    allPlayers.add(new Player(trim(myLine[1]), trim(myLine[0]), trim(myLine[2]), trim(myLine[3])));
   }
 }
 
-void loadCountries(String filename){
+void loadCountriesCoordinates(String filename){
   String[] tableString = loadStrings(filename);
   for(String lineString : tableString){
     String[] myLine = split(lineString, "\t");
-    String name = myLine[0];
+    String name = trim(myLine[0]);
     float lat = parseFloat(myLine[1]);
     float lng = parseFloat(myLine[2]);
     Country myCountry = new Country(name, lat, lng);

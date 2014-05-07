@@ -2,7 +2,7 @@
 void setup(){
   StringList countries = new StringList();
   
-  String[] tableString = loadStrings("players.tsv");
+  String[] tableString = loadStrings("players_pt.tsv");
   for(String lineString : tableString){
     String[] myLine = split(lineString, "\t");
     if(!countries.hasValue(myLine[0])){
@@ -18,7 +18,7 @@ void setup(){
   for(int i = 0; i < countries.size(); i++){
     countriesArray[i] = countries.get(i);
   }
-  saveStrings("countries_list.txt", countriesArray);
+  saveStrings("countries_list_pt.txt", countriesArray);
 }
 
 void draw(){

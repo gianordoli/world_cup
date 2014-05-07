@@ -18,6 +18,7 @@ França
 Bélgica
 Suíça
 Dinamarca
+Holanda
 Alemanha
 Noruega
 Suécia
@@ -26,9 +27,11 @@ Croácia
 Bósnia e Herzegovina
 Ucrânia
 Turquia
+Grécia
 Rússia
 Japão
 Coreia do Sul
+Austrália
 Irã
 Catar
 Emirados Árabes

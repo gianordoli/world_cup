@@ -16,8 +16,8 @@ void setup(){
 //  beginRecord(PDF, "world_cup.pdf");
 
   worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapPos = new PVector(40*mm, 70*mm);
-  worldMapSize = new PVector(width - 100*mm, height - 100*mm);
+  worldMapPos = new PVector(10*mm, 70*mm);
+  worldMapSize = new PVector(width - 50*mm, height - 50*mm);
 
   sortedCountries = loadStrings("countries_visual_sorting.txt");
 
@@ -104,62 +104,45 @@ void sortPlayersCountry(){
 }
 
 void sortPlayersClub(){
+  //New list
   ArrayList<Player> tempList = new ArrayList<Player>();
-  for(int i = 0; i < sortedCountries.length; i++){
-    for(int j = 0; j < 16; j++){
-      Player p = allPlayers.get(j);
-//      println(p.country);
-      if(sortedCountries[i].equals(p.clubCountry)){
-        tempList.add(p);
-      }
+  
+  int a = 0;
+  
+  while(a < allPlayers.size() - 1){
+    //Current country
+    ArrayList<Player> tempListCountry = new ArrayList<Player>();
+    int i = a;
+    String currCountry = allPlayers.get(a).country;
+    while(currCountry.equals(allPlayers.get(i).country) && i < allPlayers.size() - 1){
+      tempListCountry.add(allPlayers.get(i));
+      i++;
     }
-  }
-  for(Player p : tempList){
-    println(p.country + "\t" + p.clubCountry);
+    if(i == allPlayers.size() - 1){
+      tempListCountry.add(allPlayers.get(i));
+    }
+//    i--;
+  //  for(Player p : tempListCountry){
+  //    println(p.country + "\t" + p.clubCountry);
+  //  }  
+  
+    for(int j = 0; j < sortedCountries.length; j++){
+      for(int k = 0; k < tempListCountry.size(); k++){
+        Player p = tempListCountry.get(k);      
+        if(sortedCountries[j].equals(p.clubCountry)){
+          tempList.add(p);
+//          allPlayers.remove(p);
+        }
+      }
+    }   
+    a = i;
+//    println(a);
   }
   
-//  //Creating an empty array that will store the values
-//  //we want to compare
-//  int[] values = new int[barChart.size()];
-//  for(int i = 0; i < barChart.size(); i++){
-//    //We'l compare based on...?
-//    if(comparator == "value1"){
-//      values[i] = barChart.get(i).value1;
-//    }else if(comparator == "value2"){
-//      values[i] = barChart.get(i).value2;
-//    }
-//  }
-//  //Sorting those values
-//  values = sort(values);
-//  values = reverse(values);
-//  
-//  //This temporary ArrayList will store the objects sorted
-//  ArrayList<Bar> tempList = new ArrayList<Bar>();
-//  
-//  //Looping through each sorted value
-//  for(int i = 0; i < values.length; i++){
-//    //Looping through each object
-//    for(int j = 0; j < barChart.size(); j++){
-//      //We'l compare based on...?
-//      int objectValue;
-//      if(comparator == "value1"){
-//        objectValue = barChart.get(j).value1;  
-//      }else{
-//        objectValue = barChart.get(j).value2;
-//      }
-//      
-//      //If the sorted value is found...
-//      if(values[i] == objectValue){
-//        //Add the object to the temporary list and jump to the next iteration
-//        tempList.add(barChart.get(j));
-//        barChart.remove(barChart.get(j));
-//        break;
-//      }
-//    }
-//  }
-//  //Replace the original list with the sorted one
-//  barChart = tempList;
-//  println(values);
+  for(Player p : tempList){
+    println(p.country + "\t" + p.clubCountry);
+  } 
+ allPlayers = tempList; 
 }
 
 void setPlayersPositionsAndColors(){

@@ -2,6 +2,7 @@
 int mm = 3;
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
+String[] sortedCountries;
 
 PShape worldMap;
 PVector worldMapPos;
@@ -18,12 +19,15 @@ void setup(){
   worldMapPos = new PVector(40*mm, 70*mm);
   worldMapSize = new PVector(width - 100*mm, height - 100*mm);
 
+  sortedCountries = loadStrings("countries_visual_sorting.txt");
+
   allPlayers = new ArrayList<Player>();
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
   setCountriesColors();  
-  sortPlayersVisually();
+  sortPlayersCountry();
+  sortPlayersClub();
   setPlayersPositionsAndColors();
 //  debug();
 }
@@ -74,35 +78,88 @@ void setCountriesColors(){
   }
 }
 
-void sortPlayersVisually(){
-  String[] values = loadStrings("countries_visual_sorting.txt");
+void sortPlayersCountry(){
   
   //This temporary ArrayList will store the objects sorted
   ArrayList<Player> tempList = new ArrayList<Player>();  
   
-  //ARC  
-    //Looping through each sorted value
-    for(int i = 0; i < values.length; i++){
+  //Looping through each sorted value
+  for(int i = 0; i < sortedCountries.length; i++){
+    
+    //Looping through each object
+    for(int j = 0; j < allPlayers.size(); j++){
+      String thisValue = allPlayers.get(j).country;
+//        println("\t" + thisValue);
       
-      //Looping through each object
-      for(int j = 0; j < allPlayers.size(); j++){
-        String thisValue = allPlayers.get(j).country;
-        
-        //If the sorted value is found...
-        if(values[i].equals(thisValue)){
-          //Add the object to the temporary list and jump to the next iteration
-          tempList.add(allPlayers.get(j));
-          allPlayers.remove(allPlayers.get(j));
-  //        break;
-        }
+      //If the sorted value is found...
+      if(sortedCountries[i].equals(thisValue)){
+        //Add the object to the temporary list
+        tempList.add(allPlayers.get(j));
       }
     }
-    
-    //Replace the original list with the sorted one
-    allPlayers = tempList;
-    
-  //ORIGIN
+  }
   
+  //Replace the original list with the sorted one
+  allPlayers = tempList;
+}
+
+void sortPlayersClub(){
+  ArrayList<Player> tempList = new ArrayList<Player>();
+  for(int i = 0; i < sortedCountries.length; i++){
+    for(int j = 0; j < 16; j++){
+      Player p = allPlayers.get(j);
+//      println(p.country);
+      if(sortedCountries[i].equals(p.clubCountry)){
+        tempList.add(p);
+      }
+    }
+  }
+  for(Player p : tempList){
+    println(p.country + "\t" + p.clubCountry);
+  }
+  
+//  //Creating an empty array that will store the values
+//  //we want to compare
+//  int[] values = new int[barChart.size()];
+//  for(int i = 0; i < barChart.size(); i++){
+//    //We'l compare based on...?
+//    if(comparator == "value1"){
+//      values[i] = barChart.get(i).value1;
+//    }else if(comparator == "value2"){
+//      values[i] = barChart.get(i).value2;
+//    }
+//  }
+//  //Sorting those values
+//  values = sort(values);
+//  values = reverse(values);
+//  
+//  //This temporary ArrayList will store the objects sorted
+//  ArrayList<Bar> tempList = new ArrayList<Bar>();
+//  
+//  //Looping through each sorted value
+//  for(int i = 0; i < values.length; i++){
+//    //Looping through each object
+//    for(int j = 0; j < barChart.size(); j++){
+//      //We'l compare based on...?
+//      int objectValue;
+//      if(comparator == "value1"){
+//        objectValue = barChart.get(j).value1;  
+//      }else{
+//        objectValue = barChart.get(j).value2;
+//      }
+//      
+//      //If the sorted value is found...
+//      if(values[i] == objectValue){
+//        //Add the object to the temporary list and jump to the next iteration
+//        tempList.add(barChart.get(j));
+//        barChart.remove(barChart.get(j));
+//        break;
+//      }
+//    }
+//  }
+//  //Replace the original list with the sorted one
+//  barChart = tempList;
+//  println(values);
 }
 
 void setPlayersPositionsAndColors(){

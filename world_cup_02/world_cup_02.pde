@@ -10,26 +10,35 @@ PVector worldMapSize;
 
 void setup(){
 //  JS:
-  size(1212, 798);
-//  size(404*mm, 266*mm);
+//  size(1212, 798);
+  size(404*mm, 266*mm);
   colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
+  //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
   worldMapPos = new PVector(30*mm, 70*mm);
   worldMapSize = new PVector(width - 100*mm, height - 100*mm);
 
-//  sortedCountries = loadStrings("countries_visual_sorting.txt");
+  //Initializing ArrayLists  
+  allPlayers = new ArrayList<Player>();
+  allCountries = new ArrayList<Country>();
+
+  //Loading and parsing countries list
   sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
   for(int i =0; i < sortedCountries.length; i++){
     sortedCountries[i] = trim(sortedCountries[i]);
   }  
   
-  allPlayers = new ArrayList<Player>();
-  allCountries = new ArrayList<Country>();
+  //Loading players
   loadPlayers("players.tsv");
+
+  //Loading countries coordinates
   loadCountriesCoordinates("coordinates_pt.tsv");
-  setCountriesColors();  
+  setCountriesColors();
+  setCountriesRadii();
+  
+  //Setting players attributes
   sortPlayersCountry();
   sortPlayersClub();
   setPlayersPositionsAndColors();
@@ -41,13 +50,14 @@ void draw(){
   shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   
   for (Country c : allCountries) {
+    c.update();
     c.display();
   }
   
-  for (int i = 0; i < allPlayers.size(); i++) {
-    Player p = allPlayers.get(i);
-    p.display(allPlayers, i);
-  }  
+//  for (int i = 0; i < allPlayers.size(); i++) {
+//    Player p = allPlayers.get(i);
+//    p.display(allPlayers, i);
+//  }  
 
 //  endRecord();
 //  exit();
@@ -80,6 +90,23 @@ void setCountriesColors(){
     float s = 255;
     float b = (i % 2 == 0) ? (255) : (150);
     c.setColor(h, s, b);
+  }
+}
+
+void setCountriesRadii(){
+  for(Country c : allCountries){
+    for(Player p : allPlayers){
+      if(p.clubCountry.equals(c.name)){
+        c.totalPlayers ++;
+      }
+    }
+  }
+  
+  int maxPlayers = getMax(allCountries);
+  
+  for(Country c : allCountries){
+//    println(c.name + "\t" + c.totalPlayers);
+    c.setRadius(maxPlayers);
   }
 }
 
@@ -144,10 +171,7 @@ void sortPlayersClub(){
 //    println(a);
   }
   
-  for(Player p : tempList){
-    println(p.country + "\t" + p.clubCountry);
-  } 
- allPlayers = tempList; 
+  allPlayers = tempList; 
 }
 
 void setPlayersPositionsAndColors(){
@@ -202,110 +226,18 @@ void setPlayersPositionsAndColors(){
   }
 }
 
+int getMax(ArrayList<Country> myList){
+  int max = 0;
+  for(Country c : myList){
+    if(c.totalPlayers > max){
+      max = c.totalPlayers;
+    }
+  }
+  return max;
+}
+
 void debug(){
   for(Player p : allPlayers){
     println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end); 
   }
 }
-class Country {
-
-  String name;
-  PVector pos;
-  color myColor;
-
-  Country(String _name, float lat, float lng) {
-    name = _name;
-    pos = new PVector();
-    setPos(lat, lng);
-  }
-  
-  void setPos(float lat, float lng){
-    // Equirectangular projection
-    pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);       
-  }
-  
-  void setColor(float h, float s, float b){
-    myColor = color(h, s, b);
-  }
-
-  void display() {
-    
-    noStroke();
-    fill(myColor);
-    ellipse(pos.x, pos.y, 5, 5);
-    
-    float boxWidth = textWidth(name) + 4;
-    fill(myColor, 150);
-    rect(pos.x, pos.y, boxWidth, - 12);
-    fill(255);
-    textSize(10);
-    textAlign(LEFT, BOTTOM);
-    text(name, pos.x + 2, pos.y);
-  }
-}
-
-class Player {
-  String name, country, club, clubCountry;
-  PVector start, end;
-  float angle;
-  color countryColor;
-  color clubCountryColor;
-
-  Player(String _name, String _country, String _club, String _clubCountry) {
-    name = _name;
-    country = _country;
-    club = _club;
-    clubCountry = _clubCountry;
-    start = new PVector();
-    end = new PVector();
-  }
-
-  void setPos(float x1, float y1, float x2, float y2) {
-    start.x = x1;
-    start.y = y1;
-    end.x = x2;
-    end.y = y2;
-  }
-
-  void setColor(color _countryColor, color _clubCountryColor) {
-    countryColor = _countryColor;
-    clubCountryColor = _clubCountryColor;
-//    println(countryColor + ", " + clubCountryColor);
-  }
-  
-  void setAngle(float _angle){
-    angle = _angle;
-  }
-
-  void display(ArrayList<Player> myList, int index) {
-    noFill();
-    stroke(clubCountryColor, 100);
-    line(start.x, start.y, end.x, end.y);
-
-    fill(countryColor);
-    noStroke();
-    ellipse(start.x, start.y, 5, 5);
-    
-    //Contry name
-    if(index > 0 && !myList.get(index - 1).country.equals(country)){
-      pushMatrix();
-        translate(start.x, start.y);
-        
-        if(PI/2 < angle && angle < 1.5 * PI ){
-          rotate(angle - PI);
-          fill(0);
-          textAlign(RIGHT, CENTER);
-          text(country, -2*mm, 0);
-        }else{
-          rotate(angle);
-          fill(0);
-          textAlign(LEFT, CENTER);
-          text(country, 2*mm, 0);
-        }
-      popMatrix();    
-    }
-  }
-}
-
-

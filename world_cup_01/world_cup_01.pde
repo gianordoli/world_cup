@@ -67,7 +67,10 @@ void setPlayersPositions(){
   for(int i = 0; i < allPlayers.size(); i++){
     
     Player thisPlayer = allPlayers.get(i);
-    float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.25 * PI);
+    float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.75 * PI);
+    if(angle > 1.25 * PI){
+      angle += 0.5 * PI;
+    }
     float x1 = center.x + cos(angle) * radius;
     float y1 = center.y + sin(angle) * radius;
     float x2 = 0;

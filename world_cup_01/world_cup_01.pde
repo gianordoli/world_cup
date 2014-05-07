@@ -9,8 +9,8 @@ PVector worldMapSize;
 
 void setup(){
 //  JS:
-//  size(1212, 798);
-  size(404*mm, 266*mm);
+  size(1212, 798);
+//  size(404*mm, 266*mm);
   colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
@@ -22,8 +22,9 @@ void setup(){
   allCountries = new ArrayList<Country>();
   loadPlayers("players.tsv");
   loadCountries("coordinates.tsv");
-  visualSorting();
-  setPlayersPositions();
+  setCountriesColors();  
+  sortPlayersVisually();
+  setPlayersPositionsAndColors();
 //  debug();
 }
 
@@ -63,60 +64,94 @@ void loadCountries(String filename){
   } 
 }
 
+void setCountriesColors(){
+  for(int i = 0; i < allCountries.size(); i++){
+    Country c = allCountries.get(i);
+    float h = map(i, 0, allCountries.size() - 1, 0, 255);
+    float s = 255;
+    float b = (i % 2 == 0) ? (255) : (150);
+    c.setColor(h, s, b);
+  }
+}
 
-void visualSorting(){
+void sortPlayersVisually(){
   String[] values = loadStrings("countries_visual_sorting.txt");
   
   //This temporary ArrayList will store the objects sorted
-  ArrayList<Player> tempList = new ArrayList<Player>();
+  ArrayList<Player> tempList = new ArrayList<Player>();  
   
-  //Looping through each sorted value
-  for(int i = 0; i < values.length; i++){
-//    println(values[i]);
-    
-    //Looping through each object
-    for(int j = 0; j < allPlayers.size(); j++){
-      String thisValue = allPlayers.get(j).clubCountry;
+  //ARC  
+    //Looping through each sorted value
+    for(int i = 0; i < values.length; i++){
       
-      //If the sorted value is found...
-      if(values[i].equals(thisValue)){
-        //Add the object to the temporary list and jump to the next iteration
-        tempList.add(allPlayers.get(j));
-        allPlayers.remove(allPlayers.get(j));
-//        break;
+      //Looping through each object
+      for(int j = 0; j < allPlayers.size(); j++){
+        String thisValue = allPlayers.get(j).country;
+        
+        //If the sorted value is found...
+        if(values[i].equals(thisValue)){
+          //Add the object to the temporary list and jump to the next iteration
+          tempList.add(allPlayers.get(j));
+          allPlayers.remove(allPlayers.get(j));
+  //        break;
+        }
       }
     }
-  }
+    
+    //Replace the original list with the sorted one
+    allPlayers = tempList;
+    
+  //ORIGIN
   
-  //Replace the original list with the sorted one
-  allPlayers = tempList;
 }
 
-void setPlayersPositions(){
+void setPlayersPositionsAndColors(){
   PVector center = new PVector(width/2, height/2);
   float radius = 150*mm;
   
   for(int i = 0; i < allPlayers.size(); i++){
     
     Player thisPlayer = allPlayers.get(i);
-    float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.75 * PI);
-    if(angle > 1.25 * PI){
-      angle += 0.5 * PI;
-    }
-    float x1 = center.x + cos(angle) * radius;
-    float y1 = center.y + sin(angle) * radius;
-    float x2 = 0;
-    float y2 = 0;
-    
-    for(int j = 0; j < allCountries.size(); j++){
-      Country thisCountry = allCountries.get(j);
-      if(thisPlayer.clubCountry.equals(thisCountry.name)){
-        x2 = thisCountry.pos.x;
-        y2 = thisCountry.pos.y;
-        break;
+
+    //ARC (team)
+      //Position    
+      float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.75 * PI);
+      if(angle > 1.25 * PI){
+        angle += 0.5 * PI;
       }
-    }
+      float x1 = center.x + cos(angle) * radius;
+      float y1 = center.y + sin(angle) * radius;
+      color countryColor = 0;    
+      
+      //Color
+      for(int j = 0; j < allCountries.size(); j++){
+        Country thisCountry = allCountries.get(j);
+        if(thisPlayer.country.equals(thisCountry.name)){
+          countryColor = thisCountry.myColor;
+//          println(thisCountry.name);
+          break;
+        }
+      }
+
+    //ORIGIN (club)
+      //position and color
+      float x2 = 0;
+      float y2 = 0;
+      color clubCountryColor = 0;
+      
+      for(int j = 0; j < allCountries.size(); j++){
+        Country thisCountry = allCountries.get(j);
+        if(thisPlayer.clubCountry.equals(thisCountry.name)){
+          x2 = thisCountry.pos.x;
+          y2 = thisCountry.pos.y;
+          clubCountryColor = thisCountry.myColor;
+          break;
+        }
+      }
+    
+//    println(countryColor + ", " + clubCountryColor);  
     thisPlayer.setPos(x1, y1, x2, y2);
+    thisPlayer.setColor(countryColor, clubCountryColor);
   }
 }
 

@@ -31,7 +31,8 @@ class Country {
     rect(pos.x, pos.y, boxWidth, - 12);
     fill(255);
     textSize(10);
-    text(name, pos.x + 2, pos.y - 2);
+    textAlign(LEFT, BOTTOM);
+    text(name, pos.x + 2, pos.y);
   }
 }
 

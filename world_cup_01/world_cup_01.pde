@@ -16,8 +16,8 @@ void setup(){
 //  beginRecord(PDF, "world_cup.pdf");
 
   worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapPos = new PVector(10*mm, 70*mm);
-  worldMapSize = new PVector(width - 50*mm, height - 50*mm);
+  worldMapPos = new PVector(30*mm, 70*mm);
+  worldMapSize = new PVector(width - 100*mm, height - 100*mm);
 
 //  sortedCountries = loadStrings("countries_visual_sorting.txt");
   sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
@@ -44,8 +44,9 @@ void draw(){
     c.display();
   }
   
-  for (Player p : allPlayers) {
-    p.display();
+  for (int i = 0; i < allPlayers.size(); i++) {
+    Player p = allPlayers.get(i);
+    p.display(allPlayers, i);
   }  
 
 //  endRecord();
@@ -151,51 +152,53 @@ void sortPlayersClub(){
 
 void setPlayersPositionsAndColors(){
   PVector center = new PVector(width/2, height/2);
-  float radius = 150*mm;
+  float radius = 120*mm;
   
   for(int i = 0; i < allPlayers.size(); i++){
     
     Player thisPlayer = allPlayers.get(i);
 
     //ARC (team)
-      //Position    
-      float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.75 * PI);
-      if(angle > 1.25 * PI){
-        angle += 0.5 * PI;
-      }
-      float x1 = center.x + cos(angle) * radius;
-      float y1 = center.y + sin(angle) * radius;
-      color countryColor = 0;    
-      
-      //Color
-      for(int j = 0; j < allCountries.size(); j++){
-        Country thisCountry = allCountries.get(j);
-        if(thisPlayer.country.equals(thisCountry.name)){
-          countryColor = thisCountry.myColor;
+    //Position    
+//      float angle = map(i, 0, allPlayers.size() - 1, 0.75 * PI, 1.75 * PI);
+    float angle = map(i, 0, allPlayers.size(), 0, 2 * PI);
+//      if(angle > 1.25 * PI){
+//        angle += 0.5 * PI;
+//      }
+    float x1 = center.x + cos(angle) * radius;
+    float y1 = center.y + sin(angle) * radius;
+    color countryColor = 0;    
+    
+    //Color
+    for(int j = 0; j < allCountries.size(); j++){
+      Country thisCountry = allCountries.get(j);
+      if(thisPlayer.country.equals(thisCountry.name)){
+        countryColor = thisCountry.myColor;
 //          println(thisCountry.name);
-          break;
-        }
+        break;
       }
+    }
 
     //ORIGIN (club)
-      //position and color
-      float x2 = 0;
-      float y2 = 0;
-      color clubCountryColor = 0;
-      
-      for(int j = 0; j < allCountries.size(); j++){
-        Country thisCountry = allCountries.get(j);
-        if(thisPlayer.clubCountry.equals(thisCountry.name)){
-          x2 = thisCountry.pos.x;
-          y2 = thisCountry.pos.y;
-          clubCountryColor = thisCountry.myColor;
-          break;
-        }
+    //position and color
+    float x2 = 0;
+    float y2 = 0;
+    color clubCountryColor = 0;
+    
+    for(int j = 0; j < allCountries.size(); j++){
+      Country thisCountry = allCountries.get(j);
+      if(thisPlayer.clubCountry.equals(thisCountry.name)){
+        x2 = thisCountry.pos.x;
+        y2 = thisCountry.pos.y;
+        clubCountryColor = thisCountry.myColor;
+        break;
       }
+    }
     
 //    println(countryColor + ", " + clubCountryColor);  
     thisPlayer.setPos(x1, y1, x2, y2);
     thisPlayer.setColor(countryColor, clubCountryColor);
+    thisPlayer.setAngle(angle);
   }
 }
 

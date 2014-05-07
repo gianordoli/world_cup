@@ -1,6 +1,7 @@
 class Player {
   String name, country, club, clubCountry;
   PVector start, end;
+  float angle;
   color countryColor;
   color clubCountryColor;
 
@@ -25,8 +26,12 @@ class Player {
     clubCountryColor = _clubCountryColor;
 //    println(countryColor + ", " + clubCountryColor);
   }
+  
+  void setAngle(float _angle){
+    angle = _angle;
+  }
 
-  void display() {
+  void display(ArrayList<Player> myList, int index) {
     noFill();
     stroke(clubCountryColor, 100);
     line(start.x, start.y, end.x, end.y);
@@ -34,6 +39,25 @@ class Player {
     fill(countryColor);
     noStroke();
     ellipse(start.x, start.y, 5, 5);
+    
+    //Contry name
+    if(index > 0 && !myList.get(index - 1).country.equals(country)){
+      pushMatrix();
+        translate(start.x, start.y);
+        
+        if(PI/2 < angle && angle < 1.5 * PI ){
+          rotate(angle - PI);
+          fill(0);
+          textAlign(RIGHT, CENTER);
+          text(country, -2*mm, 0);
+        }else{
+          rotate(angle);
+          fill(0);
+          textAlign(LEFT, CENTER);
+          text(country, 2*mm, 0);
+        }
+      popMatrix();    
+    }
   }
 }
 

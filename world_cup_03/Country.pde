@@ -2,6 +2,7 @@ class Country {
 
   String name;
   PVector pos;
+  PVector controlPoint;
   float radius;
   float final_radius;
   int totalPlayers;  
@@ -10,16 +11,29 @@ class Country {
   Country(String _name, float lat, float lng) {
     name = _name;
     pos = new PVector();
+    controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
-    final_radius = random(10, 20);
     totalPlayers = 0;    
   }
   
   void setPos(float lat, float lng){
     // Equirectangular projection
     pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);       
+    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
+    setControlPoint();    
+  }
+  
+  void setControlPoint(){
+      PVector center = new PVector(width/2, height/2);
+      float offset = 20*mm;
+      float distance = dist(pos.x, pos.y, center.x, center.y);
+      float angle = atan2(pos.y - center.y, pos.x - center.x);
+      if(angle < 0) {
+        angle = TWO_PI - abs(angle); 
+      }    
+      controlPoint.x = center.x + cos(angle) * (distance + final_radius + offset);
+      controlPoint.y = center.y + sin(angle) * (distance + final_radius + offset);  
   }
   
   void setColor(float h, float s, float b){
@@ -31,7 +45,7 @@ class Country {
   }
   
   void update(){
-    float padding = 4*mm; //space in between the circles
+    float padding = 3*mm; //space in between the circles
     for(Country c : allCountries){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -39,8 +53,10 @@ class Country {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.2;
-        pos.y += escape.y * 1.2;
+        pos.x += escape.x * 1.1;
+        pos.y += escape.y * 1.1;
+        
+        setControlPoint();        
       }    
     }  
   }  
@@ -57,14 +73,14 @@ class Country {
     
     PVector boxSize = new PVector(20*mm, 4*mm);
 //    fill(myColor);
-    rectMode(CENTER);
+//    rectMode(CENTER);
 //    rect(pos.x, pos.y, boxSize.x, boxSize.y);
     
     fill(0);
     textSize(10);
     textAlign(CENTER, CENTER);
     textLeading(10);
-    text(name, pos.x, pos.y, boxSize.x, boxSize.x);
+    text(name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
   }
 }
 

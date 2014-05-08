@@ -15,39 +15,54 @@ void setup(){
   colorMode(HSB);
 //  beginRecord(PDF, "world_cup.pdf");
 
+  frameRate(30);
+
+  //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
   worldMapPos = new PVector(30*mm, 70*mm);
   worldMapSize = new PVector(width - 100*mm, height - 100*mm);
 
-//  sortedCountries = loadStrings("countries_visual_sorting.txt");
+  //Initializing ArrayLists  
+  allPlayers = new ArrayList<Player>();
+  allCountries = new ArrayList<Country>();
+
+  //Loading and parsing countries list
   sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
   for(int i =0; i < sortedCountries.length; i++){
     sortedCountries[i] = trim(sortedCountries[i]);
   }  
   
-  allPlayers = new ArrayList<Player>();
-  allCountries = new ArrayList<Country>();
+  //Loading players
   loadPlayers("players.tsv");
+
+  //Loading countries coordinates
   loadCountriesCoordinates("coordinates_pt.tsv");
-  setCountriesColors();  
+  setCountriesColors();
+  setCountriesRadii();
+  
+  //Setting players attributes
   sortPlayersCountry();
   sortPlayersClub();
-  setPlayersPositionsAndColors();
+  setPlayersPositions();
+  
+  //Linking the 2 ArrayLists
+  linkPlayersAndCoutries();
 //  debug();
 }
 
 void draw(){
   background(255);
-  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
-  
-  for (Country c : allCountries) {
-    c.display();
-  }
-  
+//  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+
   for (int i = 0; i < allPlayers.size(); i++) {
     Player p = allPlayers.get(i);
     p.display(allPlayers, i);
   }  
+  
+  for (Country c : allCountries) {
+    c.update();
+    c.display();
+  }
 
 //  endRecord();
 //  exit();
@@ -78,8 +93,25 @@ void setCountriesColors(){
     Country c = allCountries.get(i);
     float h = map(i, 0, allCountries.size() - 1, 0, 255);
     float s = 255;
-    float b = (i % 2 == 0) ? (255) : (150);
+    float b = (i % 2 == 0) ? (240) : (150);
+//    float b = 200;
     c.setColor(h, s, b);
+  }
+}
+
+void setCountriesRadii(){
+  for(Country c : allCountries){
+    for(Player p : allPlayers){
+      if(p.clubCountry.equals(c.name)){
+        c.totalPlayers ++;
+      }
+    }
+  }
+  
+  int maxPlayers = getMax(allCountries);
+  for(Country c : allCountries){
+//    println(c.name + "\t" + c.totalPlayers);
+    c.setRadius(maxPlayers);
   }
 }
 
@@ -144,13 +176,10 @@ void sortPlayersClub(){
 //    println(a);
   }
   
-  for(Player p : tempList){
-    println(p.country + "\t" + p.clubCountry);
-  } 
- allPlayers = tempList; 
+  allPlayers = tempList; 
 }
 
-void setPlayersPositionsAndColors(){
+void setPlayersPositions(){
   PVector center = new PVector(width/2, height/2);
   float radius = 120*mm;
   
@@ -167,56 +196,63 @@ void setPlayersPositionsAndColors(){
 //      }
     float x1 = center.x + cos(angle) * radius;
     float y1 = center.y + sin(angle) * radius;
-    color countryColor = 0;    
-    
-    //Color
-    for(int j = 0; j < allCountries.size(); j++){
-      Country thisCountry = allCountries.get(j);
-      if(thisPlayer.country.equals(thisCountry.name)){
-        countryColor = thisCountry.myColor;
-//          println(thisCountry.name);
-        break;
-      }
-    }
-
-    //ORIGIN (club)
-    //position and color
-    float x2 = 0;
-    float y2 = 0;
-    color clubCountryColor = 0;
-    
-    for(int j = 0; j < allCountries.size(); j++){
-      Country thisCountry = allCountries.get(j);
-      if(thisPlayer.clubCountry.equals(thisCountry.name)){
-        x2 = thisCountry.pos.x;
-        y2 = thisCountry.pos.y;
-        clubCountryColor = thisCountry.myColor;
-        break;
-      }
-    }
-    
-//    println(countryColor + ", " + clubCountryColor);  
-    thisPlayer.setPos(x1, y1, x2, y2);
-    thisPlayer.setColor(countryColor, clubCountryColor);
+      
+    thisPlayer.setPos(x1, y1);
     thisPlayer.setAngle(angle);
   }
 }
 
+void linkPlayersAndCoutries(){
+  //Original country
+  for(Country c : allCountries){
+    for(Player p : allPlayers){
+      if(p.country.equals(c.name)){
+        p.originCountry = c;
+      }
+    }
+  }  
+  
+  //Club country
+  for(Country c : allCountries){
+    for(Player p : allPlayers){
+      if(p.clubCountry.equals(c.name)){
+        p.currCountry = c;
+      }
+    }
+  }
+}
+
+int getMax(ArrayList<Country> myList){
+  int max = 0;
+  for(Country c : myList){
+    if(c.totalPlayers > max){
+      max = c.totalPlayers;
+    }
+  }
+  return max;
+}
+
 void debug(){
   for(Player p : allPlayers){
-    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end); 
+//    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end); 
   }
 }
 class Country {
 
   String name;
   PVector pos;
+  float radius;
+  float final_radius;
+  int totalPlayers;  
   color myColor;
 
   Country(String _name, float lat, float lng) {
     name = _name;
     pos = new PVector();
     setPos(lat, lng);
+    radius = 1;
+    final_radius = random(10, 20);
+    totalPlayers = 0;    
   }
   
   void setPos(float lat, float lng){
@@ -228,50 +264,67 @@ class Country {
   void setColor(float h, float s, float b){
     myColor = color(h, s, b);
   }
+  
+  void setRadius(int max){
+    final_radius = map(totalPlayers, 0, max, 10, 40);
+  }
+  
+  void update(){
+    float padding = 2*mm; //space in between the circles
+    for(Country c : allCountries){
+      float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
+      float minDistance = c.radius + radius + padding;
+      if(distance < minDistance && distance > 0){
+        PVector escape = new PVector(pos.x - c.pos.x,
+                                     pos.y - c.pos.y);
+        escape.normalize();
+        pos.x += escape.x * 1.2;
+        pos.y += escape.y * 1.2;
+      }    
+    }  
+  }  
 
   void display() {
     
-    noStroke();
-    fill(myColor);
-    ellipse(pos.x, pos.y, 5, 5);
+    if(radius < final_radius * 0.99){
+      radius += (final_radius - radius) * 0.1;
+    }
     
-    float boxWidth = textWidth(name) + 4;
+    noStroke();
     fill(myColor, 150);
-    rect(pos.x, pos.y, boxWidth, - 12);
-    fill(255);
+    ellipse(pos.x, pos.y, radius * 2, radius * 2);
+    
+//    float boxWidth = textWidth(name) + 4;
+//    fill(myColor, 150);
+//    rect(pos.x, pos.y, boxWidth, - 12);
+//    fill(255);
+    fill(0);
     textSize(10);
-    textAlign(LEFT, BOTTOM);
-    text(name, pos.x + 2, pos.y);
+    textAlign(CENTER, TOP);
+    textLeading(10);
+    text(name, pos.x - 10*mm, pos.y, 20*mm, 20*mm);
   }
 }
 
 class Player {
   String name, country, club, clubCountry;
-  PVector start, end;
+  PVector arcPos;
   float angle;
-  color countryColor;
-  color clubCountryColor;
+  
+  Country originCountry;
+  Country currCountry;
 
   Player(String _name, String _country, String _club, String _clubCountry) {
     name = _name;
     country = _country;
     club = _club;
     clubCountry = _clubCountry;
-    start = new PVector();
-    end = new PVector();
+    arcPos = new PVector();
   }
 
-  void setPos(float x1, float y1, float x2, float y2) {
-    start.x = x1;
-    start.y = y1;
-    end.x = x2;
-    end.y = y2;
-  }
-
-  void setColor(color _countryColor, color _clubCountryColor) {
-    countryColor = _countryColor;
-    clubCountryColor = _clubCountryColor;
-//    println(countryColor + ", " + clubCountryColor);
+  void setPos(float x1, float y1) {
+    arcPos.x = x1;
+    arcPos.y = y1;
   }
   
   void setAngle(float _angle){
@@ -279,18 +332,20 @@ class Player {
   }
 
   void display(ArrayList<Player> myList, int index) {
+    //Line
     noFill();
-    stroke(clubCountryColor, 100);
-    line(start.x, start.y, end.x, end.y);
+    stroke(currCountry.myColor, 100);
+    line(arcPos.x, arcPos.y, currCountry.pos.x, currCountry.pos.y);
 
-    fill(countryColor);
+    //Ellipse
+    fill(originCountry.myColor);
     noStroke();
-    ellipse(start.x, start.y, 5, 5);
+    ellipse(arcPos.x, arcPos.y, 5, 5);
     
     //Contry name
     if(index > 0 && !myList.get(index - 1).country.equals(country)){
       pushMatrix();
-        translate(start.x, start.y);
+        translate(arcPos.x, arcPos.y);
         
         if(PI/2 < angle && angle < 1.5 * PI ){
           rotate(angle - PI);

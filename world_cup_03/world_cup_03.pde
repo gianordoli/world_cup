@@ -19,8 +19,8 @@ void setup(){
 
   //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapPos = new PVector(30*mm, 70*mm);
-  worldMapSize = new PVector(width - 100*mm, height - 100*mm);
+  worldMapPos = new PVector(70*mm, 90*mm);
+  worldMapSize = new PVector(width - 150*mm, height - 150*mm);
 
   //Initializing ArrayLists  
   allPlayers = new ArrayList<Player>();
@@ -43,10 +43,13 @@ void setup(){
   //Setting players attributes
   sortPlayersCountry();
   sortPlayersClub();
-  setPlayersPositions();
   
   //Linking the 2 ArrayLists
-  linkPlayersAndCoutries();
+  linkPlayersAndCoutries();  
+  
+  //Setting arc points
+  setPlayersPositions();
+  
 //  debug();
 }
 
@@ -91,7 +94,7 @@ void loadCountriesCoordinates(String filename){
 void setCountriesColors(){
   for(int i = 0; i < allCountries.size(); i++){
     Country c = allCountries.get(i);
-    float h = map(i, 0, allCountries.size() - 1, 0, 255);
+    float h = map(i, 0, allCountries.size() - 1, 0, 200);
     float s = 255;
 //    float b = (i % 2 == 0) ? (255) : (200);
     float b = 255;
@@ -194,10 +197,13 @@ void setPlayersPositions(){
 //      if(angle > 1.25 * PI){
 //        angle += 0.5 * PI;
 //      }
+    float offset = 30*mm;
     float x1 = center.x + cos(angle) * radius;
     float y1 = center.y + sin(angle) * radius;
+    float x2 = center.x + cos(angle) * (radius - offset);
+    float y2 = center.y + sin(angle) * (radius - offset);    
       
-    thisPlayer.setPos(x1, y1);
+    thisPlayer.setPos(x1, y1, x2, y2);
     thisPlayer.setAngle(angle);
   }
 }

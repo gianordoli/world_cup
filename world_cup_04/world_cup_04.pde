@@ -69,10 +69,11 @@ void draw() {
 //  fill(0, 10);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
-  for (int i = 0; i < allPlayers.size(); i++) {
-    Player p = allPlayers.get(i);
-    p.display(allPlayers, i);
-  }  
+  for(Team t : allTeams){
+    for(Player p : t.teamPlayers){
+      p.display();
+    }
+  }
 
   for (Country c : allCountries) {
     c.update();

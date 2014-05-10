@@ -23,7 +23,7 @@ class Player {
     angle = _angle;
   }
 
-  void display(ArrayList<Player> myList, int index) {
+  void display() {
     //Line
     noFill();
     strokeWeight(0.3*mm);
@@ -33,32 +33,6 @@ class Player {
            anchors.get(1).x, anchors.get(1).y,
            currCountry.controlPoint.x, currCountry.controlPoint.y,
            currCountry.pos.x, currCountry.pos.y);
-    
-//    //Contry name
-//    if(index == 0 || !myList.get(index - 1).country.equals(country)){
-      pushMatrix();
-        translate(anchors.get(0).x, anchors.get(0).y);
-        rotate(angle - PI);
-        
-        //DOT
-//        noStroke();
-//        fill(currCountry.myColor);
-//        rectMode(CENTER);
-//        rect(0, 0, 5*mm, 0.5*mm);
-    
-//        if(PI/2 < angle && angle < 1.5 * PI ){
-//          rotate(angle - PI);
-//          fill(0);
-//          textAlign(RIGHT, CENTER);
-//          text(country, -2*mm, 0);
-//        }else{
-//          rotate(angle);
-//          fill(0);
-//          textAlign(LEFT, CENTER);
-//          text(country, 2*mm, 0);
-//        }
-      popMatrix();    
-//    }
   }
 }
 

@@ -39,14 +39,14 @@ void setup() {
   sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
   for (int i =0; i < sortedCountries.length; i++) {
     sortedCountries[i] = trim(sortedCountries[i]);
-  }  
+  }
 
   //Loading players
   loadPlayers("players_pt.tsv");
 
   //Loading countries coordinates
   loadCountriesCoordinates("coordinates_pt.tsv");
-  setCountriesColors();
+  setCountriesColors("countries_groups.tsv");
   setCountriesRadii();
 
   //Setting players attributes
@@ -59,7 +59,7 @@ void setup() {
   //Setting arc points
   setPlayersPositions();
 
-  //  debug();
+  debug();
 }
 
 void draw() {
@@ -112,14 +112,15 @@ void loadCountriesCoordinates(String filename) {
   }
 }
 
-void setCountriesColors() {
+void setCountriesColors(String filename) {
   for (int i = 0; i < allCountries.size(); i++) {
     Country c = allCountries.get(i);
-    float h = map(i, 0, allCountries.size() - 1, 0, 200);
-    float s = 255;
-    //    float b = (i % 2 == 0) ? (255) : (200);
-    float b = 255;
-    c.setColor(h, s, b);
+//    float h = map(i, 0, allCountries.size() - 1, 0, 200);
+//    float s = 255;
+//    //    float b = (i % 2 == 0) ? (255) : (200);
+//    float b = 255;
+//    c.setColor(h, s, b);
+    c.setColor(filename);
   }
 }
 
@@ -261,12 +262,15 @@ int getMax(ArrayList<Country> myList) {
 }
 
 void debug() {
-  for (Player p : allPlayers) {
+//  for (Player p : allPlayers) {
     //    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end);
+//  }
+  for(Country c: allCountries){
+    println(c.name + "\t" + c.group);
   }
 }
 
-boolean sketchFullScreen() {
-  return true;
-}
+//boolean sketchFullScreen() {
+//  return true;
+//}
 

@@ -1,6 +1,7 @@
 class Country {
 
   String name;
+  String group;
   PVector pos;
   PVector controlPoint;
   float radius;
@@ -35,9 +36,33 @@ class Country {
       controlPoint.y = center.y + sin(angle) * (distance + final_radius + offset);  
   }
   
-  void setColor(float h, float s, float b){
+//  void setColor(float h, float s, float b){
+//    myColor = color(h, s, b);
+//  }
+  
+  void setColor(String filename){
+  String[] tableString = loadStrings(filename);
+    for (String lineString : tableString) {
+      String[] myLine = split(lineString, "\t");
+      if(trim(myLine[0]).equals(this.name)){
+        group = trim(myLine[1]);
+      }
+    }
+    //Converting group Strint to char and to int
+    int[] code = int(group.toCharArray());
+    int groupInt = code[0];
+    float h, s, b;
+    //group int: "a" to "h"
+    h = map(groupInt, 97, 104, 0, 255);
+    if(groupInt < 97){
+      s = 0;
+      b = 170;
+    }else{
+      s = 225;
+      b = 255;    
+    }
     myColor = color(h, s, b);
-  }
+  }  
   
   void setRadius(int max){
     final_radius = map(totalPlayers, 0, max, 2*mm, 10*mm);

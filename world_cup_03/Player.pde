@@ -26,36 +26,39 @@ class Player {
   void display(ArrayList<Player> myList, int index) {
     //Line
     noFill();
+    strokeWeight(0.5*mm);
     stroke(currCountry.myColor, 100);
 //    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,
            currCountry.controlPoint.x, currCountry.controlPoint.y,
            currCountry.pos.x, currCountry.pos.y);
-
-    //Ellipse
-    fill(originCountry.myColor);
-    noStroke();
-    ellipse(anchors.get(0).x, anchors.get(0).y, 5, 5);
     
-    //Contry name
-    if(index == 0 || !myList.get(index - 1).country.equals(country)){
+//    //Contry name
+//    if(index == 0 || !myList.get(index - 1).country.equals(country)){
       pushMatrix();
         translate(anchors.get(0).x, anchors.get(0).y);
+        rotate(angle - PI);
         
-        if(PI/2 < angle && angle < 1.5 * PI ){
-          rotate(angle - PI);
-          fill(0);
-          textAlign(RIGHT, CENTER);
-          text(country, -2*mm, 0);
-        }else{
-          rotate(angle);
-          fill(0);
-          textAlign(LEFT, CENTER);
-          text(country, 2*mm, 0);
-        }
+        //DOT
+        noStroke();
+        fill(originCountry.myColor);
+        rectMode(CENTER);
+        rect(0, 0, 5*mm, 1*mm);
+    
+//        if(PI/2 < angle && angle < 1.5 * PI ){
+//          rotate(angle - PI);
+//          fill(0);
+//          textAlign(RIGHT, CENTER);
+//          text(country, -2*mm, 0);
+//        }else{
+//          rotate(angle);
+//          fill(0);
+//          textAlign(LEFT, CENTER);
+//          text(country, 2*mm, 0);
+//        }
       popMatrix();    
-    }
+//    }
   }
 }
 

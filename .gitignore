@@ -1,4 +1,6 @@
 _refs
 _data
 _documentation
+_layout
+*.pdf
 load_coordinates/data/credentials.txt

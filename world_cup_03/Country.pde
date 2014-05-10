@@ -25,7 +25,6 @@ class Country {
   }
   
   void setControlPoint(){
-      PVector center = new PVector(width/2, height/2);
       float offset = 20*mm;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
@@ -41,7 +40,7 @@ class Country {
   }
   
   void setRadius(int max){
-    final_radius = map(totalPlayers, 0, max, 10, 40);
+    final_radius = map(totalPlayers, 0, max, 2*mm, 10*mm);
   }
   
   void update(){
@@ -77,9 +76,10 @@ class Country {
 //    rect(pos.x, pos.y, boxSize.x, boxSize.y);
     
     fill(0);
-    textSize(10);
+    textSize(8);
+    rectMode(CORNER);
     textAlign(CENTER, CENTER);
-    textLeading(10);
+    textLeading(8);
     text(name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
   }
 }

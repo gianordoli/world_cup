@@ -2,9 +2,10 @@ import processing.pdf.*;
 boolean record = false;
 
 int mm = 3;
+
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
-String[] sortedCountries;
+ArrayList<Team> allTeams;
 
 PShape worldMap;
 PVector worldMapPos;
@@ -31,33 +32,29 @@ void setup() {
   worldMapPos = new PVector((width - worldMapSize.x)/2 - 5*mm, (height - worldMapSize.y)/2 + 30*mm);
 //  worldMap.disableStyle();
 
-  //Initializing ArrayLists  
-  allPlayers = new ArrayList<Player>();
+  /*----- COUNTRIES -----*/
   allCountries = new ArrayList<Country>();
-
-  //Loading and parsing countries list
-  sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
-  for (int i =0; i < sortedCountries.length; i++) {
-    sortedCountries[i] = trim(sortedCountries[i]);
-  }
-
-  //Loading players
-  loadPlayers("players_pt.tsv");
-
-  //Loading countries coordinates
   loadCountriesCoordinates("coordinates_pt.tsv");
   setCountriesColors("countries_groups.tsv");
+
+  /*------ PLAYERS ------*/
+  allTeams = new ArrayList<Team>();
+  allPlayers = new ArrayList<Player>();
+  loadPlayers("players_pt.tsv");
+  
+  //Players' positions in the arc will be based on this sorted list
+    String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
+    for (int i =0; i < sortedCountries.length; i++) {
+      sortedCountries[i] = trim(sortedCountries[i]);
+    }
+    sortPlayersCountry(sortedCountries);  //Sorting the arcs
+    sortPlayersClub(sortedCountries);     //Sub-sorting the lines
+    
+  linkPlayersAndCoutries();  //Linking the 2 ArrayLists  
+  setPlayersPositions();     //Setting arc points
+
+  //Now that we have all players, we can set the radius of each country
   setCountriesRadii();
-
-  //Setting players attributes
-  sortPlayersCountry();
-  sortPlayersClub();
-
-  //Linking the 2 ArrayLists
-  linkPlayersAndCoutries();  
-
-  //Setting arc points
-  setPlayersPositions();
 
   debug();
 }
@@ -140,7 +137,7 @@ void setCountriesRadii() {
   }
 }
 
-void sortPlayersCountry() {
+void sortPlayersCountry(String[] sortedCountries) {
 
   //This temporary ArrayList will store the objects sorted
   ArrayList<Player> tempList = new ArrayList<Player>();  
@@ -165,7 +162,7 @@ void sortPlayersCountry() {
   allPlayers = tempList;
 }
 
-void sortPlayersClub() {
+void sortPlayersClub(String[] sortedCountries) {
   //New list
   ArrayList<Player> tempList = new ArrayList<Player>();
 
@@ -207,39 +204,57 @@ void sortPlayersClub() {
 void setPlayersPositions() { 
   float radius = 137*mm;
   float centerOffset = 5*mm;
+  
+  ArrayList<Player> tempPlayers = new ArrayList();
+  String prevCountry = "";
+  float startAngle = 0;
+  float endAngle = 0;
 
   for (int i = 0; i < allPlayers.size(); i++) {
 
     Player thisPlayer = allPlayers.get(i);
 
-    //ARC (team)
     //Position    
     float angle = map(i, 0, allPlayers.size() - 1, 0.15 * PI, 1.55 * PI);
-//    float angle = map(i, 0, allPlayers.size(), 0, 2 * PI);
-      if(angle > 0.85 * PI){
-        angle += 0.3 * PI;
-        centerOffset = -5*mm;
-      }
+    if(angle > 0.85 * PI){
+      angle += 0.3 * PI;
+      centerOffset = -5*mm;
+    }    
+      
+    float rX = center.x;
+    float rY = center.y + centerOffset;
     float offset = 30*mm;  //distance from arc to control point
-    float x1 = center.x + cos(angle) * radius;
-    float y1 = center.y + centerOffset + sin(angle) * radius;
-    float x2 = center.x + cos(angle) * (radius - offset);
-    float y2 = center.y + centerOffset + sin(angle) * (radius - offset);    
+    float x1 = rX + cos(angle) * radius;
+    float y1 = rY + sin(angle) * radius;
+    float x2 = rX + cos(angle) * (radius - offset);
+    float y2 = rY + sin(angle) * (radius - offset);    
 
     thisPlayer.setPos(x1, y1, x2, y2);
     thisPlayer.setAngle(angle);
+    
+    //Is this player's team different from the previous one?
+    if(!thisPlayer.country.equals(prevCountry)){
+      //Create a new team based on the previous information
+      allTeams.add(new Team(prevCountry, tempPlayers, startAngle, endAngle)); 
+      
+      //Start a new team/Clean the previous list up 
+      startAngle = angle;
+      tempPlayers = new ArrayList();
+    }
+    
+    tempPlayers.add(thisPlayer);
+    endAngle = angle;
+    
+    //Wait! Was it the last player?
+    if(i == allPlayers.size() - 1){
+      allTeams.add(new Team(prevCountry, tempPlayers, startAngle, endAngle));   
+    }    
+    
+    prevCountry = thisPlayer.country;
   }
 }
 
 void linkPlayersAndCoutries() {
-  //Original country
-  for (Country c : allCountries) {
-    for (Player p : allPlayers) {
-      if (p.country.equals(c.name)) {
-        p.originCountry = c;
-      }
-    }
-  }  
 
   //Club country
   for (Country c : allCountries) {
@@ -265,12 +280,18 @@ void debug() {
 //  for (Player p : allPlayers) {
     //    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end);
 //  }
-  for(Country c: allCountries){
-    println(c.name + "\t" + c.group);
+//  for(Country c: allCountries){
+//    println(c.name + "\t" + c.group);
+//  }
+  for(Team t: allTeams){
+    print(t.name);
+    for(Player p : t.teamPlayers){
+      println("\t" + p.name);
+    }
   }
 }
 
-boolean sketchFullScreen() {
-  return true;
-}
+//boolean sketchFullScreen() {
+//  return true;
+//}
 

@@ -9,7 +9,6 @@ void setup() {
   worldMap = loadImage("worldmap-equirectangular-s.jpg");
   center = new PVector(width/2, height/2 - 100);
   
-//  queryAndCreatePlaces("coordinates.tsv");
   queryAndCreatePlaces("coordinates_pt.tsv");
   setPositions(placeMarkers);
   setAngles(placeMarkers);

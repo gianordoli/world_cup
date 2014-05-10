@@ -15,12 +15,12 @@ PImage layout;
 
 void setup() {
   //  JS:
-  //  size(1212, 798);
-  size(266*mm, 404*mm);
+//size(800, 1000);
+  size(266*mm, 300*mm);
   colorMode(HSB);
 //  frameRate(30);
 
-  center = new PVector(width/2, height/2 + 13*mm);
+  center = new PVector(width/2, height/2);
   
   layout = loadImage("GA275_numeralhaCopa.png");  
 
@@ -28,7 +28,7 @@ void setup() {
   worldMap = loadShape("world_map_equirectangular.svg");
 //  worldMapPos = new PVector(70*mm, 90*mm);
   worldMapSize = new PVector(worldMap.width + 80*mm, worldMap.height + 80*mm);
-  worldMapPos = new PVector((width - worldMapSize.x)/2 - 5*mm, (height - worldMapSize.y)/2 + 50*mm);
+  worldMapPos = new PVector((width - worldMapSize.x)/2 - 5*mm, (height - worldMapSize.y)/2 + 30*mm);
 //  worldMap.disableStyle();
 
   //Initializing ArrayLists  
@@ -42,7 +42,7 @@ void setup() {
   }  
 
   //Loading players
-  loadPlayers("players.tsv");
+  loadPlayers("players_pt.tsv");
 
   //Loading countries coordinates
   loadCountriesCoordinates("coordinates_pt.tsv");
@@ -70,7 +70,7 @@ void draw() {
   background(255);
 //  image(layout, 0, 0, width, height);
 //  fill(0, 10);
-  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+//  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   for (int i = 0; i < allPlayers.size(); i++) {
     Player p = allPlayers.get(i);
@@ -264,5 +264,9 @@ void debug() {
   for (Player p : allPlayers) {
     //    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end);
   }
+}
+
+boolean sketchFullScreen() {
+  return true;
 }
 

@@ -26,7 +26,7 @@ class Player {
   void display(ArrayList<Player> myList, int index) {
     //Line
     noFill();
-    strokeWeight(0.5*mm);
+    strokeWeight(0.3*mm);
     stroke(currCountry.myColor, 100);
 //    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
@@ -44,7 +44,7 @@ class Player {
         noStroke();
         fill(originCountry.myColor);
         rectMode(CENTER);
-        rect(0, 0, 5*mm, 1*mm);
+        rect(0, 0, 5*mm, 0.5*mm);
     
 //        if(PI/2 < angle && angle < 1.5 * PI ){
 //          rotate(angle - PI);

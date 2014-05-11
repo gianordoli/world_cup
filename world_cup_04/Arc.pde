@@ -23,26 +23,54 @@ class Arc{
     endAngle = _endAngle;
   }  
   
-//  Arc(String _name, ArrayList<Player> _teamPlayers, float _rX, float _rY, float _radius, float _startAngle, float _endAngle){
-//    name = _name;
-//    teamPlayers = _teamPlayers;
-//    pos = new PVector(_rX, _rY);
-//    radius = _radius;
-//    startAngle = _startAngle;
-//    endAngle = _endAngle;
-//  }
+  void linkCircles(){
+    //Club country
+    for (Circle c : allCircles) {
+      for (Player p : teamPlayers) {
+        if (p.current.name.equals(c.thisCountry.name)) {
+          p.currCountry = c;
+          c.totalPlayers ++;
+        }
+      }
+    }  
+  }
+  
+  void setPlayersPositions() { 
+
+    for (int i = 0; i < teamPlayers.size(); i++) {
+  
+      Player p = teamPlayers.get(i);
+      
+      float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
+      float offset = 30*mm;  //distance from arc to control point
+      float x1 = pos.x + cos(angle) * radius;
+      float y1 = pos.y + sin(angle) * radius;
+      float x2 = pos.x + cos(angle) * (radius - offset);
+      float y2 = pos.y + sin(angle) * (radius - offset);    
+  
+      p.setPos(x1, y1, x2, y2);
+      p.setAngle(angle);
+    }
+  }  
   
   void display(){
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      stroke(thisCountry.myColor, 100);
+      stroke(thisCountry.myColor);
       strokeWeight(5*mm);
       strokeCap(SQUARE);
       arc(0, 0, radius*2, radius*2, startAngle, endAngle);
       
-      rotate(startAngle);
-      text(thisCountry.name, radius, 0);
+      float angle = (endAngle + startAngle)/2;
+      translate(cos(angle) * radius, sin(angle) * radius);
+        if(angle < PI){
+          rotate(angle - PI/2);
+          text(thisCountry.name, 0, 5*mm);
+        }else{
+          rotate(angle + PI/2);
+          text(thisCountry.name, 0, -6*mm);      
+        }
     popMatrix();
   }
 }

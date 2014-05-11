@@ -5,7 +5,7 @@ class Circle {
   PVector pos;
   PVector controlPoint;
   float radius;
-  float final_radius;
+  float finalRadius;
   int totalPlayers;
   
   Country thisCountry;
@@ -16,8 +16,7 @@ class Circle {
     controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
-    totalPlayers = 0;
-    final_radius = 5*mm;    
+    totalPlayers = 0;  
   }
   
   void setPos(float lat, float lng){
@@ -34,8 +33,8 @@ class Circle {
       if(angle < 0) {
         angle = TWO_PI - abs(angle); 
       }    
-      controlPoint.x = center.x + cos(angle) * (distance + final_radius + offset);
-      controlPoint.y = center.y + sin(angle) * (distance + final_radius + offset);  
+      controlPoint.x = center.x + cos(angle) * (distance + finalRadius + offset);
+      controlPoint.y = center.y + sin(angle) * (distance + finalRadius + offset);  
   }
   
 //  void setColor(float h, float s, float b){
@@ -43,7 +42,7 @@ class Circle {
 //  }  
   
   void setRadius(int max){
-    final_radius = map(totalPlayers, 0, max, 2*mm, 10*mm);
+    finalRadius = map(totalPlayers, 0, max, 2*mm, 10*mm);
   }
   
   void update(){
@@ -65,8 +64,8 @@ class Circle {
 
   void display() {
     
-    if(radius < final_radius * 0.99){
-      radius += (final_radius - radius) * 0.1;
+    if(radius < finalRadius * 0.99){
+      radius += (finalRadius - radius) * 0.1;
     }
     
     noStroke();

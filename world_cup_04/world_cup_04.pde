@@ -14,8 +14,6 @@ PVector worldMapPos;
 PVector worldMapSize;
 PVector center;
 
-PImage layout;
-
 void setup() {
   //  JS:
 //size(800, 1000);
@@ -24,8 +22,6 @@ void setup() {
 //  frameRate(30);
 
   center = new PVector(width/2, height/2);
-  
-  layout = loadImage("GA275_numeralhaCopa.png");  
 
   //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
@@ -45,15 +41,21 @@ void setup() {
   /*------ ARCS ------*/
   allArcs = createArcs(allPlayers);  //Creating arcs based on players list
   allArcs = setArcs(allArcs);        //Setting arc angle
-//  for(Arc a : allArcs){              //Sorting the list
-//    a.teamPlayers = sortPlayers(a.teamPlayers, sortedCountries, "current");
-//  }  
+  for(Arc a : allArcs){
+    //Sorting the list
+    a.teamPlayers = sortPlayers(a.teamPlayers, sortedCountries, "current");
+    //Linking to the circles
+    a.linkCircles();
+    a.setPlayersPositions();
+  }
 
-//  linkPlayersAndCoutries();  //Linking the 2 ArrayLists  
-//  setPlayersPositions();     //Setting arc points
-//
-//  //Now that we have all players, we can set the radius of each country
-//  setCountriesRadii();
+  //Now that we've linked players and circles,
+  //let's calculate the circle radius based on the number
+  //of players linked to it
+  int maxPlayers = getMax(allCircles);
+  for (Circle c : allCircles) {
+    c.setRadius(maxPlayers);
+  }  
 
   debug();
 }
@@ -64,18 +66,13 @@ void draw() {
   }
   
   background(255);
-//  image(layout, 0, 0, width, height);
-//  fill(0, 10);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   for(Arc a : allArcs){
-//  for(int i = 0; i < limit; i++){
-//  Arc a = allArcs.get(i);
-  
+    for(Player p : a.teamPlayers){
+      p.display();
+    }
     a.display();
-//    for(Player p : t.teamPlayers){
-//      p.display();
-//    }
   }
 
   for (Circle c : allCircles) {
@@ -249,22 +246,6 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   return tempList;
 }
 
-//void setCountriesRadii() {
-//  for (Circle c : allCircles) {
-//    for (Player p : allPlayers) {
-//      if (p.clubCountry.equals(c.name)) {
-//        c.totalPlayers ++;
-//      }
-//    }
-//  }
-//
-//  int maxPlayers = getMax(allCircles);
-//  for (Circle c : allCircles) {
-//    //    println(c.name + "\t" + c.totalPlayers);
-//    c.setRadius(maxPlayers);
-//  }
-//}
-
 
 //void setPlayersPositions() { 
 //  float radius = 137*mm;
@@ -326,17 +307,7 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
 //  }
 //}
 //
-//void linkPlayersAndCoutries() {
-//
-//  //Club country
-//  for (Circle c : allCircles) {
-//    for (Player p : allPlayers) {
-//      if (p.clubCountry.equals(c.name)) {
-//        p.currCountry = c;
-//      }
-//    }
-//  }
-//}
+
 
 int getMax(ArrayList<Circle> myList) {
   int max = 0;

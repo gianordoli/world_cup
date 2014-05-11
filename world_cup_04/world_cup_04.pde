@@ -14,9 +14,15 @@ PVector worldMapPos;
 PVector worldMapSize;
 PVector center;
 
+//animation
+int interval;
+int transition1;
+int transition2;
+int transition3;
+
 void setup() {
   //  JS:
-//size(800, 1000);
+//size(800, 900);
   size(266*mm, 300*mm);
   colorMode(HSB);
 //  frameRate(30);
@@ -25,8 +31,8 @@ void setup() {
 
   //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapSize = new PVector(worldMap.width + 80*mm, worldMap.height + 80*mm);
-  worldMapPos = new PVector((width - worldMapSize.x)/2 - 5*mm, (height - worldMapSize.y)/2 + 30*mm);
+  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+  worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
 
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");  
@@ -35,7 +41,8 @@ void setup() {
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
-  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt"); 
+  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
+//  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
   /*------ ARCS ------*/
@@ -58,6 +65,11 @@ void setup() {
   }  
 
   debug();
+  
+  interval = 1000;
+  transition1 = millis() + 6000;
+  transition2 = transition1 + interval;
+  transition3 = transition2 + interval;
 }
 
 void draw() {
@@ -68,13 +80,19 @@ void draw() {
   background(255);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
-  for(Arc a : allArcs){
-    for(Player p : a.teamPlayers){
-      p.display();
+  if(millis() > transition1){
+    
+    for(Arc a : allArcs){
+      
+      if(millis() > transition2){
+        for(Player p : a.teamPlayers){
+          p.display();
+        }
+      }      
+      a.display();
     }
-    a.display();
   }
-
+  
   for (Circle c : allCircles) {
     c.update();
     c.display();
@@ -245,69 +263,6 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   
   return tempList;
 }
-
-
-//void setPlayersPositions() { 
-//  float radius = 137*mm;
-//  float centerOffset = 5*mm;
-//  
-//  ArrayList<Player> tempPlayers = new ArrayList();
-//  String prevCircle = "";
-//  float prevRX = 0;
-//  float prevRY = 0;
-//  float startAngle = 0;
-//  float endAngle = 0;
-//
-//  for (int i = 0; i < allPlayers.size(); i++) {
-//
-//    Player thisPlayer = allPlayers.get(i);
-//
-//    //Position    
-//    float angle = map(i, 0, allPlayers.size() - 1, 0.15 * PI, 1.55 * PI);
-//    if(angle > 0.85 * PI){
-//      angle += 0.3 * PI;
-//      centerOffset = -5*mm;
-//    }    
-//      
-//    float rX = center.x;
-//    float rY = center.y + centerOffset;
-//    float offset = 30*mm;  //distance from arc to control point
-//    float x1 = rX + cos(angle) * radius;
-//    float y1 = rY + sin(angle) * radius;
-//    float x2 = rX + cos(angle) * (radius - offset);
-//    float y2 = rY + sin(angle) * (radius - offset);    
-//
-//    thisPlayer.setPos(x1, y1, x2, y2);
-//    thisPlayer.setAngle(angle);
-//    
-//    //Is this player's team different from the previous one?
-//    if(!thisPlayer.country.equals(prevCircle)){
-//      //If it is not the first player...
-//      if(i != 0){
-//        //Create a new team based on the previous information
-//        allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));      
-//      } 
-//      
-//      //Start a new team/Clean the previous list up 
-//      startAngle = angle;
-//      tempPlayers = new ArrayList();
-//    }
-//    
-//    tempPlayers.add(thisPlayer);
-//    endAngle = angle;
-//    prevRX = rX;
-//    prevRY = rY;
-//    
-//    //Wait! Was it the last player?
-//    if(i == allPlayers.size() - 1){
-//      allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));   
-//    }    
-//    
-//    prevCircle = thisPlayer.country;
-//  }
-//}
-//
-
 
 int getMax(ArrayList<Circle> myList) {
   int max = 0;

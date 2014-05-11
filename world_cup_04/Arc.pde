@@ -54,22 +54,40 @@ class Arc{
   }  
   
   void display(){
+    float currAngle = 0;
+    float alpha = 0;
+    if(millis() < transition2){
+      currAngle = map(transition2 - millis(), interval, 0, startAngle, endAngle);
+      currAngle = constrain(currAngle, 0, endAngle);
+      alpha = map(transition2 - millis(), interval, 0, 0, 255);
+      alpha = constrain(alpha, 0, 255);
+    }else{
+      currAngle = endAngle;
+      alpha = 255;
+    }
+    
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
       stroke(thisCountry.myColor);
       strokeWeight(5*mm);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2, radius*2, startAngle, endAngle);
+      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
+      PVector boxSize = new PVector(20*mm, 4*mm);  
+      rectMode(CORNER);
+      textAlign(CENTER, CENTER);
+      textSize(10);    
+      textLeading(10);  
+      fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.name, 0, 5*mm);
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }else{
           rotate(angle + PI/2);
-          text(thisCountry.name, 0, -6*mm);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }
     popMatrix();
   }

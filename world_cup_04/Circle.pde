@@ -42,7 +42,7 @@ class Circle {
 //  }  
   
   void setRadius(int max){
-    finalRadius = map(totalPlayers, 0, max, 2*mm, 10*mm);
+    finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
   }
   
   void update(){

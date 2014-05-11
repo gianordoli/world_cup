@@ -16,13 +16,17 @@ class Country{
     int groupInt = code[0];
     float h, s, b;
     //group int: "a" to "h"
-    h = map(groupInt, 97, 104, 0, 255);
+    h = map(groupInt, 97, 104, 0, 230);
     if(groupInt < 97){
       s = 0;
       b = 170;
     }else{
       s = 225;
-      b = 255;    
+      if(groupInt % 2 == 0){
+        b = 255;
+      }else{
+        b = 225;
+      }
     }
     myColor = color(h, s, b);  
   }

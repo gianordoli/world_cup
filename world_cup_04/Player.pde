@@ -25,10 +25,19 @@ class Player {
   }
 
   void display() {
+    
+    float alpha = 0;
+    if(millis() < transition3){
+      alpha = map(transition3 - millis(), interval, 0, 0, 100);
+      alpha = constrain(alpha, 0, 100);
+    }else{
+      alpha = 100;
+    }  
+    
     //Line
     noFill();
     strokeWeight(0.3*mm);
-    stroke(currCountry.thisCountry.myColor, 100);
+    stroke(currCountry.thisCountry.myColor, alpha);
 //    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,

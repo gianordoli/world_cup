@@ -4,7 +4,7 @@ class Player {
   ArrayList<PVector> anchors;
   float angle;
   
-  Country currCountry;
+  Circle currCountry;
 
   Player(String _name, String _country, String _club, String _clubCountry) {
     name = _name;

@@ -1,7 +1,7 @@
 //Draw countries on the map
 //Represent countries in which (clubs) World Cup athletes currently play 
 //It is linked to players in order to update their control points
-class Country {
+class Circle {
   String name;
   String group;
   PVector pos;
@@ -11,7 +11,7 @@ class Country {
   int totalPlayers;  
   color myColor;
 
-  Country(String _name, float lat, float lng) {
+  Circle(String _name, float lat, float lng) {
     name = _name;
     pos = new PVector();
     controlPoint = new PVector();
@@ -72,7 +72,7 @@ class Country {
   
   void update(){
     float padding = 3*mm; //space in between the circles
-    for(Country c : allCountries){
+    for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
       if(distance < minDistance && distance > 0){

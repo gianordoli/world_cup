@@ -4,8 +4,8 @@ boolean record = false;
 int mm = 3;
 
 ArrayList<Player> allPlayers;
-ArrayList<Country> allCountries;
-ArrayList<Team> allTeams;
+ArrayList<Circle> allCircles;
+ArrayList<Arc> allArcs;
 
 PShape worldMap;
 PVector worldMapPos;
@@ -33,12 +33,12 @@ void setup() {
 //  worldMap.disableStyle();
 
   /*----- COUNTRIES -----*/
-  allCountries = new ArrayList<Country>();
+  allCircles = new ArrayList<Circle>();
   loadCountriesCoordinates("coordinates_pt.tsv");
   setCountriesColors("countries_groups.tsv");
 
   /*------ PLAYERS ------*/
-  allTeams = new ArrayList<Team>();
+  allArcs = new ArrayList<Arc>();
   allPlayers = new ArrayList<Player>();
   loadPlayers("players_pt.tsv");
   
@@ -47,7 +47,7 @@ void setup() {
     for (int i =0; i < sortedCountries.length; i++) {
       sortedCountries[i] = trim(sortedCountries[i]);
     }
-    sortPlayersCountry(sortedCountries);  //Sorting the arcs
+    sortPlayersCircle(sortedCountries);  //Sorting the arcs
     sortPlayersClub(sortedCountries);     //Sub-sorting the lines
     
   linkPlayersAndCoutries();  //Linking the 2 ArrayLists  
@@ -69,13 +69,14 @@ void draw() {
 //  fill(0, 10);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
-  for(Team t : allTeams){
+  for(Arc t : allArcs){
+    t.display();
     for(Player p : t.teamPlayers){
       p.display();
     }
   }
 
-  for (Country c : allCountries) {
+  for (Circle c : allCircles) {
     c.update();
     c.display();
   }
@@ -105,15 +106,15 @@ void loadCountriesCoordinates(String filename) {
     String name = trim(myLine[0]);
     float lat = parseFloat(myLine[1]);
     float lng = parseFloat(myLine[2]);
-    Country myCountry = new Country(name, lat, lng);
-    allCountries.add(myCountry);
+    Circle myCircle = new Circle(name, lat, lng);
+    allCircles.add(myCircle);
   }
 }
 
 void setCountriesColors(String filename) {
-  for (int i = 0; i < allCountries.size(); i++) {
-    Country c = allCountries.get(i);
-//    float h = map(i, 0, allCountries.size() - 1, 0, 200);
+  for (int i = 0; i < allCircles.size(); i++) {
+    Circle c = allCircles.get(i);
+//    float h = map(i, 0, allCircles.size() - 1, 0, 200);
 //    float s = 255;
 //    //    float b = (i % 2 == 0) ? (255) : (200);
 //    float b = 255;
@@ -123,7 +124,7 @@ void setCountriesColors(String filename) {
 }
 
 void setCountriesRadii() {
-  for (Country c : allCountries) {
+  for (Circle c : allCircles) {
     for (Player p : allPlayers) {
       if (p.clubCountry.equals(c.name)) {
         c.totalPlayers ++;
@@ -131,14 +132,14 @@ void setCountriesRadii() {
     }
   }
 
-  int maxPlayers = getMax(allCountries);
-  for (Country c : allCountries) {
+  int maxPlayers = getMax(allCircles);
+  for (Circle c : allCircles) {
     //    println(c.name + "\t" + c.totalPlayers);
     c.setRadius(maxPlayers);
   }
 }
 
-void sortPlayersCountry(String[] sortedCountries) {
+void sortPlayersCircle(String[] sortedCountries) {
 
   //This temporary ArrayList will store the objects sorted
   ArrayList<Player> tempList = new ArrayList<Player>();  
@@ -171,24 +172,24 @@ void sortPlayersClub(String[] sortedCountries) {
 
   while (a < allPlayers.size () - 1) {
     //Current country
-    ArrayList<Player> tempListCountry = new ArrayList<Player>();
+    ArrayList<Player> tempListCircle = new ArrayList<Player>();
     int i = a;
     String currCountry = allPlayers.get(a).country;
     while (currCountry.equals (allPlayers.get (i).country) && i < allPlayers.size() - 1) {
-      tempListCountry.add(allPlayers.get(i));
+      tempListCircle.add(allPlayers.get(i));
       i++;
     }
     if (i == allPlayers.size() - 1) {
-      tempListCountry.add(allPlayers.get(i));
+      tempListCircle.add(allPlayers.get(i));
     }
     //    i--;
-    //  for(Player p : tempListCountry){
+    //  for(Player p : tempListCircle){
     //    println(p.country + "\t" + p.clubCountry);
     //  }  
 
     for (int j = 0; j < sortedCountries.length; j++) {
-      for (int k = 0; k < tempListCountry.size(); k++) {
-        Player p = tempListCountry.get(k);      
+      for (int k = 0; k < tempListCircle.size(); k++) {
+        Player p = tempListCircle.get(k);      
         if (sortedCountries[j].equals(p.clubCountry)) {
           tempList.add(p);
           //          allPlayers.remove(p);
@@ -207,7 +208,9 @@ void setPlayersPositions() {
   float centerOffset = 5*mm;
   
   ArrayList<Player> tempPlayers = new ArrayList();
-  String prevCountry = "";
+  String prevCircle = "";
+  float prevRX = 0;
+  float prevRY = 0;
   float startAngle = 0;
   float endAngle = 0;
 
@@ -234,9 +237,12 @@ void setPlayersPositions() {
     thisPlayer.setAngle(angle);
     
     //Is this player's team different from the previous one?
-    if(!thisPlayer.country.equals(prevCountry)){
-      //Create a new team based on the previous information
-      allTeams.add(new Team(prevCountry, tempPlayers, startAngle, endAngle)); 
+    if(!thisPlayer.country.equals(prevCircle)){
+      //If it is not the first player...
+      if(i != 0){
+        //Create a new team based on the previous information
+        allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));      
+      } 
       
       //Start a new team/Clean the previous list up 
       startAngle = angle;
@@ -245,20 +251,22 @@ void setPlayersPositions() {
     
     tempPlayers.add(thisPlayer);
     endAngle = angle;
+    prevRX = rX;
+    prevRY = rY;
     
     //Wait! Was it the last player?
     if(i == allPlayers.size() - 1){
-      allTeams.add(new Team(prevCountry, tempPlayers, startAngle, endAngle));   
+      allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));   
     }    
     
-    prevCountry = thisPlayer.country;
+    prevCircle = thisPlayer.country;
   }
 }
 
 void linkPlayersAndCoutries() {
 
   //Club country
-  for (Country c : allCountries) {
+  for (Circle c : allCircles) {
     for (Player p : allPlayers) {
       if (p.clubCountry.equals(c.name)) {
         p.currCountry = c;
@@ -267,9 +275,9 @@ void linkPlayersAndCoutries() {
   }
 }
 
-int getMax(ArrayList<Country> myList) {
+int getMax(ArrayList<Circle> myList) {
   int max = 0;
-  for (Country c : myList) {
+  for (Circle c : myList) {
     if (c.totalPlayers > max) {
       max = c.totalPlayers;
     }
@@ -281,11 +289,11 @@ void debug() {
 //  for (Player p : allPlayers) {
     //    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end);
 //  }
-//  for(Country c: allCountries){
+//  for(Circle c: allCircles){
 //    println(c.name + "\t" + c.group);
 //  }
-  for(Team t: allTeams){
-    print(t.name);
+  for(Arc t: allArcs){
+    print(t.name + ":" + t.teamPlayers.size());
     for(Player p : t.teamPlayers){
       println("\t" + p.name);
     }

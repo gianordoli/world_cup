@@ -34,10 +34,10 @@ class Country{
     //Saturation
     if(i < 4*4){
       s = map(i % 4, 0, 3, 255, 180);
-      b = map(i % 4, 0, 3, 220, 255);    
+//      b = map(i % 4, 0, 3, 235, 255);    
     }else{
       s = map(i % 4, 0, 3, 180, 255);
-      b = map(i % 4, 0, 3, 255, 220);
+//      b = map(i % 4, 0, 3, 255, 235);
     }
 //    s = 255;
     
@@ -46,7 +46,7 @@ class Country{
       s -= 100;
     }    
     
-//    b = 255;
+    b = 255;
     
     if(groupInt < 97){  //gray
       s = 0;

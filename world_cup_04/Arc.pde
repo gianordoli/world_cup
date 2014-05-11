@@ -70,13 +70,14 @@ class Arc{
       translate(pos.x, pos.y);
       noFill();
       stroke(thisCountry.myColor);
-      strokeWeight(5*mm);
+      strokeWeight(8*mm);
       strokeCap(SQUARE);
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
-      PVector boxSize = new PVector(20*mm, 4*mm);  
+      PVector boxSize = new PVector(15*mm, 4*mm);  
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
+      textFont(glober);      
       textSize(10);    
       textLeading(10);  
       fill(0, alpha);      

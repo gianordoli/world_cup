@@ -22,12 +22,11 @@ class Circle {
   void setPos(float lat, float lng){
     // Equirectangular projection
     pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
-    setControlPoint();    
+    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);    
   }
   
   void setControlPoint(){
-      float offset = 20*mm;
+      float offset = 30*mm;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -43,6 +42,7 @@ class Circle {
   
   void setRadius(int max){
     finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
+    setControlPoint();    
   }
   
   void update(){
@@ -72,8 +72,9 @@ class Circle {
     fill(thisCountry.myColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
-    PVector boxSize = new PVector(20*mm, 4*mm);    
+    PVector boxSize = new PVector(14*mm, 4*mm);    
     fill(0);
+    textFont(glober);
     textSize(8);
     rectMode(CORNER);
     textAlign(CENTER, CENTER);

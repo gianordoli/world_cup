@@ -20,6 +20,8 @@ int transition1;
 int transition2;
 int transition3;
 
+PFont glober;
+
 void setup() {
   //  JS:
 //size(800, 900);
@@ -27,6 +29,8 @@ void setup() {
   colorMode(HSB);
 //  frameRate(30);
 
+  glober = createFont("GloberBold", 8);
+  
   center = new PVector(width/2, height/2);
 
   //Loading and positioning map

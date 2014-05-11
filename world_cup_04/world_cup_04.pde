@@ -38,10 +38,6 @@ void setup() {
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");  
   allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
-  println(allCircles.size());
-//  for(Circle c : allCircles){
-//    c.setColor
-//  }
   
 //  setCountriesColors("countries_groups.tsv");
 
@@ -50,13 +46,12 @@ void setup() {
   allPlayers = loadPlayers("players_pt.tsv");
   
   //Players' positions in the arc will be based on this sorted list
-    String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
-    for (int i =0; i < sortedCountries.length; i++) {
-      sortedCountries[i] = trim(sortedCountries[i]);
-    } 
-    
-//    sortPlayersCircle(sortedCountries);  //Sorting the arcs
-//    sortPlayersClub(sortedCountries);     //Sub-sorting the lines
+  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt"); 
+  allPlayers = sortPlayersByOrigin(allPlayers, sortedCountries);  //Sorting the arcs
+  
+  /*------ ARCS ------*/
+  allArcs = createArcs(allPlayers);
+//    sortPlayersByCurrent(sortedCountries); //Sub-sorting the lines
 //    
 //  linkPlayersAndCoutries();  //Linking the 2 ArrayLists  
 //  setPlayersPositions();     //Setting arc points
@@ -165,18 +160,31 @@ ArrayList<Player> loadPlayers(String filename) {
   return tempList;
 }
 
+ArrayList<Player> sortPlayersByOrigin(ArrayList<Player> thesePlayers, String[] sortedCountries) {
+  ArrayList<Player> tempList = new ArrayList<Player>();
+  for(String s : sortedCountries){
+    s = trim(s);
+  }  
+  //Looping through each sorted value
+  for (int i = 0; i < sortedCountries.length; i++) {
+    //Looping through each object
+    for (int j = 0; j < thesePlayers.size(); j++) {
+      String thisValue = thesePlayers.get(j).origin.name;
+      //        println("\t" + thisValue);
+      //If the sorted value is found...
+      if (sortedCountries[i].equals(thisValue)) {
+        //Add the object to the temporary list
+        tempList.add(thesePlayers.get(j));
+      }
+    }
+  }
+  return tempList;
+}
 
-
-//void setCountriesColors(String filename) {
-//  for (int i = 0; i < allCircles.size(); i++) {
-//    Circle c = allCircles.get(i);
-//    float h = map(i, 0, allCircles.size() - 1, 0, 200);
-//    float s = 255;
-//    //    float b = (i % 2 == 0) ? (255) : (200);
-//    float b = 255;
-//    c.setColor(h, s, b);
-//    c.setColor(filename);
-//  }
+//ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
+//  ArrayList<Arc> tempList = new ArrayList<Arc>();
+//  for()
+//
 //}
 
 //void setCountriesRadii() {
@@ -194,33 +202,10 @@ ArrayList<Player> loadPlayers(String filename) {
 //    c.setRadius(maxPlayers);
 //  }
 //}
-//
-//void sortPlayersCircle(String[] sortedCountries) {
-//
-//  //This temporary ArrayList will store the objects sorted
-//  ArrayList<Player> tempList = new ArrayList<Player>();  
-//
-//  //Looping through each sorted value
-//  for (int i = 0; i < sortedCountries.length; i++) {
-//
-//    //Looping through each object
-//    for (int j = 0; j < allPlayers.size(); j++) {
-//      String thisValue = allPlayers.get(j).country;
-//      //        println("\t" + thisValue);
-//
-//      //If the sorted value is found...
-//      if (sortedCountries[i].equals(thisValue)) {
-//        //Add the object to the temporary list
-//        tempList.add(allPlayers.get(j));
-//      }
-//    }
-//  }
-//
-//  //Replace the original list with the sorted one
-//  allPlayers = tempList;
-//}
-//
-//void sortPlayersClub(String[] sortedCountries) {
+
+
+
+//void sortPlayersByCurrent(String[] sortedCountries) {
 //  //New list
 //  ArrayList<Player> tempList = new ArrayList<Player>();
 //
@@ -348,9 +333,9 @@ void debug() {
   for(Circle c: allCircles){
     println(c.thisCountry.name);
   }  
-//  for (Player p : allPlayers) {
-    //    println(p.name + "\t" + p.country + "\t" + p.club + "\t" + p.clubCountry + "\t" + p.start + "\t" + p.end);
-//  }
+  for (Player p : allPlayers) {
+    println(p.name + " \t" + p.origin.name);
+  }
 
 //  for(Arc t: allArcs){
 //    print(t.name + ":" + t.teamPlayers.size());

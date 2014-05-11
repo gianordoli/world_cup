@@ -35,14 +35,18 @@ void setup() {
   worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
 
   /*----- COUNTRIES -----*/
-  allCountries = initCountries("countries_groups.tsv");  
+  allCountries = initCountries("countries_groups.tsv"); 
+  for(int i = 0; i < allCountries.size(); i++){
+    Country c = allCountries.get(i);
+    c.setColor(i);
+  }
   allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
-  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
-//  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
+//  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
+  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
   /*------ ARCS ------*/
@@ -116,7 +120,7 @@ ArrayList<Country> initCountries(String filename){
       String name = trim(myLine[0]);
       String group = trim(myLine[1]);
       Country thisCountry = new Country(name, group);
-      thisCountry.setColor();
+//      thisCountry.setColor();
       tempList.add(thisCountry);
     }
     return tempList;
@@ -292,7 +296,7 @@ void debug() {
 //  }
 }
 
-//boolean sketchFullScreen() {
-//  return true;
-//}
+boolean sketchFullScreen() {
+  return true;
+}
 

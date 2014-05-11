@@ -1,16 +1,17 @@
 //Draws lines
 class Player {
-  String name, country, club, clubCountry;
+  String name, club;
+  Country origin, current;
   ArrayList<PVector> anchors;
   float angle;
   
   Circle currCountry;
 
-  Player(String _name, String _country, String _club, String _clubCountry) {
+  Player(String _name, Country _origin, String _club, Country _current) {
     name = _name;
-    country = _country;
+    origin = _origin;
     club = _club;
-    clubCountry = _clubCountry;
+    current = _current;
     anchors = new ArrayList<PVector>();
   }
 
@@ -27,7 +28,7 @@ class Player {
     //Line
     noFill();
     strokeWeight(0.3*mm);
-    stroke(currCountry.myColor, 100);
+    stroke(currCountry.thisCountry.myColor, 100);
 //    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,

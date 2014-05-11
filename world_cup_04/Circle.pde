@@ -2,22 +2,22 @@
 //Represent countries in which (clubs) World Cup athletes currently play 
 //It is linked to players in order to update their control points
 class Circle {
-  String name;
-  String group;
   PVector pos;
   PVector controlPoint;
   float radius;
   float final_radius;
-  int totalPlayers;  
-  color myColor;
+  int totalPlayers;
+  
+  Country thisCountry;
 
-  Circle(String _name, float lat, float lng) {
-    name = _name;
+  Circle(Country _thisCountry, float lat, float lng) {
+    thisCountry = _thisCountry;
     pos = new PVector();
     controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
-    totalPlayers = 0;    
+    totalPlayers = 0;
+    final_radius = 5*mm;    
   }
   
   void setPos(float lat, float lng){
@@ -40,31 +40,7 @@ class Circle {
   
 //  void setColor(float h, float s, float b){
 //    myColor = color(h, s, b);
-//  }
-  
-  void setColor(String filename){
-  String[] tableString = loadStrings(filename);
-    for (String lineString : tableString) {
-      String[] myLine = split(lineString, "\t");
-      if(trim(myLine[0]).equals(this.name)){
-        group = trim(myLine[1]);
-      }
-    }
-    //Converting group Strint to char and to int
-    int[] code = int(group.toCharArray());
-    int groupInt = code[0];
-    float h, s, b;
-    //group int: "a" to "h"
-    h = map(groupInt, 97, 104, 0, 255);
-    if(groupInt < 97){
-      s = 0;
-      b = 170;
-    }else{
-      s = 225;
-      b = 255;    
-    }
-    myColor = color(h, s, b);
-  }  
+//  }  
   
   void setRadius(int max){
     final_radius = map(totalPlayers, 0, max, 2*mm, 10*mm);
@@ -94,20 +70,16 @@ class Circle {
     }
     
     noStroke();
-    fill(myColor);
+    fill(thisCountry.myColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
-    PVector boxSize = new PVector(20*mm, 4*mm);
-//    fill(myColor);
-//    rectMode(CENTER);
-//    rect(pos.x, pos.y, boxSize.x, boxSize.y);
-    
+    PVector boxSize = new PVector(20*mm, 4*mm);    
     fill(0);
     textSize(8);
     rectMode(CORNER);
     textAlign(CENTER, CENTER);
     textLeading(8);
-    text(name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+    text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
   }
 }
 

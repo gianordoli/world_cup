@@ -23,7 +23,7 @@ class Arc{
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      stroke(teamPlayers.get(0).currCountry.myColor);
+//      stroke(teamPlayers.get(0).currCountry.thisCountry.myColor);
       strokeWeight(5*mm);
       arc(0, 0, radius*2, radius*2, startAngle, endAngle);
     popMatrix();

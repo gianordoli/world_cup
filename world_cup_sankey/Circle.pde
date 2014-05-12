@@ -8,6 +8,8 @@ class Circle {
   float finalRadius;
   int totalPlayers;
   
+  float start, barLength;
+  
   Country thisCountry;
 
   Circle(Country _thisCountry, float lat, float lng) {
@@ -18,6 +20,11 @@ class Circle {
     radius = 1;
     totalPlayers = 0;  
   }
+  
+  void setCircleParam(float _start, float _barLength){
+    start = _start;
+    barLength = _barLength;    
+  }    
   
   void setPos(float lat, float lng){
     // Equirectangular projection
@@ -63,6 +70,10 @@ class Circle {
   }  
 
   void display() {
+    
+    noStroke();
+    fill(thisCountry.myColor);
+    rect(start, 10*mm, barLength, 10*mm);
     
     if(radius < finalRadius * 0.99){
       radius += (finalRadius - radius) * 0.1;

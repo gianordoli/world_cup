@@ -51,8 +51,6 @@ void setup() {
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
-  //Players' positions in the arc will be based on this sorted list
-//  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
   String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
@@ -66,6 +64,8 @@ void setup() {
     a.linkCircles();
     a.setPlayersPositions();
   }
+
+  allCircles = setCircles(allCircles);
 
   //Now that we've linked players and circles,
   //let's calculate the circle radius based on the number
@@ -126,6 +126,7 @@ ArrayList<Country> initCountries(String filename){
 ArrayList<Circle> loadCirclesCoordinates(String filename) {
   ArrayList<Circle> tempList = new ArrayList<Circle>();
   String[] tableString = loadStrings(filename);
+    
   for (String lineString : tableString) {
     String[] myLine = split(lineString, "\t");
     String name = trim(myLine[0]);
@@ -141,6 +142,28 @@ ArrayList<Circle> loadCirclesCoordinates(String filename) {
       }
     }
   }
+  return tempList;
+}
+
+ArrayList<Circle> setCircles(ArrayList<Circle> theseCircles){
+  
+  ArrayList<Circle> tempList = theseCircles;
+  float barOffset = 1*mm;
+  float start = 0;
+  float end = 0;
+  
+  for(int i = 0; i < tempList.size(); i++){
+    
+    Circle c = tempList.get(i);
+    float barLength = (width - (tempList.size() - 1) * barOffset) / tempList.size();
+    
+    end = start + barLength;
+    
+      c.setCircleParam(start, barLength);
+    
+    start = end + barOffset;  //Next
+  }
+  
   return tempList;
 }
 
@@ -237,20 +260,18 @@ ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
 ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   
   ArrayList<Arc> tempList = theseArcs;
-  
   float barOffset = 1*mm;
   float start = 0;
   float end = 0;
   
-  
   for(int i = 0; i < tempList.size(); i++){
+    
     Arc a = tempList.get(i);
-       
     float barLength = (width - (tempList.size() - 1) * barOffset) / tempList.size();
     
     end = start + barLength;
     
-    a.setArcParam(start, barLength);
+      a.setArcParam(start, barLength);
     
     start = end + barOffset;  //Next
   }

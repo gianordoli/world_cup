@@ -4,6 +4,8 @@
 
 class Arc{
 
+  PVector pos;
+  PVector size;
   float start;
   float barLength;
   
@@ -16,9 +18,8 @@ class Arc{
   }
 
   void setArcParam(float _start, float _barLength){
-    
-    start = _start;
-    barLength = _barLength;
+    pos = new PVector(_start, height - 40*mm);
+    size = new PVector(_barLength, 10*mm);    
   }  
   
   void linkCircles(){
@@ -39,13 +40,13 @@ class Arc{
   
       Player p = teamPlayers.get(i);
       
-      float x = map(i, 0, teamPlayers.size() - 1, start, barLength);
+      float x = map(i, 0, teamPlayers.size() - 1, pos.x, size.x);
       
       float offset = 20*mm;  //distance from arc to control point
       float x1 = x;
-      float y1 = height/2;
+      float y1 = pos.y;
       float x2 = x;
-      float y2 = y1 - offset;    
+      float y2 = pos.y - offset;    
   
       p.setPos(x1, y1, x2, y2);
     }
@@ -54,15 +55,14 @@ class Arc{
   void display(){
     noStroke();
     fill(thisCountry.myColor);
-    rect(start, height/2, barLength, 10*mm);
-    
-    PVector boxSize = new PVector(15*mm, 4*mm);  
+    rect(pos.x, pos.y, size.x, size.y);
+      
     rectMode(CORNER);
     textAlign(CENTER, CENTER);
     textFont(glober);      
     textSize(10);    
     textLeading(10);  
     fill(0);     
-    text(thisCountry.name, start - boxSize.x/2, height/2 - boxSize.x/2 + 3*mm, boxSize.x, boxSize.x); 
+    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, size.y); 
   }
 }

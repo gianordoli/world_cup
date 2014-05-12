@@ -3,94 +3,68 @@
 //It is linked to players in order to update their control points
 class Circle {
   PVector pos;
+  PVector size;
   PVector controlPoint;
   float radius;
   float finalRadius;
   int totalPlayers;
+
+  ArrayList<Player> teamPlayers;
   
   float start, barLength;
   
   Country thisCountry;
 
-  Circle(Country _thisCountry, float lat, float lng) {
+  Circle(Country _thisCountry) {
     thisCountry = _thisCountry;
     pos = new PVector();
+    size = new PVector();
     controlPoint = new PVector();
-    setPos(lat, lng);
-    radius = 1;
     totalPlayers = 0;  
+    
+    teamPlayers = new ArrayList<Player>();
   }
   
   void setCircleParam(float _start, float _barLength){
-    start = _start;
-    barLength = _barLength;    
-  }    
-  
-  void setPos(float lat, float lng){
-    // Equirectangular projection
-    pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);    
+    pos = new PVector(_start, 50*mm);
+    size = new PVector(_barLength, 10*mm); 
+
+    float offset = 100*mm;
+    controlPoint.x = pos.x;
+    controlPoint.y = pos.y + offset;        
   }
   
-  void setControlPoint(){
-      float offset = 30*mm;
-      float distance = dist(pos.x, pos.y, center.x, center.y);
-      float angle = atan2(pos.y - center.y, pos.x - center.x);
-      if(angle < 0) {
-        angle = TWO_PI - abs(angle); 
-      }    
-      controlPoint.x = center.x + cos(angle) * (distance + finalRadius + offset);
-      controlPoint.y = center.y + sin(angle) * (distance + finalRadius + offset);  
-  }
+  void setPlayersPositions() { 
+
+    for (int i = 0; i < teamPlayers.size(); i++) {
   
-//  void setColor(float h, float s, float b){
-//    myColor = color(h, s, b);
-//  }  
+      Player p = teamPlayers.get(i);
+      
+      float x = map(i, 0, teamPlayers.size() - 1, pos.x, pos.x + size.x);
+      
+      float offset = 100*mm;  //distance from arc to control point
+      float x1 = x;
+      float y1 = pos.y + offset;
+      float x2 = x;
+      float y2 = pos.y;
   
-  void setRadius(int max){
-    finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
-    setControlPoint();    
-  }
-  
-  void update(){
-    float padding = 3*mm; //space in between the circles
-    for(Circle c : allCircles){
-      float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
-      float minDistance = c.radius + radius + padding;
-      if(distance < minDistance && distance > 0){
-        PVector escape = new PVector(pos.x - c.pos.x,
-                                     pos.y - c.pos.y);
-        escape.normalize();
-        pos.x += escape.x * 1.1;
-        pos.y += escape.y * 1.1;
-        
-        setControlPoint();        
-      }    
-    }  
+      p.setPos(x1, y1, x2, y2);
+    }
   }  
 
   void display() {
     
     noStroke();
     fill(thisCountry.myColor);
-    rect(start, 10*mm, barLength, 10*mm);
+    rect(pos.x, pos.y, size.x, -size.y);
     
-    if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.1;
-    }
-    
-    noStroke();
-    fill(thisCountry.myColor);
-    ellipse(pos.x, pos.y, radius * 2, radius * 2);
-    
-    PVector boxSize = new PVector(14*mm, 4*mm);    
-    fill(0);
-    textFont(glober);
-    textSize(8);
     rectMode(CORNER);
     textAlign(CENTER, CENTER);
-    textLeading(8);
-    text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+    textFont(glober);      
+    textSize(10);    
+    textLeading(10);  
+    fill(0);     
+    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, size.y);     
   }
 }
 

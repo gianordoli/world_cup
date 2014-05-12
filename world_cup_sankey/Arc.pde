@@ -29,6 +29,8 @@ class Arc{
         if (p.current.name.equals(c.thisCountry.name)) {
           p.currCountry = c;
           c.totalPlayers ++;
+          
+          c.teamPlayers.add(p);
         }
       }
     }  
@@ -40,9 +42,9 @@ class Arc{
   
       Player p = teamPlayers.get(i);
       
-      float x = map(i, 0, teamPlayers.size() - 1, pos.x, size.x);
+      float x = map(i, 0, teamPlayers.size() - 1, pos.x, pos.x + size.x);
       
-      float offset = 20*mm;  //distance from arc to control point
+      float offset = 100*mm;  //distance from arc to control point
       float x1 = x;
       float y1 = pos.y;
       float x2 = x;
@@ -63,6 +65,6 @@ class Arc{
     textSize(10);    
     textLeading(10);  
     fill(0);     
-    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, size.y); 
+    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, -size.y); 
   }
 }

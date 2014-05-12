@@ -47,7 +47,8 @@ void setup() {
     Country c = allCountries.get(i);
     c.setColor(i);
   }
-  allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
+//  allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
+  allCircles = loadCircles("countries_sorted_by_groups.txt");
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
@@ -66,13 +67,8 @@ void setup() {
   }
 
   allCircles = setCircles(allCircles);
-
-  //Now that we've linked players and circles,
-  //let's calculate the circle radius based on the number
-  //of players linked to it
-  int maxPlayers = getMax(allCircles);
-  for (Circle c : allCircles) {
-    c.setRadius(maxPlayers);
+  for(Circle c : allCircles){
+    c.setPlayersPositions();
   }  
 
   debug();
@@ -95,7 +91,6 @@ void draw() {
   }
   
   for (Circle c : allCircles) {
-    c.update();
     c.display();
   }
 
@@ -123,19 +118,17 @@ ArrayList<Country> initCountries(String filename){
     return tempList;
 }
 
-ArrayList<Circle> loadCirclesCoordinates(String filename) {
+ArrayList<Circle> loadCircles(String filename) {
   ArrayList<Circle> tempList = new ArrayList<Circle>();
   String[] tableString = loadStrings(filename);
     
   for (String lineString : tableString) {
     String[] myLine = split(lineString, "\t");
     String name = trim(myLine[0]);
-    float lat = parseFloat(myLine[1]);
-    float lng = parseFloat(myLine[2]);
 
     for (Country c : allCountries) {
       if(name.equals(c.name)){
-        Circle myCircle = new Circle(c, lat, lng);
+        Circle myCircle = new Circle(c);
         tempList.add(myCircle);
 //        println(name);
         break;
@@ -151,11 +144,11 @@ ArrayList<Circle> setCircles(ArrayList<Circle> theseCircles){
   float barOffset = 1*mm;
   float start = 0;
   float end = 0;
-  
+    
   for(int i = 0; i < tempList.size(); i++){
     
     Circle c = tempList.get(i);
-    float barLength = (width - (tempList.size() - 1) * barOffset) / tempList.size();
+    float barLength = map(c.teamPlayers.size(), 0, allPlayers.size(), 0, width - (theseCircles.size() - 1) * barOffset);
     
     end = start + barLength;
     
@@ -277,16 +270,6 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   }
   
   return tempList;
-}
-
-int getMax(ArrayList<Circle> myList) {
-  int max = 0;
-  for (Circle c : myList) {
-    if (c.totalPlayers > max) {
-      max = c.totalPlayers;
-    }
-  }
-  return max;
 }
 
 void debug() {

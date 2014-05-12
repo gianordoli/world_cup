@@ -4,8 +4,11 @@
  Gabriel Gianordoli
  gianordoligabriel@gmail.com
  
- Sorting list of countries based on geolocation
- (based on angle 0-2*PI) 
+ Geoplacing countries and then sorting list
+ based on geolocation (based on angle 0-2*PI).
+ The geoplacement here is based on Till Nagel's tutorial
+ "Processing geo information in Wikipedia articles" 
+ http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html
 --------------------------------------------------------------------------- */
 
 ArrayList placeMarkers = new ArrayList();

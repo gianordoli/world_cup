@@ -2,7 +2,10 @@
  World Cup 2014: Teams vs Clubs
  2014, for Galileu Magazine, Brazil
  Gabriel Gianordoli
- gianordoligabriel@gmail.com 
+ gianordoligabriel@gmail.com
+
+ Geoplacement based on Till Nagel's tutorial: 
+ http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
 --------------------------------------------------------------------------- */
 
 import processing.pdf.*;

@@ -1,4 +1,12 @@
-//Loading data to extract a list of unique countries
+/* ---------------------------------------------------------------------------
+ World Cup 2014: Teams vs Clubs
+ 2014, for Galileu Magazine, Brazil
+ Gabriel Gianordoli
+ gianordoligabriel@gmail.com
+ 
+ Extracting list of countries from original spreadsheet
+--------------------------------------------------------------------------- */
+
 void setup(){
   StringList countries = new StringList();
   

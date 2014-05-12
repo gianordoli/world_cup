@@ -1,3 +1,13 @@
+/* ---------------------------------------------------------------------------
+ World Cup 2014: Teams vs Clubs
+ 2014, for Galileu Magazine, Brazil
+ gianordoligabriel@gmail.com
+ 
+ This sketch only loads the coordinates for geoplacing the countries
+ Using Temboo to access Yahoo API
+ You'll need your own credentials to access it. Just replace "credentials.txt" 
+--------------------------------------------------------------------------- */
+
 import com.temboo.core.*;
 import com.temboo.Library.Yahoo.PlaceFinder.*;
 

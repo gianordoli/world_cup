@@ -23,23 +23,23 @@ class Country{
 //    }
 
     //hue
-    if(groupInt % 2 == 0){
-      h = map(groupInt, 98, 104, 0, 60);
+    if(groupInt % 2 != 0){
+      h = map(groupInt, 98, 104, 0, 80);
       
     }else{
-      h = map(groupInt, 96, 103, 115, 235);
+      h = map(groupInt, 96, 104, 115, 235);
     }
 //    h += map(i % 4, 0, 3, 0, 20);
     
     //Saturation
-    if(i < 4*4){
-      s = map(i % 4, 0, 3, 255, 180);
-//      b = map(i % 4, 0, 3, 235, 255);    
-    }else{
-      s = map(i % 4, 0, 3, 180, 255);
-//      b = map(i % 4, 0, 3, 255, 235);
-    }
-//    s = 255;
+//    if(i < 4*4){
+//      s = map(i % 4, 0, 3, 255, 180);
+////      b = map(i % 4, 0, 3, 235, 255);    
+//    }else{
+//      s = map(i % 4, 0, 3, 180, 255);
+////      b = map(i % 4, 0, 3, 255, 235);
+//    }
+    s = 255;
     
     //Indigo blue
     if(140 < h && h < 190){

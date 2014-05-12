@@ -1,3 +1,10 @@
+/* ---------------------------------------------------------------------------
+ World Cup 2014: Teams vs Clubs
+ 2014, for Galileu Magazine, Brazil
+ Gabriel Gianordoli
+ gianordoligabriel@gmail.com 
+--------------------------------------------------------------------------- */
+
 import processing.pdf.*;
 boolean record = false;
 

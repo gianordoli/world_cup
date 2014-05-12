@@ -38,11 +38,15 @@ class Player {
     noFill();
     strokeWeight(0.3*mm);
     stroke(currCountry.thisCountry.myColor, alpha);
-//    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
+//    line(anchors.get(0).x, anchors.get(0).y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,
-           currCountry.controlPoint.x, currCountry.controlPoint.y,
+           currCountry.pos.x, currCountry.pos.y,
            currCountry.pos.x, currCountry.pos.y);
+//    bezier(anchors.get(0).x, anchors.get(0).y, 
+//           anchors.get(1).x, anchors.get(1).y,
+//           currCountry.controlPoint.x, currCountry.controlPoint.y,
+//           currCountry.pos.x, currCountry.pos.y);
   }
 }
 

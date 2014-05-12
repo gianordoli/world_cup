@@ -1,3 +1,13 @@
+/* ---------------------------------------------------------------------------
+ World Cup 2014: Teams vs Clubs
+ 2014, for Galileu Magazine, Brazil
+ Gabriel Gianordoli
+ gianordoligabriel@gmail.com
+ 
+ Sorting list of countries based on geolocation
+ (based on angle 0-2*PI) 
+--------------------------------------------------------------------------- */
+
 ArrayList placeMarkers = new ArrayList();
 PImage worldMap;
 PVector center;

@@ -42,7 +42,7 @@ class Arc{
       Player p = teamPlayers.get(i);
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 30*mm;  //distance from arc to control point
+      float offset = 20*mm;  //distance from arc to control point
       float x1 = pos.x + cos(angle) * radius;
       float y1 = pos.y + sin(angle) * radius;
       float x2 = pos.x + cos(angle) * (radius - offset);
@@ -72,7 +72,7 @@ class Arc{
       stroke(thisCountry.myColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
+      arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);
       
       PVector boxSize = new PVector(15*mm, 4*mm);  
       rectMode(CORNER);
@@ -85,10 +85,10 @@ class Arc{
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 + 3*mm, boxSize.x, boxSize.x);      
         }else{
           rotate(angle + PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 - 3*mm, boxSize.x, boxSize.x);      
         }
     popMatrix();
   }

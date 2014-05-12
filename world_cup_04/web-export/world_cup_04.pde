@@ -15,32 +15,42 @@ PVector worldMapSize;
 PVector center;
 
 //animation
+int interval;
 int transition1;
 int transition2;
 int transition3;
 
+PFont glober;
+
 void setup() {
   //  JS:
-size(800, 1000);
+size(800, 900);
 //  size(266*mm, 300*mm);
   colorMode(HSB);
 //  frameRate(30);
 
+  glober = createFont("GloberBold", 8);
+  
   center = new PVector(width/2, height/2);
 
   //Loading and positioning map
   worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapSize = new PVector(worldMap.width + 80*mm, worldMap.height + 80*mm);
-  worldMapPos = new PVector((width - worldMapSize.x)/2 - 5*mm, (height - worldMapSize.y)/2 + 30*mm);
+  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+  worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
 
   /*----- COUNTRIES -----*/
-  allCountries = initCountries("countries_groups.tsv");  
+  allCountries = initCountries("countries_groups.tsv"); 
+  for(int i = 0; i < allCountries.size(); i++){
+    Country c = allCountries.get(i);
+    c.setColor(i);
+  }
   allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
-  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt"); 
+//  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
+  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
   /*------ ARCS ------*/
@@ -64,9 +74,10 @@ size(800, 1000);
 
   debug();
   
-  transition1 = millis() + 1000;
-  transition2 = millis() + 3000;
-  transition3 = millis() + 5000;
+  interval = 1000;
+  transition1 = millis() + 6000;
+  transition2 = transition1 + interval;
+  transition3 = transition2 + interval;
 }
 
 void draw() {
@@ -113,7 +124,7 @@ ArrayList<Country> initCountries(String filename){
       String name = trim(myLine[0]);
       String group = trim(myLine[1]);
       Country thisCountry = new Country(name, group);
-      thisCountry.setColor();
+//      thisCountry.setColor();
       tempList.add(thisCountry);
     }
     return tempList;
@@ -261,69 +272,6 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   return tempList;
 }
 
-
-//void setPlayersPositions() { 
-//  float radius = 137*mm;
-//  float centerOffset = 5*mm;
-//  
-//  ArrayList<Player> tempPlayers = new ArrayList();
-//  String prevCircle = "";
-//  float prevRX = 0;
-//  float prevRY = 0;
-//  float startAngle = 0;
-//  float endAngle = 0;
-//
-//  for (int i = 0; i < allPlayers.size(); i++) {
-//
-//    Player thisPlayer = allPlayers.get(i);
-//
-//    //Position    
-//    float angle = map(i, 0, allPlayers.size() - 1, 0.15 * PI, 1.55 * PI);
-//    if(angle > 0.85 * PI){
-//      angle += 0.3 * PI;
-//      centerOffset = -5*mm;
-//    }    
-//      
-//    float rX = center.x;
-//    float rY = center.y + centerOffset;
-//    float offset = 30*mm;  //distance from arc to control point
-//    float x1 = rX + cos(angle) * radius;
-//    float y1 = rY + sin(angle) * radius;
-//    float x2 = rX + cos(angle) * (radius - offset);
-//    float y2 = rY + sin(angle) * (radius - offset);    
-//
-//    thisPlayer.setPos(x1, y1, x2, y2);
-//    thisPlayer.setAngle(angle);
-//    
-//    //Is this player's team different from the previous one?
-//    if(!thisPlayer.country.equals(prevCircle)){
-//      //If it is not the first player...
-//      if(i != 0){
-//        //Create a new team based on the previous information
-//        allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));      
-//      } 
-//      
-//      //Start a new team/Clean the previous list up 
-//      startAngle = angle;
-//      tempPlayers = new ArrayList();
-//    }
-//    
-//    tempPlayers.add(thisPlayer);
-//    endAngle = angle;
-//    prevRX = rX;
-//    prevRY = rY;
-//    
-//    //Wait! Was it the last player?
-//    if(i == allPlayers.size() - 1){
-//      allArcs.add(new Arc(prevCircle, tempPlayers, prevRX, prevRY, radius, startAngle, endAngle));   
-//    }    
-//    
-//    prevCircle = thisPlayer.country;
-//  }
-//}
-//
-
-
 int getMax(ArrayList<Circle> myList) {
   int max = 0;
   for (Circle c : myList) {
@@ -352,9 +300,9 @@ void debug() {
 //  }
 }
 
-//boolean sketchFullScreen() {
-//  return true;
-//}
+boolean sketchFullScreen() {
+  return true;
+}
 
 //World cup teams
 //Linked to Country (only to read colors)
@@ -400,7 +348,7 @@ class Arc{
       Player p = teamPlayers.get(i);
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 30*mm;  //distance from arc to control point
+      float offset = 20*mm;  //distance from arc to control point
       float x1 = pos.x + cos(angle) * radius;
       float y1 = pos.y + sin(angle) * radius;
       float x2 = pos.x + cos(angle) * (radius - offset);
@@ -415,9 +363,9 @@ class Arc{
     float currAngle = 0;
     float alpha = 0;
     if(millis() < transition2){
-      currAngle = map(transition2 - millis(), 2000, 0, startAngle, endAngle);
+      currAngle = map(transition2 - millis(), interval, 0, startAngle, endAngle);
       currAngle = constrain(currAngle, 0, endAngle);
-      alpha = map(transition2 - millis(), 2000, 0, 0, 255);
+      alpha = map(transition2 - millis(), interval, 0, 0, 255);
       alpha = constrain(alpha, 0, 255);
     }else{
       currAngle = endAngle;
@@ -428,19 +376,25 @@ class Arc{
       translate(pos.x, pos.y);
       noFill();
       stroke(thisCountry.myColor);
-      strokeWeight(5*mm);
+      strokeWeight(8*mm);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
+      arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);
       
-      fill(0, alpha);
+      PVector boxSize = new PVector(15*mm, 4*mm);  
+      rectMode(CORNER);
+      textAlign(CENTER, CENTER);
+      textFont(glober);      
+      textSize(10);    
+      textLeading(10);  
+      fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.name, 0, 5*mm);
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 + 3*mm, boxSize.x, boxSize.x);      
         }else{
           rotate(angle + PI/2);
-          text(thisCountry.name, 0, -6*mm);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 - 3*mm, boxSize.x, boxSize.x);      
         }
     popMatrix();
   }
@@ -469,12 +423,11 @@ class Circle {
   void setPos(float lat, float lng){
     // Equirectangular projection
     pos.x = map(lng, -180, 180, worldMapPos.x, worldMapPos.x + worldMapSize.x); 
-    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);
-    setControlPoint();    
+    pos.y = map(lat, 90, -90, worldMapPos.y, worldMapPos.y + worldMapSize.y);    
   }
   
   void setControlPoint(){
-      float offset = 20*mm;
+      float offset = 30*mm;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -489,7 +442,8 @@ class Circle {
 //  }  
   
   void setRadius(int max){
-    finalRadius = map(totalPlayers, 0, max, 2*mm, 10*mm);
+    finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
+    setControlPoint();    
   }
   
   void update(){
@@ -519,8 +473,9 @@ class Circle {
     fill(thisCountry.myColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
-    PVector boxSize = new PVector(20*mm, 4*mm);    
+    PVector boxSize = new PVector(14*mm, 4*mm);    
     fill(0);
+    textFont(glober);
     textSize(8);
     rectMode(CORNER);
     textAlign(CENTER, CENTER);
@@ -541,19 +496,47 @@ class Country{
     group = _group;
   }
   
-  void setColor(){
+  void setColor(int i){
     //Converting group Strint to char and to int
     int[] code = int(group.toCharArray());
     int groupInt = code[0];
     float h, s, b;
     //group int: "a" to "h"
-    h = map(groupInt, 97, 104, 0, 255);
-    if(groupInt < 97){
+//    if(i < 16 * 4){
+//      h = map(groupInt, 97, 100, 0, 120);
+//    }else{
+//      h = map(groupInt, 101, 104, 130, 255);
+//    }
+
+    //hue
+    if(groupInt % 2 == 0){
+      h = map(groupInt, 98, 104, 0, 60);
+      
+    }else{
+      h = map(groupInt, 96, 103, 115, 235);
+    }
+//    h += map(i % 4, 0, 3, 0, 20);
+    
+    //Saturation
+    if(i < 4*4){
+      s = map(i % 4, 0, 3, 255, 180);
+//      b = map(i % 4, 0, 3, 235, 255);    
+    }else{
+      s = map(i % 4, 0, 3, 180, 255);
+//      b = map(i % 4, 0, 3, 255, 235);
+    }
+//    s = 255;
+    
+    //Indigo blue
+    if(140 < h && h < 190){
+      s -= 100;
+    }    
+    
+    b = 255;
+    
+    if(groupInt < 97){  //gray
       s = 0;
       b = 170;
-    }else{
-      s = 225;
-      b = 255;    
     }
     myColor = color(h, s, b);  
   }
@@ -588,7 +571,7 @@ class Player {
     
     float alpha = 0;
     if(millis() < transition3){
-      alpha = map(transition3 - millis(), 2000, 0, 0, 100);
+      alpha = map(transition3 - millis(), interval, 0, 0, 100);
       alpha = constrain(alpha, 0, 100);
     }else{
       alpha = 100;
@@ -598,11 +581,15 @@ class Player {
     noFill();
     strokeWeight(0.3*mm);
     stroke(currCountry.thisCountry.myColor, alpha);
-//    line(anchors.x, anchors.y, currCountry.pos.x, currCountry.pos.y);
+//    line(anchors.get(0).x, anchors.get(0).y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,
-           currCountry.controlPoint.x, currCountry.controlPoint.y,
+           currCountry.pos.x, currCountry.pos.y,
            currCountry.pos.x, currCountry.pos.y);
+//    bezier(anchors.get(0).x, anchors.get(0).y, 
+//           anchors.get(1).x, anchors.get(1).y,
+//           currCountry.controlPoint.x, currCountry.controlPoint.y,
+//           currCountry.pos.x, currCountry.pos.y);
   }
 }
 

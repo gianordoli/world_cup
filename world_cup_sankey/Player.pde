@@ -19,10 +19,6 @@ class Player {
     anchors.add(new PVector(x1, y1));
     anchors.add(new PVector(x2, y2));    
   }
-  
-  void setAngle(float _angle){
-    angle = _angle;
-  }
 
   void display() {
     

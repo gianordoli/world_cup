@@ -237,29 +237,22 @@ ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
 ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   
   ArrayList<Arc> tempList = theseArcs;
-  float angleOffset = 0.005 * PI; //Distance between each arc
-    
-  //Filling the lower part in
-  float radius = 137*mm;
-  float x = center.x;
-  float y = center.y + 5*mm;
-  float startAngle = 0.15 * PI;
-  float endAngle = 0;
+  
+  float barOffset = 1*mm;
+  float start = 0;
+  float end = 0;
+  
   
   for(int i = 0; i < tempList.size(); i++){
     Arc a = tempList.get(i);
-    float arcLength = (1.4*PI - (tempList.size() - 1) * angleOffset) / tempList.size();
+       
+    float barLength = (width - (tempList.size() - 1) * barOffset) / tempList.size();
     
-    endAngle = startAngle + arcLength;
+    end = start + barLength;
     
-    a.setArcParam(x, y, radius, startAngle, endAngle);
+    a.setArcParam(start, barLength);
     
-    startAngle = endAngle + angleOffset;  //next
-    
-    //Next arc
-    if(i == tempList.size()/2 - 1){
-      startAngle += 0.3 * PI;
-    }
+    start = end + barOffset;  //Next
   }
   
   return tempList;

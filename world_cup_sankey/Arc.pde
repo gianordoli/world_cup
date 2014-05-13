@@ -19,7 +19,7 @@ class Arc{
 
   void setArcParam(float _start, float _barLength){
     pos = new PVector(_start, height - 40*mm);
-    size = new PVector(_barLength, 10*mm);    
+    size = new PVector(_barLength, 5*mm);    
   }  
   
   void linkCircles(){
@@ -28,7 +28,6 @@ class Arc{
       for (Player p : teamPlayers) {
         if (p.current.name.equals(c.thisCountry.name)) {
           p.currCountry = c;
-          c.totalPlayers ++;
           
           c.teamPlayers.add(p);
         }
@@ -60,11 +59,11 @@ class Arc{
     rect(pos.x, pos.y, size.x, size.y);
       
     rectMode(CORNER);
-    textAlign(CENTER, CENTER);
+    textAlign(CENTER, TOP);
     textFont(glober);      
-    textSize(10);    
-    textLeading(10);  
+    textSize(7.5);    
+    textLeading(8);  
     fill(0);     
-    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, -size.y); 
+    text(thisCountry.name, pos.x - 1*mm, pos.y + size.y, size.x + 2*mm, size.y + 20*mm); 
   }
 }

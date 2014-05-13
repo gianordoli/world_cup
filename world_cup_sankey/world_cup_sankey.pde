@@ -3,15 +3,12 @@
  2014, for Galileu Magazine, Brazil
  Gabriel Gianordoli
  gianordoligabriel@gmail.com
-
- Geoplacement based on Till Nagel's tutorial: 
- http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
 --------------------------------------------------------------------------- */
 
 import processing.pdf.*;
 boolean record = false;
 
-int mm = 4;
+int mm = 3;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -20,7 +17,7 @@ ArrayList<Circle> allCircles;
 ArrayList<Arc> allArcs;
 
 PFont glober;
-float margin = 20*mm;
+float margin = 12*mm;
 
 void setup() {
   size(404*mm, 266*mm);
@@ -181,6 +178,8 @@ ArrayList<Player> loadPlayers(String filename) {
     String club = trim(myLine[2]);
     String currentString = trim(myLine[3]);
     
+//    println(originString + "\t" + name + "\t" + club + "\t" + currentString);
+    
     Country origin = new Country("", "");
     for (Country c : allCountries) {
       if(originString.equals(c.name)){
@@ -284,9 +283,9 @@ void debug() {
 //  for(Country c : allCountries){
 //    println(c.name + "\t" + c.group + "\t" + c.myColor);
 //  }
-//  for(Circle c: allCircles){
-//    println(c.thisCountry.name);
-//  }  
+  for(Circle c: allCircles){
+    println(c.thisCountry.name + "\t" + c.teamPlayers.size());
+  }  
 //  for (Player p : allPlayers) {
 //    println(p.name + " \t" + p.origin.name);
 //  }

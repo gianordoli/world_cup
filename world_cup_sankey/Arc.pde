@@ -28,8 +28,7 @@ class Arc{
       for (Player p : teamPlayers) {
         if (p.current.name.equals(c.thisCountry.name)) {
           p.currCountry = c;
-          c.totalPlayers ++;
-          
+
           c.teamPlayers.add(p);
         }
       }

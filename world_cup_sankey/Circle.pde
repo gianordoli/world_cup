@@ -27,7 +27,7 @@ class Circle {
   
   void setCircleParam(float _start, float _barLength){
     pos = new PVector(_start, 50*mm);
-    size = new PVector(_barLength, 10*mm); 
+    size = new PVector(_barLength, 5*mm); 
 
     float offset = 100*mm;
     controlPoint.x = pos.x;
@@ -40,7 +40,7 @@ class Circle {
   
       Player p = teamPlayers.get(i);
       
-      float x = map(i, 0, teamPlayers.size() - 1, pos.x, pos.x + size.x);
+      float x = map(i, -1, teamPlayers.size(), pos.x, pos.x + size.x);
       
       float offset = 100*mm;  //distance from arc to control point
       float x1 = x;
@@ -52,19 +52,22 @@ class Circle {
     }
   }  
 
-  void display() {
+  void display(int i) {
     
     noStroke();
     fill(thisCountry.myColor);
     rect(pos.x, pos.y, size.x, -size.y);
     
-    rectMode(CORNER);
-    textAlign(CENTER, CENTER);
+   textSize(10);
+   rectMode(CORNER);
+    textAlign(CENTER, BOTTOM);
     textFont(glober);      
-    textSize(10);    
+ 
+   textSize(8);    
     textLeading(10);  
-    fill(0);     
-    text(thisCountry.name, pos.x - size.x/2, pos.y - size.y/2, size.x, size.y);     
+    fill(0); 
+    float offset = (i % 6) * 5*mm;    
+    text(thisCountry.name, pos.x + size.x/2, pos.y - size.y - offset);     
   }
 }
 

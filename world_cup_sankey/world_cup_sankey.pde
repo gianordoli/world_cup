@@ -11,7 +11,7 @@
 import processing.pdf.*;
 boolean record = false;
 
-int mm = 3;
+int mm = 4;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -19,47 +19,56 @@ ArrayList<Country> allCountries;
 ArrayList<Circle> allCircles;
 ArrayList<Arc> allArcs;
 
-PShape worldMap;
-PVector worldMapPos;
-PVector worldMapSize;
-PVector center;
-
 PFont glober;
+float margin = 20*mm;
 
 void setup() {
-  //  JS:
   size(404*mm, 266*mm);
-  colorMode(HSB);
-//  frameRate(30);
+  colorMode(HSB, 360, 100, 100);
 
   glober = createFont("GloberBold", 8);
   
-  center = new PVector(width/2, height/2);
-
-  //Loading and positioning map
-  worldMap = loadShape("world_map_equirectangular.svg");
-  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
-  worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
 
   /*----- COUNTRIES -----*/
-  allCountries = initCountries("countries_groups.tsv"); 
+//  allCountries = initCountries("countries_groups.tsv"); 
+  allCountries = initCountries("countries_continents.tsv");
+  Country prevCountry = allCountries.get(0);
+  int group = 0;
   for(int i = 0; i < allCountries.size(); i++){
     Country c = allCountries.get(i);
-    c.setColor(i);
+    
+    if(!c.continent.equals(prevCountry.continent)){
+      group = 0;
+    }else{
+      group ++;
+    }
+    c.setColor(group);
+    
+    prevCountry = allCountries.get(i);
   }
 //  allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
-  allCircles = loadCircles("countries_sorted_by_groups.txt");
+  allCircles = loadCircles("countries_sorted_by_continents.txt");
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
-  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
-  allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
+  
+  String[] sortedCountries = new String[allCountries.size()];
+  for(int i = 0; i < allCountries.size(); i++){
+    sortedCountries[i] = allCountries.get(i).name;
+  }    
+  //Sorting the players based on the original country list
+  allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");
   
   /*------ ARCS ------*/
+  sortedCountries = new String[allCircles.size()];
+  for(int i = 0; i < allCircles.size(); i++){
+    sortedCountries[i] = allCircles.get(i).thisCountry.name;
+  }    
+  //Sorting the arcs based on the original country list  
   allArcs = createArcs(allPlayers);  //Creating arcs based on players list
   allArcs = setArcs(allArcs);        //Setting arc angle
   for(Arc a : allArcs){
-    //Sorting the list
+    //Sorting the list based on the upper list
     a.teamPlayers = sortPlayers(a.teamPlayers, sortedCountries, "current");
     //Linking to the circles
     a.linkCircles();
@@ -79,9 +88,7 @@ void draw() {
       beginRecord(PDF, "world_cup.pdf");
   }
   
-  background(255);
-//  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
-
+  background(360);
     
   for(Arc a : allArcs){ 
     for(Player p : a.teamPlayers){
@@ -90,8 +97,11 @@ void draw() {
     a.display();
   }
   
-  for (Circle c : allCircles) {
-    c.display();
+//  for (Circle c : allCircles) {
+  for(int i = 0; i < allCircles.size(); i++){
+//    c.display();
+    Circle c = allCircles.get(i);
+    c.display(i);
   }
 
   if(record){
@@ -142,13 +152,13 @@ ArrayList<Circle> setCircles(ArrayList<Circle> theseCircles){
   
   ArrayList<Circle> tempList = theseCircles;
   float barOffset = 1*mm;
-  float start = 0;
+  float start = margin;
   float end = 0;
     
   for(int i = 0; i < tempList.size(); i++){
     
     Circle c = tempList.get(i);
-    float barLength = map(c.teamPlayers.size(), 0, allPlayers.size(), 0, width - (theseCircles.size() - 1) * barOffset);
+    float barLength = map(c.teamPlayers.size(), 0, allPlayers.size(), 0, width - (theseCircles.size() - 1) * barOffset - 2*margin);
     
     end = start + barLength;
     
@@ -193,9 +203,6 @@ ArrayList<Player> loadPlayers(String filename) {
 
 ArrayList<Player> sortPlayers(ArrayList<Player> thesePlayers, String[] sortedCountries, String criteria) {
   ArrayList<Player> tempList = new ArrayList<Player>();
-  for(String s : sortedCountries){
-    s = trim(s);
-  }  
   //Looping through each sorted value
   for (int i = 0; i < sortedCountries.length; i++) {
     //Looping through each object
@@ -254,13 +261,14 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   
   ArrayList<Arc> tempList = theseArcs;
   float barOffset = 1*mm;
-  float start = 0;
-  float end = 0;
+  float start = margin;
+  float end = margin;
   
   for(int i = 0; i < tempList.size(); i++){
     
     Arc a = tempList.get(i);
-    float barLength = (width - (tempList.size() - 1) * barOffset) / tempList.size();
+//    float barLength = (width - (tempList.size() - 1) * barOffset - 2*margin) / tempList.size();
+  float barLength = map(a.teamPlayers.size(), 0, allPlayers.size(), 0, width - (theseArcs.size() - 1) * barOffset - 2*margin);
     
     end = start + barLength;
     

@@ -41,8 +41,8 @@ class Arc{
     for (int i = 0; i < teamPlayers.size(); i++) {
   
       Player p = teamPlayers.get(i);
-      
-      float x = map(i, 0, teamPlayers.size() - 1, pos.x, pos.x + size.x);
+         
+      float x = map(i, -1, teamPlayers.size(), pos.x, pos.x + size.x);
       
       float offset = 100*mm;  //distance from arc to control point
       float x1 = x;

@@ -2,56 +2,51 @@
 //Only a sort of HashMap to store countries x colors
 class Country{
   String name;
-  String group;
+//  String group;
+  String continent;
   color myColor;
   
-  Country(String _name, String _group){
+  Country(String _name, String _continent){
     name = _name;
-    group = _group;
+//    group = _group;
+    continent = _continent;
   }
   
   void setColor(int i){
-    //Converting group Strint to char and to int
-    int[] code = int(group.toCharArray());
-    int groupInt = code[0];
-    float h, s, b;
-    //group int: "a" to "h"
-//    if(i < 16 * 4){
-//      h = map(groupInt, 97, 100, 0, 120);
-//    }else{
-//      h = map(groupInt, 101, 104, 130, 255);
-//    }
-
-    //hue
-    if(groupInt % 2 != 0){
-      h = map(groupInt, 98, 104, 0, 80);
-      
+    float h = 0;
+    float s = 0;
+    float b = 0;
+    if(continent.equals("Europa")){
+      h = 230;
+      s = 50;
+      b = 100;  
+      h += i * 5;  
+    }else if(continent.equals("África")){
+      h = 28;
+      s = 60;
+      b = 100;   
+      h -= i * 7;         
+    }else if(continent.equals("Ásia")){
+      h = 50;
+      s = 100;
+      b = 100;  
+      h -= i * 2;
+    }else if(continent.equals("América do Norte, Central e Caribe")){
+      h = 180;
+      s = 100;
+      b = 90;
+      h += i * 5;
+    }else if(continent.equals("América do Sul")){
+      h = 90;
+      s = 70;
+      b = 80;
+       h += i * 15; 
     }else{
-      h = map(groupInt, 96, 104, 115, 235);
-    }
-//    h += map(i % 4, 0, 3, 0, 20);
-    
-    //Saturation
-//    if(i < 4*4){
-//      s = map(i % 4, 0, 3, 255, 180);
-////      b = map(i % 4, 0, 3, 235, 255);    
-//    }else{
-//      s = map(i % 4, 0, 3, 180, 255);
-////      b = map(i % 4, 0, 3, 255, 235);
-//    }
-    s = 255;
-    
-    //Indigo blue
-    if(140 < h && h < 190){
-      s -= 100;
-    }    
-    
-    b = 255;
-    
-    if(groupInt < 97){  //gray
+      h = 90;
       s = 0;
-      b = 170;
+      b = 80;    
     }
+  
     myColor = color(h, s, b);  
   }
 }

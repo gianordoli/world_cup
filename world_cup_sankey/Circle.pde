@@ -58,15 +58,16 @@ class Circle {
     fill(thisCountry.myColor);
     rect(pos.x, pos.y, size.x, -size.y);
     
-   textSize(10);
+
+
    rectMode(CORNER);
     textAlign(CENTER, BOTTOM);
-    textFont(glober);      
- 
+    textFont(glober);       
    textSize(7.5);    
+      textLeading(8);
     fill(0); 
     float offset = (i % 6) * 5*mm;    
-    text(thisCountry.name, pos.x + size.x/2, pos.y - size.y - offset);     
+    text(thisCountry.name, pos.x - 7*mm, pos.y - size.y - offset - 10*mm, size.x + 14*mm, 10*mm);     
   }
 }
 

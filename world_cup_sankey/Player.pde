@@ -35,7 +35,7 @@ class Player {
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,
            anchors.get(2).x, anchors.get(2).y,
-           anchors.get(3).x, anchors.get(3).y);           
+           anchors.get(3).x, anchors.get(3).y); 
   }
 }
 

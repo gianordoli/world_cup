@@ -50,7 +50,61 @@ class Circle {
   
       p.setPos(x1, y1, x2, y2);
     }
-  }  
+  } 
+ 
+ void createConnections(){
+   
+  Country prevCountry = new Country("", "");
+  ArrayList<Player> tempList = new ArrayList<Player>();
+  
+  for(int i = 0; i < teamPlayers.size(); i++){
+    
+    Player p = teamPlayers.get(i);
+    
+    //If the current player's country is different from the previous...
+    if(!p.origin.name.equals(prevCountry.name)){
+      //If it is not the first player...
+      if(i != 0){
+        //CREATE CONNECTION
+        color myColor = thisCountry.myColor;
+        float strokeLength = map(tempList.size(), 0, teamPlayers.size()+2, 0, size.x);        
+        float x1 = (tempList.get(0).anchors.get(0).x + tempList.get(tempList.size()-1).anchors.get(0).x)/2; 
+        float y1 = tempList.get(0).anchors.get(0).y;
+        float x2 = (tempList.get(0).anchors.get(1).x + tempList.get(tempList.size()-1).anchors.get(1).x)/2; 
+        float y2 = tempList.get(0).anchors.get(1).y;
+        
+        float x3 = (tempList.get(0).anchors.get(2).x + tempList.get(tempList.size()-1).anchors.get(2).x)/2; 
+        float y3 = tempList.get(0).anchors.get(2).y;
+        float x4 = (tempList.get(0).anchors.get(3).x + tempList.get(tempList.size()-1).anchors.get(3).x)/2; 
+        float y4 = tempList.get(0).anchors.get(3).y;
+        allConnections.add(new Connection(myColor, strokeLength, x1, y1, x2, y2, x3, y3, x4, y4));
+      } 
+      //Cleaned the list up
+      tempList = new ArrayList();
+    }
+    
+    tempList.add(p);
+    
+    //Wait! Was it the last player?
+    if(i == teamPlayers.size() - 1){
+      //CREATE CONNECTION 
+        color myColor = thisCountry.myColor;
+        float strokeLength = map(tempList.size(), 0, teamPlayers.size()+2, 0, size.x);        
+        float x1 = (tempList.get(0).anchors.get(0).x + tempList.get(tempList.size()-1).anchors.get(0).x)/2; 
+        float y1 = tempList.get(0).anchors.get(0).y;
+        float x2 = (tempList.get(0).anchors.get(1).x + tempList.get(tempList.size()-1).anchors.get(1).x)/2; 
+        float y2 = tempList.get(0).anchors.get(1).y;
+        
+        float x3 = (tempList.get(0).anchors.get(2).x + tempList.get(tempList.size()-1).anchors.get(2).x)/2; 
+        float y3 = tempList.get(0).anchors.get(2).y;
+        float x4 = (tempList.get(0).anchors.get(3).x + tempList.get(tempList.size()-1).anchors.get(3).x)/2; 
+        float y4 = tempList.get(0).anchors.get(3).y;
+        allConnections.add(new Connection(myColor, strokeLength, x1, y1, x2, y2, x3, y3, x4, y4));
+    }    
+    
+    prevCountry = p.origin;    
+  } 
+ } 
 
   void display(int i) {
     

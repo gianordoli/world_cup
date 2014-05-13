@@ -16,6 +16,8 @@ ArrayList<Country> allCountries;
 ArrayList<Circle> allCircles;
 ArrayList<Arc> allArcs;
 
+ArrayList<Connection> allConnections;
+
 PFont glober;
 float margin = 12*mm;
 
@@ -25,6 +27,7 @@ void setup() {
 
   glober = createFont("GloberBold", 8);
   
+  allConnections = new ArrayList<Connection>();
 
   /*----- COUNTRIES -----*/
 //  allCountries = initCountries("countries_groups.tsv"); 
@@ -75,22 +78,26 @@ void setup() {
   allCircles = setCircles(allCircles);
   for(Circle c : allCircles){
     c.setPlayersPositions();
-  }  
+  }
 
+  for(Circle c : allCircles){
+    c.createConnections();
+  }  
+  
   debug();
 }
 
 void draw() {
+  background(0, 0, 100);
+  
   if(record){
       beginRecord(PDF, "world_cup.pdf");
   }
-  
-  background(360);
     
   for(Arc a : allArcs){ 
-    for(Player p : a.teamPlayers){
-      p.display();
-    }    
+//    for(Player p : a.teamPlayers){
+//      p.display();
+//    }    
     a.display();
   }
   
@@ -99,6 +106,10 @@ void draw() {
 //    c.display();
     Circle c = allCircles.get(i);
     c.display(i);
+  }
+  
+  for(Connection cn : allConnections){
+    cn.display();
   }
 
   if(record){
@@ -283,9 +294,9 @@ void debug() {
 //  for(Country c : allCountries){
 //    println(c.name + "\t" + c.group + "\t" + c.myColor);
 //  }
-  for(Circle c: allCircles){
-    println(c.thisCountry.name + "\t" + c.teamPlayers.size());
-  }  
+//  for(Circle c: allCircles){
+//    println(c.thisCountry.name + "\t" + c.teamPlayers.size());
+//  }  
 //  for (Player p : allPlayers) {
 //    println(p.name + " \t" + p.origin.name);
 //  }

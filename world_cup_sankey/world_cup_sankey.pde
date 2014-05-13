@@ -11,7 +11,7 @@
 import processing.pdf.*;
 boolean record = false;
 
-int mm = 3;
+int mm = 4;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -70,6 +70,8 @@ void setup() {
   for(Arc a : allArcs){
     //Sorting the list based on the upper list
     a.teamPlayers = sortPlayers(a.teamPlayers, sortedCountries, "current");
+    //Linking to the circles
+    a.linkCircles();
     a.setPlayersPositions();
   }
 
@@ -283,11 +285,10 @@ void debug() {
 //    println(c.name + "\t" + c.group + "\t" + c.myColor);
 //  }
 //  for(Circle c: allCircles){
-//    println(c.thisCountry.name + "\t" + c.teamPlayers.size());
+//    println(c.thisCountry.name);
 //  }  
 //  for (Player p : allPlayers) {
 //    println(p.name + " \t" + p.origin.name);
-//    println(p.name + " \t" + p.current.name);
 //  }
 //  for(Arc a: allArcs){
 //    print(a.thisCountry.name + ":" + a.teamPlayers.size());

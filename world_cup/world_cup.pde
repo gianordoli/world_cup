@@ -122,10 +122,25 @@ void mousePressed(){
   selectedType = "";
   for (Arc a : allArcs) {
     if(a.isHovering()){
-      selectedType = "arc";
-      selectedCountry = a.thisCountry;
+      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
+        selectedType = "arc";
+        selectedCountry = a.thisCountry;
+      }else{
+        selectedType = "";
+      }
     }
   }
+  
+  for (Circle c : allCircles) {
+    if(c.isHovering()){
+      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
+        selectedType = "circle";
+        selectedCountry = c.thisCountry;
+      }else{
+        selectedType = "";
+      }
+    }
+  }  
 }
 
 void mouseMoved(){
@@ -135,11 +150,8 @@ void mouseMoved(){
       changeCursor = true;
 //      println(c.thisCountry.name);
       color newColor = a.thisCountry.myColor;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
-        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-        a.currColor = newColor;
-      }
+      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      a.currColor = newColor;
     }else{
       a.currColor = a.thisCountry.myColor;
     }
@@ -152,9 +164,11 @@ void mouseMoved(){
       color newColor = c.thisCountry.myColor;
       //If it' not one of the gray countries
       if(saturation(newColor) > 0){
-        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-        c.currColor = newColor;
+        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      }else{
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
       }
+      c.currColor = newColor;
     }else{
       c.currColor = c.thisCountry.myColor;
     }

@@ -89,7 +89,7 @@ class Arc{
          (selectedType.equals("arc") && selectedCountry == thisCountry)){
         stroke(currColor);
       }else{
-        stroke(0, 0, 170);
+        stroke(0, 0, 220);
       }
       
       strokeWeight(8*mm);

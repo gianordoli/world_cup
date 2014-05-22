@@ -118,54 +118,54 @@ void draw() {
   }  
 }
 
-//void mousePressed(){
-//  selectedType = "";
-//  for (Arc a : allArcs) {
-//    if(a.isHovering()){
-//      selectedType = "arc";
-//      selectedCountry = a.thisCountry;
-//    }
-//  }
-//}
-//
-//void mouseMoved(){
-//  boolean changeCursor = false;
-//  for (Arc a : allArcs) {
-//    if(a.isHovering()){
-//      changeCursor = true;
-////      println(c.thisCountry.name);
-//      color newColor = a.thisCountry.myColor;
-//      //If it' not one of the gray countries
-//      if(saturation(newColor) > 0){
-//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-//        a.currColor = newColor;
-//      }
-//    }else{
-//      a.currColor = a.thisCountry.myColor;
-//    }
-//  }   
-//  
-//  for (Circle c : allCircles) {
-//    if(c.isHovering()){
-//      changeCursor = true;
-////      println(c.thisCountry.name);
-//      color newColor = c.thisCountry.myColor;
-//      //If it' not one of the gray countries
-//      if(saturation(newColor) > 0){
-//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-//        c.currColor = newColor;
-//      }
-//    }else{
-//      c.currColor = c.thisCountry.myColor;
-//    }
-//  }
-//
-//  if(changeCursor){
-//    cursor(HAND);
-//  }else{
-//    cursor(ARROW);
-//  }
-//}
+void mousePressed(){
+  selectedType = "";
+  for (Arc a : allArcs) {
+    if(a.isHovering()){
+      selectedType = "arc";
+      selectedCountry = a.thisCountry;
+    }
+  }
+}
+
+void mouseMoved(){
+  boolean changeCursor = false;
+  for (Arc a : allArcs) {
+    if(a.isHovering()){
+      changeCursor = true;
+//      println(c.thisCountry.name);
+      color newColor = a.thisCountry.myColor;
+      //If it' not one of the gray countries
+      if(saturation(newColor) > 0){
+        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+        a.currColor = newColor;
+      }
+    }else{
+      a.currColor = a.thisCountry.myColor;
+    }
+  }   
+  
+  for (Circle c : allCircles) {
+    if(c.isHovering()){
+      changeCursor = true;
+//      println(c.thisCountry.name);
+      color newColor = c.thisCountry.myColor;
+      //If it' not one of the gray countries
+      if(saturation(newColor) > 0){
+        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+        c.currColor = newColor;
+      }
+    }else{
+      c.currColor = c.thisCountry.myColor;
+    }
+  }
+
+  if(changeCursor){
+    cursor(HAND);
+  }else{
+    cursor(ARROW);
+  }
+}
 
 ArrayList<Country> initCountries(String filename){
   ArrayList<Country> tempList = new ArrayList<Country>();

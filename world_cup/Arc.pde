@@ -91,7 +91,6 @@ class Arc{
       }else{
         stroke(0, 0, 170);
       }
-      stroke(currColor);
       
       strokeWeight(8*mm);
       strokeCap(SQUARE);

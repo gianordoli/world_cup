@@ -31,7 +31,7 @@ void setup() {
 
   /*----- COUNTRIES -----*/
 //  allCountries = initCountries("countries_groups.tsv"); 
-  allCountries = initCountries("countries_continents.tsv");
+  allCountries = initCountries("all_countries.tsv");
   Country prevCountry = allCountries.get(0);
   int group = 0;
   for(int i = 0; i < allCountries.size(); i++){
@@ -47,11 +47,12 @@ void setup() {
     prevCountry = allCountries.get(i);
   }
 //  allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
-  allCircles = loadCircles("countries_sorted_by_continents.txt");
+  allCircles = loadCircles("upper_bar.tsv");
 
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
   
+//  String[] sortedCountries = new String[allCountries.size()];
   String[] sortedCountries = new String[allCountries.size()];
   for(int i = 0; i < allCountries.size(); i++){
     sortedCountries[i] = allCountries.get(i).name;
@@ -60,10 +61,10 @@ void setup() {
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");
   
   /*------ ARCS ------*/
-  sortedCountries = new String[allCircles.size()];
-  for(int i = 0; i < allCircles.size(); i++){
-    sortedCountries[i] = allCircles.get(i).thisCountry.name;
-  }    
+//  sortedCountries = new String[allCircles.size()];
+//  for(int i = 0; i < allCircles.size(); i++){
+//    sortedCountries[i] = allCircles.get(i).thisCountry.name;
+//  }    
   //Sorting the arcs based on the original country list  
   allArcs = createArcs(allPlayers);  //Creating arcs based on players list
   allArcs = setArcs(allArcs);        //Setting arc angle
@@ -128,8 +129,8 @@ ArrayList<Country> initCountries(String filename){
     for (String lineString : tableString) {
       String[] myLine = split(lineString, "\t");
       String name = trim(myLine[0]);
-      String group = trim(myLine[1]);
-      Country thisCountry = new Country(name, group);
+      String continent = trim(myLine[1]);
+      Country thisCountry = new Country(name, continent);
 //      thisCountry.setColor();
       tempList.add(thisCountry);
     }

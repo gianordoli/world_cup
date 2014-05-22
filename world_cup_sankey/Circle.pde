@@ -117,8 +117,8 @@ class Circle {
    rectMode(CORNER);
     textAlign(CENTER, BOTTOM);
     textFont(glober);       
-   textSize(7.5);    
-      textLeading(8);
+   textSize(7);    
+      textLeading(7.5);
     fill(0); 
     float offset = (i % 6) * 5*mm;    
     text(thisCountry.name, pos.x - 7*mm, pos.y - size.y - offset - 10*mm, size.x + 14*mm, 10*mm);     

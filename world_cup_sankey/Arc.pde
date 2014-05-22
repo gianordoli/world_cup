@@ -61,8 +61,8 @@ class Arc{
     rectMode(CORNER);
     textAlign(CENTER, TOP);
     textFont(glober);      
-    textSize(7.5);    
-    textLeading(8);  
+    textSize(7);    
+    textLeading(7.5);  
     fill(0);     
     text(thisCountry.name, pos.x - 1*mm, pos.y + size.y, size.x + 2*mm, size.y + 20*mm); 
   }

@@ -76,16 +76,8 @@ class Circle {
       radius = finalRadius;
     }
     
-    noStroke();
-
-//    if(selectedType.equals("") ||
-//       (selectedType.equals("circle") && selectedCountry == thisCountry)){
-//      fill(currColor);
-//    }else{
-//      fill(0, 0, 220);
-//    }    
+    noStroke();  
     fill(currColor);
-    
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    

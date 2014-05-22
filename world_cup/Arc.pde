@@ -85,12 +85,6 @@ class Arc{
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-//      if(selectedType.equals("") ||
-//         (selectedType.equals("arc") && selectedCountry == thisCountry)){
-//        stroke(currColor);
-//      }else{
-//        stroke(0, 0, 220);
-//      }
       stroke(currColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);

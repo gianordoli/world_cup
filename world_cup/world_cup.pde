@@ -104,12 +104,13 @@ void draw() {
     for(Arc a : allArcs){
       
       if(millis() > transition2){
-//        if(selectedType.equals("") ||
-//          (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
-//          for(Player p : a.teamPlayers){
-//            p.display();
-//          }
-//        }
+        if(selectedType.equals("") ||
+          (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
+          for(Player p : a.teamPlayers){
+            p.display();
+            p.currCountry.currColor = p.currCountry.thisCountry.myColor;
+          }
+        }
       }      
       a.display();
     }

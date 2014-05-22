@@ -38,10 +38,6 @@ class Circle {
       controlPoint.y = center.y + sin(angle) * (distance + finalRadius + offset);  
   }
   
-//  void setColor(float h, float s, float b){
-//    myColor = color(h, s, b);
-//  }  
-  
   void setRadius(int max){
     finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
     setControlPoint();    
@@ -82,12 +78,13 @@ class Circle {
     
     noStroke();
 
-    if(selectedType.equals("") ||
-       (selectedType.equals("circle") && selectedCountry == thisCountry)){
-      fill(currColor);
-    }else{
-      fill(0, 0, 220);
-    }    
+//    if(selectedType.equals("") ||
+//       (selectedType.equals("circle") && selectedCountry == thisCountry)){
+//      fill(currColor);
+//    }else{
+//      fill(0, 0, 220);
+//    }    
+    fill(currColor);
     
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     

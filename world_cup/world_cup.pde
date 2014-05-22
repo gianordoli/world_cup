@@ -104,9 +104,12 @@ void draw() {
     for(Arc a : allArcs){
       
       if(millis() > transition2){
-        for(Player p : a.teamPlayers){
-          p.display();
-        }
+//        if(selectedType.equals("") ||
+//          (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
+//          for(Player p : a.teamPlayers){
+//            p.display();
+//          }
+//        }
       }      
       a.display();
     }
@@ -125,6 +128,7 @@ void mousePressed(){
       if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
         selectedType = "arc";
         selectedCountry = a.thisCountry;
+        dimColors();
       }else{
         selectedType = "";
       }
@@ -133,14 +137,42 @@ void mousePressed(){
   
   for (Circle c : allCircles) {
     if(c.isHovering()){
+      //If it' not already selected... Select!
       if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
         selectedType = "circle";
         selectedCountry = c.thisCountry;
+        dimColors();
       }else{
         selectedType = "";
       }
     }
+  }
+  if(selectedType.equals("")){
+    selectedCountry = null;
+    restoreColors();
   }  
+}
+
+void dimColors(){
+  for(Arc a: allArcs){
+    if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
+      a.currColor = color(0, 0, 200);
+    }
+  }  
+  for(Circle c: allCircles){
+    if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
+      c.currColor = color(0, 0, 200);
+    }
+  }
+}
+
+void restoreColors(){
+  for(Arc a: allArcs){
+    a.currColor = a.thisCountry.myColor;
+  }   
+  for(Circle c: allCircles){
+    c.currColor = c.thisCountry.myColor;
+  }
 }
 
 void mouseMoved(){
@@ -152,7 +184,7 @@ void mouseMoved(){
       color newColor = a.thisCountry.myColor;
       newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
       a.currColor = newColor;
-    }else{
+    }else if(selectedType.equals("")){
       a.currColor = a.thisCountry.myColor;
     }
   }   
@@ -169,7 +201,7 @@ void mouseMoved(){
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
       }
       c.currColor = newColor;
-    }else{
+    }else if(selectedType.equals("")){
       c.currColor = c.thisCountry.myColor;
     }
   }

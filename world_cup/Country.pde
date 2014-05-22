@@ -14,30 +14,32 @@ class Country{
     //Converting group Strint to char and to int
     int[] code = int(group.toCharArray());
     int groupInt = code[0];
-    float h, s, b;
+    float hu = 0;
+    float sa = 0;
+    float br = 0;
 
 //    //hue
     if(groupInt % 2 != 0){
-      h = map(groupInt, 96, 104, 100, 235);
-      h += i%4 * 4;
+      hu = map(groupInt, 96, 104, 100, 235);
+      hu = hu + (i%4)*4;
     }else{
-      h = map(groupInt, 98, 104, 0, 60);
-      h -= i%4 * 2;
+      hu = map(groupInt, 98, 104, 0, 60);
+      hu = hu - (i%4)*2;
     }
+    hu = constrain(hu, 0, 255);
     
-    s = 255;
+    sa = 255;
     
     //Indigo blue
-    if(140 < h && h < 200){
-      s -= 100;
+    if(140 < hu && hu < 200){
+      sa -= 100;
     }    
-    b = 255;
+    br = 255;
     
     if(groupInt < 97){  //gray
-      s = 0;
-      b = 170;
+      sa = 0;
+      br = 170;
     }
-
-    myColor = color(h, s, b);  
+    myColor = color(hu, sa, br);
   }
 }

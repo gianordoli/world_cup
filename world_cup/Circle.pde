@@ -73,7 +73,7 @@ class Circle {
   void display() {
     
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.2;
+      radius += (finalRadius - radius) * 0.3;
     }else{
       radius = finalRadius;
     }
@@ -84,7 +84,7 @@ class Circle {
     
     PVector boxSize = new PVector(14*mm, 4*mm);    
     fill(0);
-    textFont(glober);
+//    textFont(glober);
     textSize(8);
     rectMode(CORNER);
     textAlign(CENTER, CENTER);

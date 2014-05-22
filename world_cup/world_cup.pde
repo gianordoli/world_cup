@@ -1,3 +1,5 @@
+/* @pjs preload="world_map_equirectangular.png"; */
+
 /* ---------------------------------------------------------------------------
  World Cup 2014: Teams vs Clubs
  2014, for Galileu Magazine, Brazil
@@ -16,7 +18,7 @@ ArrayList<Country> allCountries;
 ArrayList<Circle> allCircles;
 ArrayList<Arc> allArcs;
 
-PShape worldMap;
+PImage worldMap;
 PVector worldMapPos;
 PVector worldMapSize;
 PVector center;
@@ -34,24 +36,25 @@ Country selectedCountry;
 
 void setup() {
   size(800, 850);
-  colorMode(HSB);
+  colorMode(HSB, 255, 255, 255);
   mm = 3;
-  glober = createFont("GloberBold", 8);
+//  glober = createFont("GloberBold", 8);
+  textSize(8);
   center = new PVector(width/2, height/2);
 
   //Loading and positioning map
-  worldMap = loadShape("world_map_equirectangular.svg");
+  worldMap = loadImage("world_map_equirectangular.png");
   worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
   worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
-
+  
   /*----- COUNTRIES -----*/
-  allCountries = initCountries("countries_groups.tsv"); 
+  allCountries = initCountries("countries_groups.tsv");
   for(int i = 0; i < allCountries.size(); i++){
     Country c = allCountries.get(i);
     c.setColor(i);
   }
   allCircles = loadCirclesCoordinates("coordinates_pt.tsv");
-
+  
   /*------ PLAYERS ------*/
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
@@ -101,8 +104,8 @@ void setup() {
 }
 
 void draw() {  
-  background(255, 255, 255);
-//  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  background(255);
+  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
     
@@ -132,80 +135,80 @@ void draw() {
   }  
 }
 
-//void mousePressed(){
-//  selectedType = "";
-//  for (Arc a : allArcs) {
-//    if(a.isHovering()){
-//      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
-//        selectedType = "arc";
-//        selectedCountry = a.thisCountry;
-//        a.currColor = a.thisCountry.myColor;
-//        dimColors();
-//      }else{
-//        selectedType = "";
-//      }
-//    }
-//  }
-//  
-//  for (Circle c : allCircles) {
-//    if(c.isHovering()){
-//      //If it' not already selected... Select!
-//      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
-//        selectedType = "circle";
-//        selectedCountry = c.thisCountry;
-//        c.currColor = c.thisCountry.myColor;
-//        dimColors();
-//      }else{
-//        selectedType = "";
-//      }
-//    }
-//  }
-//  if(selectedType.equals("")){
-//    selectedCountry = null;
-//    restoreColors();
-//  }  
-//}
-//
-//void mouseMoved(){
-//  boolean changeCursor = false;
-//  
-//  for (Arc a : allArcs) {
-//    color newColor = a.thisCountry.myColor;
-//    if(a.isHovering()){
-//      changeCursor = true;
-//      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-//    }else{
-//      newColor = a.thisCountry.myColor;
-//    }
-//    if(selectedType.equals("")){
-//      a.currColor = newColor;
-//    }
-//  }   
-//  
-//  for (Circle c : allCircles) {
-//    color newColor = c.thisCountry.myColor;
-//    if(c.isHovering()){
-//      changeCursor = true;
-//      //If it' not one of the gray countries
-//      if(saturation(newColor) > 0){
-//        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-//      }else{
-//        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
-//      }
-//    }else{
-//      newColor = c.thisCountry.myColor;
-//    }
-//    if(selectedType.equals("")){
-//      c.currColor = newColor;
-//    }
-//  }  
-//
-//  if(changeCursor){
-//    cursor(HAND);
-//  }else{
-//    cursor(ARROW);
-//  }
-//}
+void mousePressed(){
+  selectedType = "";
+  for (Arc a : allArcs) {
+    if(a.isHovering()){
+      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
+        selectedType = "arc";
+        selectedCountry = a.thisCountry;
+        a.currColor = a.thisCountry.myColor;
+        dimColors();
+      }else{
+        selectedType = "";
+      }
+    }
+  }
+  
+  for (Circle c : allCircles) {
+    if(c.isHovering()){
+      //If it' not already selected... Select!
+      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
+        selectedType = "circle";
+        selectedCountry = c.thisCountry;
+        c.currColor = c.thisCountry.myColor;
+        dimColors();
+      }else{
+        selectedType = "";
+      }
+    }
+  }
+  if(selectedType.equals("")){
+    selectedCountry = null;
+    restoreColors();
+  }  
+}
+
+void mouseMoved(){
+  boolean changeCursor = false;
+  
+  for (Arc a : allArcs) {
+    color newColor = a.thisCountry.myColor;
+    if(a.isHovering()){
+      changeCursor = true;
+      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+    }else{
+      newColor = a.thisCountry.myColor;
+    }
+    if(selectedType.equals("")){
+      a.currColor = newColor;
+    }
+  }   
+  
+  for (Circle c : allCircles) {
+    color newColor = c.thisCountry.myColor;
+    if(c.isHovering()){
+      changeCursor = true;
+      //If it' not one of the gray countries
+      if(saturation(newColor) > 0){
+        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      }else{
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+      }
+    }else{
+      newColor = c.thisCountry.myColor;
+    }
+    if(selectedType.equals("")){
+      c.currColor = newColor;
+    }
+  }  
+
+  if(changeCursor){
+    cursor(HAND);
+  }else{
+    cursor(ARROW);
+  }
+}
 
 void dimColors(){
   for(Arc a: allArcs){

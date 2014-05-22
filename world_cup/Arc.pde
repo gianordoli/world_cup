@@ -93,7 +93,7 @@ class Arc{
       PVector boxSize = new PVector(15*mm, 4*mm);  
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
-      textFont(glober);      
+//      textFont(glober);      
 //      textSize(10);    
       textLeading(10);  
       fill(0, alpha);      

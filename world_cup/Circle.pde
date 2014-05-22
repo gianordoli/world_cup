@@ -46,7 +46,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 3*mm; //space in between the circles
+    float padding = 4*mm; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;

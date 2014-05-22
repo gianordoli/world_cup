@@ -33,11 +33,8 @@ String selectedType; //"arc"/"circle"
 Country selectedCountry;
 
 void setup() {
-  //  JS:
-size(800, 850);
-colorMode(HSB);
-//  size(266*mm, 300*mm);
-//  frameRate(30);
+  size(800, 850);
+  colorMode(HSB);
   mm = 3;
   glober = createFont("GloberBold", 8);
   center = new PVector(width/2, height/2);
@@ -93,13 +90,9 @@ colorMode(HSB);
     c.setRadius(maxPlayers);
   }  
 
-  debug();
+//  debug();
   
   selectedType = "";
-//  println(selectedCountry);
-//  if(selectedCountry == null){
-//    println("oi");
-//  }
   
   interval = 1000;
   transition1 = millis() + 3000;
@@ -108,7 +101,7 @@ colorMode(HSB);
 }
 
 void draw() {  
-  background(255);
+  background(255, 255, 255);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
@@ -139,39 +132,80 @@ void draw() {
   }  
 }
 
-void mousePressed(){
-  selectedType = "";
-  for (Arc a : allArcs) {
-    if(a.isHovering()){
-      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
-        selectedType = "arc";
-        selectedCountry = a.thisCountry;
-        a.currColor = a.thisCountry.myColor;
-        dimColors();
-      }else{
-        selectedType = "";
-      }
-    }
-  }
-  
-  for (Circle c : allCircles) {
-    if(c.isHovering()){
-      //If it' not already selected... Select!
-      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
-        selectedType = "circle";
-        selectedCountry = c.thisCountry;
-        c.currColor = c.thisCountry.myColor;
-        dimColors();
-      }else{
-        selectedType = "";
-      }
-    }
-  }
-  if(selectedType.equals("")){
-    selectedCountry = null;
-    restoreColors();
-  }  
-}
+//void mousePressed(){
+//  selectedType = "";
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
+//        selectedType = "arc";
+//        selectedCountry = a.thisCountry;
+//        a.currColor = a.thisCountry.myColor;
+//        dimColors();
+//      }else{
+//        selectedType = "";
+//      }
+//    }
+//  }
+//  
+//  for (Circle c : allCircles) {
+//    if(c.isHovering()){
+//      //If it' not already selected... Select!
+//      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
+//        selectedType = "circle";
+//        selectedCountry = c.thisCountry;
+//        c.currColor = c.thisCountry.myColor;
+//        dimColors();
+//      }else{
+//        selectedType = "";
+//      }
+//    }
+//  }
+//  if(selectedType.equals("")){
+//    selectedCountry = null;
+//    restoreColors();
+//  }  
+//}
+//
+//void mouseMoved(){
+//  boolean changeCursor = false;
+//  
+//  for (Arc a : allArcs) {
+//    color newColor = a.thisCountry.myColor;
+//    if(a.isHovering()){
+//      changeCursor = true;
+//      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+//    }else{
+//      newColor = a.thisCountry.myColor;
+//    }
+//    if(selectedType.equals("")){
+//      a.currColor = newColor;
+//    }
+//  }   
+//  
+//  for (Circle c : allCircles) {
+//    color newColor = c.thisCountry.myColor;
+//    if(c.isHovering()){
+//      changeCursor = true;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+//      }else{
+//        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+//      }
+//    }else{
+//      newColor = c.thisCountry.myColor;
+//    }
+//    if(selectedType.equals("")){
+//      c.currColor = newColor;
+//    }
+//  }  
+//
+//  if(changeCursor){
+//    cursor(HAND);
+//  }else{
+//    cursor(ARROW);
+//  }
+//}
 
 void dimColors(){
   for(Arc a: allArcs){
@@ -192,49 +226,6 @@ void restoreColors(){
   }   
   for(Circle c: allCircles){
     c.currColor = c.thisCountry.myColor;
-  }
-}
-
-void mouseMoved(){
-  boolean changeCursor = false;
-  
-//  if(selectedType.equals("")){
-    for (Arc a : allArcs) {
-      color newColor = a.thisCountry.myColor;
-      if(a.isHovering()){
-        changeCursor = true;
-        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-      }else{
-        newColor = a.thisCountry.myColor;
-      }
-      if(selectedType.equals("")){
-        a.currColor = newColor;
-      }
-    }   
-    
-    for (Circle c : allCircles) {
-      color newColor = c.thisCountry.myColor;
-      if(c.isHovering()){
-        changeCursor = true;
-        //If it' not one of the gray countries
-        if(saturation(newColor) > 0){
-          newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-        }else{
-          newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
-        }
-      }else{
-        newColor = c.thisCountry.myColor;
-      }
-      if(selectedType.equals("")){
-        c.currColor = newColor;
-      }
-    }  
-//  }
-
-  if(changeCursor){
-    cursor(HAND);
-  }else{
-    cursor(ARROW);
   }
 }
 
@@ -405,19 +396,19 @@ int getMax(ArrayList<Circle> myList) {
 }
 
 void debug() {
-//  for(Country c : allCountries){
-//    println(c.name + "\t" + c.group + "\t" + c.myColor);
-//  }
-//  for(Circle c: allCircles){
-//    println(c.thisCountry.name);
-//  }  
-//  for (Player p : allPlayers) {
-//    println(p.name + " \t" + p.origin.name);
-//  }
-//  for(Arc a: allArcs){
-//    print(a.thisCountry.name + ":" + a.teamPlayers.size());
-//    for(Player p : a.teamPlayers){
-//      println("\t" + p.name);
-//    }
-//  }
+  for(Country c : allCountries){
+    println(c.name + "\t" + c.group + "\t" + c.myColor);
+  }
+  for(Circle c: allCircles){
+    println(c.thisCountry.name);
+  }  
+  for (Player p : allPlayers) {
+    println(p.name + " \t" + p.origin.name);
+  }
+  for(Arc a: allArcs){
+    print(a.thisCountry.name + ":" + a.teamPlayers.size());
+    for(Player p : a.teamPlayers){
+      println("\t" + p.name);
+    }
+  }
 }

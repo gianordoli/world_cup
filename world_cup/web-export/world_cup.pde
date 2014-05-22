@@ -33,11 +33,8 @@ String selectedType; //"arc"/"circle"
 Country selectedCountry;
 
 void setup() {
-  //  JS:
-size(800, 850);
-colorMode(HSB);
-//  size(266*mm, 300*mm);
-//  frameRate(30);
+  size(800, 850);
+  colorMode(HSB);
   mm = 3;
   glober = createFont("GloberBold", 8);
   center = new PVector(width/2, height/2);
@@ -72,6 +69,18 @@ colorMode(HSB);
     a.linkCircles();
     a.setPlayersPositions();
   }
+  
+  //Now setting connections from circle to arc, through players
+  for(Arc a : allArcs){
+    for(Player p : a.teamPlayers){
+      p.originCountry = a;
+      for(Circle c : allCircles){
+        if(p.currCountry == c){
+          c.clubPlayers.add(p);
+        }
+      }
+    }
+  }
 
   //Now that we've linked players and circles,
   //let's calculate the circle radius based on the number
@@ -81,13 +90,9 @@ colorMode(HSB);
     c.setRadius(maxPlayers);
   }  
 
-  debug();
+//  debug();
   
   selectedType = "";
-//  println(selectedCountry);
-//  if(selectedCountry == null){
-//    println("oi");
-//  }
   
   interval = 1000;
   transition1 = millis() + 3000;
@@ -96,7 +101,7 @@ colorMode(HSB);
 }
 
 void draw() {  
-  background(255);
+  background(255, 255, 255);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
@@ -104,8 +109,12 @@ void draw() {
     for(Arc a : allArcs){
       
       if(millis() > transition2){
-        for(Player p : a.teamPlayers){
-          p.display();
+        if(selectedType.equals("") ||
+          (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
+          for(Player p : a.teamPlayers){
+            p.display();
+            p.currCountry.currColor = p.currCountry.thisCountry.myColor;
+          }
         }
       }      
       a.display();
@@ -113,71 +122,110 @@ void draw() {
   }
   
   for (Circle c : allCircles) {
+    if(selectedType.equals("circle") && selectedCountry == c.thisCountry){
+      for(Player p : c.clubPlayers){
+        p.display();
+      }
+    }    
     c.update();
-    c.display();
+    c.display();    
   }  
 }
 
-void mousePressed(){
-  selectedType = "";
-  for (Arc a : allArcs) {
-    if(a.isHovering()){
-      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
-        selectedType = "arc";
-        selectedCountry = a.thisCountry;
-      }else{
-        selectedType = "";
-      }
+//void mousePressed(){
+//  selectedType = "";
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
+//        selectedType = "arc";
+//        selectedCountry = a.thisCountry;
+//        a.currColor = a.thisCountry.myColor;
+//        dimColors();
+//      }else{
+//        selectedType = "";
+//      }
+//    }
+//  }
+//  
+//  for (Circle c : allCircles) {
+//    if(c.isHovering()){
+//      //If it' not already selected... Select!
+//      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
+//        selectedType = "circle";
+//        selectedCountry = c.thisCountry;
+//        c.currColor = c.thisCountry.myColor;
+//        dimColors();
+//      }else{
+//        selectedType = "";
+//      }
+//    }
+//  }
+//  if(selectedType.equals("")){
+//    selectedCountry = null;
+//    restoreColors();
+//  }  
+//}
+//
+//void mouseMoved(){
+//  boolean changeCursor = false;
+//  
+//  for (Arc a : allArcs) {
+//    color newColor = a.thisCountry.myColor;
+//    if(a.isHovering()){
+//      changeCursor = true;
+//      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+//    }else{
+//      newColor = a.thisCountry.myColor;
+//    }
+//    if(selectedType.equals("")){
+//      a.currColor = newColor;
+//    }
+//  }   
+//  
+//  for (Circle c : allCircles) {
+//    color newColor = c.thisCountry.myColor;
+//    if(c.isHovering()){
+//      changeCursor = true;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+//      }else{
+//        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+//      }
+//    }else{
+//      newColor = c.thisCountry.myColor;
+//    }
+//    if(selectedType.equals("")){
+//      c.currColor = newColor;
+//    }
+//  }  
+//
+//  if(changeCursor){
+//    cursor(HAND);
+//  }else{
+//    cursor(ARROW);
+//  }
+//}
+
+void dimColors(){
+  for(Arc a: allArcs){
+    if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
+      a.currColor = color(0, 0, 0, 30);
+    }
+  }  
+  for(Circle c: allCircles){
+    if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
+      c.currColor = color(0, 0, 0, 30);
     }
   }
-  
-  for (Circle c : allCircles) {
-    if(c.isHovering()){
-      if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
-        selectedType = "circle";
-        selectedCountry = c.thisCountry;
-      }else{
-        selectedType = "";
-      }
-    }
-  }  
 }
 
-void mouseMoved(){
-  boolean changeCursor = false;
-  for (Arc a : allArcs) {
-    if(a.isHovering()){
-      changeCursor = true;
-//      println(c.thisCountry.name);
-      color newColor = a.thisCountry.myColor;
-      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-      a.currColor = newColor;
-    }else{
-      a.currColor = a.thisCountry.myColor;
-    }
+void restoreColors(){
+  for(Arc a: allArcs){
+    a.currColor = a.thisCountry.myColor;
   }   
-  
-  for (Circle c : allCircles) {
-    if(c.isHovering()){
-      changeCursor = true;
-//      println(c.thisCountry.name);
-      color newColor = c.thisCountry.myColor;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
-        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-      }else{
-        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
-      }
-      c.currColor = newColor;
-    }else{
-      c.currColor = c.thisCountry.myColor;
-    }
-  }
-
-  if(changeCursor){
-    cursor(HAND);
-  }else{
-    cursor(ARROW);
+  for(Circle c: allCircles){
+    c.currColor = c.thisCountry.myColor;
   }
 }
 
@@ -348,21 +396,21 @@ int getMax(ArrayList<Circle> myList) {
 }
 
 void debug() {
-//  for(Country c : allCountries){
-//    println(c.name + "\t" + c.group + "\t" + c.myColor);
-//  }
-//  for(Circle c: allCircles){
-//    println(c.thisCountry.name);
-//  }  
-//  for (Player p : allPlayers) {
-//    println(p.name + " \t" + p.origin.name);
-//  }
-//  for(Arc a: allArcs){
-//    print(a.thisCountry.name + ":" + a.teamPlayers.size());
-//    for(Player p : a.teamPlayers){
-//      println("\t" + p.name);
-//    }
-//  }
+  for(Country c : allCountries){
+    println(c.name + "\t" + c.group + "\t" + c.myColor);
+  }
+  for(Circle c: allCircles){
+    println(c.thisCountry.name);
+  }  
+  for (Player p : allPlayers) {
+    println(p.name + " \t" + p.origin.name);
+  }
+  for(Arc a: allArcs){
+    print(a.thisCountry.name + ":" + a.teamPlayers.size());
+    for(Player p : a.teamPlayers){
+      println("\t" + p.name);
+    }
+  }
 }
 //World cup teams
 //Linked to Country (only to read colors)
@@ -411,10 +459,10 @@ class Arc{
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
       float offset = 20*mm;  //distance from arc to control point
-      float x1 = pos.x + cos(angle) * radius;
-      float y1 = pos.y + sin(angle) * radius;
-      float x2 = pos.x + cos(angle) * (radius - offset);
-      float y2 = pos.y + sin(angle) * (radius - offset);    
+      float x1 = pos.x + cos(angle) * (radius - 4*mm);
+      float y1 = pos.y + sin(angle) * (radius - 4*mm);
+      float x2 = pos.x + cos(angle) * (radius - 4*mm - offset);
+      float y2 = pos.y + sin(angle) * (radius - 4*mm - offset);    
   
       p.setPos(x1, y1, x2, y2);
       p.setAngle(angle);
@@ -428,7 +476,7 @@ class Arc{
     }
     float distance = dist(mouseX, mouseY, center.x, center.y); 
     if(startAngle < mouseAngle && mouseAngle < endAngle &&
-       radius - 2*mm < distance && distance < radius + 6*mm){
+       radius - 4*mm < distance && distance < radius + 4*mm){
       return true;
     }else{
       return false;
@@ -451,32 +499,26 @@ class Arc{
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      if(selectedType.equals("") ||
-         (selectedType.equals("arc") && selectedCountry == thisCountry)){
-        stroke(currColor);
-      }else{
-        stroke(0, 0, 220);
-      }
-      
+      stroke(currColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);
+      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
       PVector boxSize = new PVector(15*mm, 4*mm);  
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
       textFont(glober);      
-      textSize(10);    
+//      textSize(10);    
       textLeading(10);  
       fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 + 3*mm, boxSize.x, boxSize.x);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }else{
           rotate(angle + PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2 - 3*mm, boxSize.x, boxSize.x);      
+          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }
     popMatrix();
   }
@@ -493,6 +535,7 @@ class Circle {
   color currColor;
   
   Country thisCountry;
+  ArrayList<Player> clubPlayers;
 
   Circle(Country _thisCountry, float lat, float lng) {
     thisCountry = _thisCountry;
@@ -501,7 +544,8 @@ class Circle {
     controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
-    totalPlayers = 0;  
+    totalPlayers = 0; 
+    clubPlayers = new ArrayList<Player>(); 
   }
   
   void setPos(float lat, float lng){
@@ -521,17 +565,13 @@ class Circle {
       controlPoint.y = center.y + sin(angle) * (distance + finalRadius + offset);  
   }
   
-//  void setColor(float h, float s, float b){
-//    myColor = color(h, s, b);
-//  }  
-  
   void setRadius(int max){
     finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
     setControlPoint();    
   }
   
   void update(){
-    float padding = 3*mm; //space in between the circles
+    float padding = 4*mm; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -563,15 +603,8 @@ class Circle {
       radius = finalRadius;
     }
     
-    noStroke();
-
-    if(selectedType.equals("") ||
-       (selectedType.equals("circle") && selectedCountry == thisCountry)){
-      fill(currColor);
-    }else{
-      fill(0, 0, 220);
-    }    
-    
+    noStroke();  
+    fill(currColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    
@@ -605,10 +638,13 @@ class Country{
 
 //    //hue
     if(groupInt % 2 != 0){
-      h = map(groupInt, 96, 104, 115, 235);
+      h = map(groupInt, 96, 104, 100, 235);
+      h += i%4 * 4;
     }else{
-      h = map(groupInt, 98, 104, 0, 80);
+      h = map(groupInt, 98, 104, 0, 60);
+      h -= i%4 * 2;
     }
+    
     s = 255;
     
     //Indigo blue
@@ -633,6 +669,7 @@ class Player {
   float angle;
   
   Circle currCountry;
+  Arc originCountry;
 
   Player(String _name, Country _origin, String _club, Country _current) {
     name = _name;

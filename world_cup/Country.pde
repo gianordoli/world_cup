@@ -18,10 +18,13 @@ class Country{
 
 //    //hue
     if(groupInt % 2 != 0){
-      h = map(groupInt, 96, 104, 115, 235);
+      h = map(groupInt, 96, 104, 100, 235);
+      h += i%4 * 4;
     }else{
-      h = map(groupInt, 98, 104, 0, 80);
+      h = map(groupInt, 98, 104, 0, 60);
+      h -= i%4 * 2;
     }
+    
     s = 255;
     
     //Indigo blue

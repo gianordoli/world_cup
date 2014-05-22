@@ -45,10 +45,10 @@ class Arc{
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
       float offset = 20*mm;  //distance from arc to control point
-      float x1 = pos.x + cos(angle) * radius;
-      float y1 = pos.y + sin(angle) * radius;
-      float x2 = pos.x + cos(angle) * (radius - offset);
-      float y2 = pos.y + sin(angle) * (radius - offset);    
+      float x1 = pos.x + cos(angle) * (radius - 4*mm);
+      float y1 = pos.y + sin(angle) * (radius - 4*mm);
+      float x2 = pos.x + cos(angle) * (radius - 4*mm - offset);
+      float y2 = pos.y + sin(angle) * (radius - 4*mm - offset);    
   
       p.setPos(x1, y1, x2, y2);
       p.setAngle(angle);
@@ -62,7 +62,7 @@ class Arc{
     }
     float distance = dist(mouseX, mouseY, center.x, center.y); 
     if(startAngle < mouseAngle && mouseAngle < endAngle &&
-       radius - 2*mm < distance && distance < radius + 6*mm){
+       radius - 4*mm < distance && distance < radius + 4*mm){
       return true;
     }else{
       return false;
@@ -88,7 +88,7 @@ class Arc{
       stroke(currColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);
+      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
       PVector boxSize = new PVector(15*mm, 4*mm);  
       rectMode(CORNER);

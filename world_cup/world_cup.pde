@@ -72,6 +72,18 @@ colorMode(HSB);
     a.linkCircles();
     a.setPlayersPositions();
   }
+  
+  //Now setting connections from circle to arc, through players
+  for(Arc a : allArcs){
+    for(Player p : a.teamPlayers){
+      p.originCountry = a;
+      for(Circle c : allCircles){
+        if(p.currCountry == c){
+          c.clubPlayers.add(p);
+        }
+      }
+    }
+  }
 
   //Now that we've linked players and circles,
   //let's calculate the circle radius based on the number
@@ -117,8 +129,13 @@ void draw() {
   }
   
   for (Circle c : allCircles) {
+    if(selectedType.equals("circle") && selectedCountry == c.thisCountry){
+      for(Player p : c.clubPlayers){
+        p.display();
+      }
+    }    
     c.update();
-    c.display();
+    c.display();    
   }  
 }
 
@@ -129,6 +146,7 @@ void mousePressed(){
       if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
         selectedType = "arc";
         selectedCountry = a.thisCountry;
+        a.currColor = a.thisCountry.myColor;
         dimColors();
       }else{
         selectedType = "";
@@ -142,6 +160,7 @@ void mousePressed(){
       if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
         selectedType = "circle";
         selectedCountry = c.thisCountry;
+        c.currColor = c.thisCountry.myColor;
         dimColors();
       }else{
         selectedType = "";
@@ -157,12 +176,12 @@ void mousePressed(){
 void dimColors(){
   for(Arc a: allArcs){
     if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
-      a.currColor = color(0, 0, 200);
+      a.currColor = color(0, 0, 0, 30);
     }
   }  
   for(Circle c: allCircles){
     if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
-      c.currColor = color(0, 0, 200);
+      c.currColor = color(0, 0, 0, 30);
     }
   }
 }
@@ -178,34 +197,39 @@ void restoreColors(){
 
 void mouseMoved(){
   boolean changeCursor = false;
-  for (Arc a : allArcs) {
-    if(a.isHovering()){
-      changeCursor = true;
-//      println(c.thisCountry.name);
-      color newColor = a.thisCountry.myColor;
-      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-      a.currColor = newColor;
-    }else if(selectedType.equals("")){
-      a.currColor = a.thisCountry.myColor;
-    }
-  }   
   
-  for (Circle c : allCircles) {
-    if(c.isHovering()){
-      changeCursor = true;
-//      println(c.thisCountry.name);
-      color newColor = c.thisCountry.myColor;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
+//  if(selectedType.equals("")){
+    for (Arc a : allArcs) {
+      color newColor = a.thisCountry.myColor;
+      if(a.isHovering()){
+        changeCursor = true;
         newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
       }else{
-        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+        newColor = a.thisCountry.myColor;
       }
-      c.currColor = newColor;
-    }else if(selectedType.equals("")){
-      c.currColor = c.thisCountry.myColor;
-    }
-  }
+      if(selectedType.equals("")){
+        a.currColor = newColor;
+      }
+    }   
+    
+    for (Circle c : allCircles) {
+      color newColor = c.thisCountry.myColor;
+      if(c.isHovering()){
+        changeCursor = true;
+        //If it' not one of the gray countries
+        if(saturation(newColor) > 0){
+          newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+        }else{
+          newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+        }
+      }else{
+        newColor = c.thisCountry.myColor;
+      }
+      if(selectedType.equals("")){
+        c.currColor = newColor;
+      }
+    }  
+//  }
 
   if(changeCursor){
     cursor(HAND);

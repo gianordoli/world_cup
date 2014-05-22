@@ -6,6 +6,7 @@ class Player {
   float angle;
   
   Circle currCountry;
+  Arc originCountry;
 
   Player(String _name, Country _origin, String _club, Country _current) {
     name = _name;

@@ -10,6 +10,7 @@ class Circle {
   color currColor;
   
   Country thisCountry;
+  ArrayList<Player> clubPlayers;
 
   Circle(Country _thisCountry, float lat, float lng) {
     thisCountry = _thisCountry;
@@ -18,7 +19,8 @@ class Circle {
     controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
-    totalPlayers = 0;  
+    totalPlayers = 0; 
+    clubPlayers = new ArrayList<Player>(); 
   }
   
   void setPos(float lat, float lng){

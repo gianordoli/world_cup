@@ -82,8 +82,8 @@ class Circle {
     if(isHovering()){
 //      println(thisCountry.name);
       //If it' not one of the gray countries
-      if(brightness(currColor) > 170){
-        currColor = color(hue(currColor), saturation(currColor), 255);
+      if(saturation(currColor) > 0){
+        currColor = color(hue(currColor), saturation(currColor) - 70, brightness(currColor));
       }
     }
     

@@ -34,8 +34,8 @@ PFont glober;
 
 void setup() {
   //  JS:
-//size(800, 900);
-  size(266*mm, 300*mm);
+size(800, 850);
+//  size(266*mm, 300*mm);
   colorMode(HSB);
 //  frameRate(30);
 
@@ -257,9 +257,9 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   float angleOffset = 0.005 * PI; //Distance between each arc
     
   //Filling the lower part in
-  float radius = 137*mm;
+  float radius = 135*mm;
   float x = center.x;
-  float y = center.y + 5*mm;
+  float y = center.y;
   float startAngle = 0.15 * PI;
   float endAngle = 0;
   

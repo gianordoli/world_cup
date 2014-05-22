@@ -53,6 +53,20 @@ class Arc{
     }
   }  
   
+  boolean isHovering(){
+    float mouseAngle = atan2(mouseY - center.y, mouseX - center.x);
+    if(mouseAngle < 0) {
+      mouseAngle = TWO_PI - abs(mouseAngle); 
+    }
+    float distance = dist(mouseX, mouseY, center.x, center.y); 
+    if(startAngle < mouseAngle && mouseAngle < endAngle &&
+       radius - 6*mm < distance && distance < radius + 2*mm){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  
   void display(){
     float currAngle = 0;
     float alpha = 0;
@@ -66,10 +80,19 @@ class Arc{
       alpha = 255;
     }
     
+    color currColor = thisCountry.myColor;
+    if(isHovering()){
+//      println(thisCountry.name);
+      //If it' not one of the gray countries
+      if(saturation(currColor) > 0){
+        currColor = color(hue(currColor), saturation(currColor) - 70, brightness(currColor));
+      }
+    }
+    
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      stroke(thisCountry.myColor);
+      stroke(currColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);
       arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);

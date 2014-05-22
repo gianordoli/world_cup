@@ -7,12 +7,14 @@ class Arc{
   float radius;
   float startAngle;
   float endAngle;
+  color currColor;
   
   Country thisCountry;
   ArrayList<Player> teamPlayers;
   
   Arc(Country _thisCountry, ArrayList<Player> _teamPlayers){
     thisCountry = _thisCountry;
+    currColor = thisCountry.myColor;
     teamPlayers = _teamPlayers;
   }
 
@@ -60,7 +62,7 @@ class Arc{
     }
     float distance = dist(mouseX, mouseY, center.x, center.y); 
     if(startAngle < mouseAngle && mouseAngle < endAngle &&
-       radius - 6*mm < distance && distance < radius + 2*mm){
+       radius - 2*mm < distance && distance < radius + 6*mm){
       return true;
     }else{
       return false;
@@ -78,15 +80,6 @@ class Arc{
     }else{
       currAngle = endAngle;
       alpha = 255;
-    }
-    
-    color currColor = thisCountry.myColor;
-    if(isHovering()){
-//      println(thisCountry.name);
-      //If it' not one of the gray countries
-      if(saturation(currColor) > 0){
-        currColor = color(hue(currColor), saturation(currColor) - 70, brightness(currColor));
-      }
     }
     
     pushMatrix();

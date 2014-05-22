@@ -8,9 +8,6 @@
  http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
 --------------------------------------------------------------------------- */
 
-import processing.pdf.*;
-boolean record = false;
-
 int mm = 3;
 
 ArrayList<Player> allPlayers;
@@ -31,6 +28,9 @@ int transition2;
 int transition3;
 
 PFont glober;
+
+String selectedType; //"arc"/"circle"
+Country selectedCountry;
 
 void setup() {
   //  JS:
@@ -84,17 +84,19 @@ size(800, 850);
 
   debug();
   
+  selectedType = "";
+//  println(selectedCountry);
+//  if(selectedCountry == null){
+//    println("oi");
+//  }
+  
   interval = 1000;
   transition1 = millis() + 3000;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
-void draw() {
-  if(record){
-      beginRecord(PDF, "world_cup.pdf");
-  }
-  
+void draw() {  
   background(255);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
@@ -114,16 +116,42 @@ void draw() {
   for (Circle c : allCircles) {
     c.update();
     c.display();
-  }
-
-  if(record){
-    endRecord();
-    record = false;
   }  
 }
 
 void mousePressed(){
-  record = true;
+
+}
+
+void mouseMoved(){
+  
+  for (Arc a : allArcs) {
+    if(a.isHovering()){
+//      println(c.thisCountry.name);
+      color newColor = a.thisCountry.myColor;
+      //If it' not one of the gray countries
+      if(saturation(newColor) > 0){
+        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+        a.currColor = newColor;
+      }
+    }else{
+      a.currColor = a.thisCountry.myColor;
+    }
+  }   
+  
+  for (Circle c : allCircles) {
+    if(c.isHovering()){
+//      println(c.thisCountry.name);
+      color newColor = c.thisCountry.myColor;
+      //If it' not one of the gray countries
+      if(saturation(newColor) > 0){
+        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+        c.currColor = newColor;
+      }
+    }else{
+      c.currColor = c.thisCountry.myColor;
+    }
+  }   
 }
 
 ArrayList<Country> initCountries(String filename){
@@ -309,8 +337,3 @@ void debug() {
 //    }
 //  }
 }
-
-//boolean sketchFullScreen() {
-//  return true;
-//}
-

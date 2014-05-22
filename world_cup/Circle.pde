@@ -7,11 +7,13 @@ class Circle {
   float radius;
   float finalRadius;
   int totalPlayers;
+  color currColor;
   
   Country thisCountry;
 
   Circle(Country _thisCountry, float lat, float lng) {
     thisCountry = _thisCountry;
+    currColor = thisCountry.myColor;
     pos = new PVector();
     controlPoint = new PVector();
     setPos(lat, lng);
@@ -76,15 +78,6 @@ class Circle {
       radius += (finalRadius - radius) * 0.2;
     }else{
       radius = finalRadius;
-    }
-    
-    color currColor = thisCountry.myColor;
-    if(isHovering()){
-//      println(thisCountry.name);
-      //If it' not one of the gray countries
-      if(saturation(currColor) > 0){
-        currColor = color(hue(currColor), saturation(currColor) - 70, brightness(currColor));
-      }
     }
     
     noStroke();

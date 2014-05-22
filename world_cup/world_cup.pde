@@ -8,7 +8,7 @@
  http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
 --------------------------------------------------------------------------- */
 
-int mm = 3;
+int mm;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -35,12 +35,11 @@ Country selectedCountry;
 void setup() {
   //  JS:
 size(800, 850);
+colorMode(HSB);
 //  size(266*mm, 300*mm);
-  colorMode(HSB);
 //  frameRate(30);
-
+  mm = 3;
   glober = createFont("GloberBold", 8);
-  
   center = new PVector(width/2, height/2);
 
   //Loading and positioning map
@@ -119,40 +118,54 @@ void draw() {
   }  
 }
 
-void mousePressed(){
-
-}
-
-void mouseMoved(){
-  
-  for (Arc a : allArcs) {
-    if(a.isHovering()){
-//      println(c.thisCountry.name);
-      color newColor = a.thisCountry.myColor;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
-        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-        a.currColor = newColor;
-      }
-    }else{
-      a.currColor = a.thisCountry.myColor;
-    }
-  }   
-  
-  for (Circle c : allCircles) {
-    if(c.isHovering()){
-//      println(c.thisCountry.name);
-      color newColor = c.thisCountry.myColor;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
-        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
-        c.currColor = newColor;
-      }
-    }else{
-      c.currColor = c.thisCountry.myColor;
-    }
-  }   
-}
+//void mousePressed(){
+//  selectedType = "";
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      selectedType = "arc";
+//      selectedCountry = a.thisCountry;
+//    }
+//  }
+//}
+//
+//void mouseMoved(){
+//  boolean changeCursor = false;
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      changeCursor = true;
+////      println(c.thisCountry.name);
+//      color newColor = a.thisCountry.myColor;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+//        a.currColor = newColor;
+//      }
+//    }else{
+//      a.currColor = a.thisCountry.myColor;
+//    }
+//  }   
+//  
+//  for (Circle c : allCircles) {
+//    if(c.isHovering()){
+//      changeCursor = true;
+////      println(c.thisCountry.name);
+//      color newColor = c.thisCountry.myColor;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+//        c.currColor = newColor;
+//      }
+//    }else{
+//      c.currColor = c.thisCountry.myColor;
+//    }
+//  }
+//
+//  if(changeCursor){
+//    cursor(HAND);
+//  }else{
+//    cursor(ARROW);
+//  }
+//}
 
 ArrayList<Country> initCountries(String filename){
   ArrayList<Country> tempList = new ArrayList<Country>();

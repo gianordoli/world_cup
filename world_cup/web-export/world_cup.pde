@@ -1,7 +1,14 @@
-import processing.pdf.*;
-boolean record = false;
+/* ---------------------------------------------------------------------------
+ World Cup 2014: Teams vs Clubs
+ 2014, for Galileu Magazine, Brazil
+ Gabriel Gianordoli
+ gianordoligabriel@gmail.com
 
-int mm = 3;
+ Geoplacement based on Till Nagel's tutorial: 
+ http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
+--------------------------------------------------------------------------- */
+
+int mm;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -22,15 +29,17 @@ int transition3;
 
 PFont glober;
 
+String selectedType; //"arc"/"circle"
+Country selectedCountry;
+
 void setup() {
   //  JS:
-size(800, 900);
+size(800, 850);
+colorMode(HSB);
 //  size(266*mm, 300*mm);
-  colorMode(HSB);
 //  frameRate(30);
-
+  mm = 3;
   glober = createFont("GloberBold", 8);
-  
   center = new PVector(width/2, height/2);
 
   //Loading and positioning map
@@ -74,17 +83,19 @@ size(800, 900);
 
   debug();
   
+  selectedType = "";
+//  println(selectedCountry);
+//  if(selectedCountry == null){
+//    println("oi");
+//  }
+  
   interval = 1000;
-  transition1 = millis() + 6000;
+  transition1 = millis() + 3000;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
-void draw() {
-  if(record){
-      beginRecord(PDF, "world_cup.pdf");
-  }
-  
+void draw() {  
   background(255);
 //  shape(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
@@ -104,17 +115,57 @@ void draw() {
   for (Circle c : allCircles) {
     c.update();
     c.display();
-  }
-
-  if(record){
-    endRecord();
-    record = false;
   }  
 }
 
-void mousePressed(){
-  record = true;
-}
+//void mousePressed(){
+//  selectedType = "";
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      selectedType = "arc";
+//      selectedCountry = a.thisCountry;
+//    }
+//  }
+//}
+//
+//void mouseMoved(){
+//  boolean changeCursor = false;
+//  for (Arc a : allArcs) {
+//    if(a.isHovering()){
+//      changeCursor = true;
+////      println(c.thisCountry.name);
+//      color newColor = a.thisCountry.myColor;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+//        a.currColor = newColor;
+//      }
+//    }else{
+//      a.currColor = a.thisCountry.myColor;
+//    }
+//  }   
+//  
+//  for (Circle c : allCircles) {
+//    if(c.isHovering()){
+//      changeCursor = true;
+////      println(c.thisCountry.name);
+//      color newColor = c.thisCountry.myColor;
+//      //If it' not one of the gray countries
+//      if(saturation(newColor) > 0){
+//        newColor = color(hue(newColor), saturation(newColor) - 70, brightness(newColor));
+//        c.currColor = newColor;
+//      }
+//    }else{
+//      c.currColor = c.thisCountry.myColor;
+//    }
+//  }
+//
+//  if(changeCursor){
+//    cursor(HAND);
+//  }else{
+//    cursor(ARROW);
+//  }
+//}
 
 ArrayList<Country> initCountries(String filename){
   ArrayList<Country> tempList = new ArrayList<Country>();
@@ -247,9 +298,9 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   float angleOffset = 0.005 * PI; //Distance between each arc
     
   //Filling the lower part in
-  float radius = 137*mm;
+  float radius = 135*mm;
   float x = center.x;
-  float y = center.y + 5*mm;
+  float y = center.y;
   float startAngle = 0.15 * PI;
   float endAngle = 0;
   
@@ -299,11 +350,6 @@ void debug() {
 //    }
 //  }
 }
-
-boolean sketchFullScreen() {
-  return true;
-}
-
 //World cup teams
 //Linked to Country (only to read colors)
 //Contains list of Player
@@ -313,12 +359,14 @@ class Arc{
   float radius;
   float startAngle;
   float endAngle;
+  color currColor;
   
   Country thisCountry;
   ArrayList<Player> teamPlayers;
   
   Arc(Country _thisCountry, ArrayList<Player> _teamPlayers){
     thisCountry = _thisCountry;
+    currColor = thisCountry.myColor;
     teamPlayers = _teamPlayers;
   }
 
@@ -359,6 +407,20 @@ class Arc{
     }
   }  
   
+  boolean isHovering(){
+    float mouseAngle = atan2(mouseY - center.y, mouseX - center.x);
+    if(mouseAngle < 0) {
+      mouseAngle = TWO_PI - abs(mouseAngle); 
+    }
+    float distance = dist(mouseX, mouseY, center.x, center.y); 
+    if(startAngle < mouseAngle && mouseAngle < endAngle &&
+       radius - 2*mm < distance && distance < radius + 6*mm){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  
   void display(){
     float currAngle = 0;
     float alpha = 0;
@@ -375,7 +437,14 @@ class Arc{
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      stroke(thisCountry.myColor);
+      if(selectedType.equals("") ||
+         (selectedType.equals("arc") && selectedCountry == thisCountry)){
+        stroke(currColor);
+      }else{
+        stroke(0, 0, 170);
+      }
+      stroke(currColor);
+      
       strokeWeight(8*mm);
       strokeCap(SQUARE);
       arc(0, 0, radius*2 + 5*mm, radius*2 + 5*mm, startAngle, currAngle);
@@ -408,11 +477,13 @@ class Circle {
   float radius;
   float finalRadius;
   int totalPlayers;
+  color currColor;
   
   Country thisCountry;
 
   Circle(Country _thisCountry, float lat, float lng) {
     thisCountry = _thisCountry;
+    currColor = thisCountry.myColor;
     pos = new PVector();
     controlPoint = new PVector();
     setPos(lat, lng);
@@ -455,22 +526,33 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.1;
-        pos.y += escape.y * 1.1;
+        pos.x += escape.x * 1.2;
+        pos.y += escape.y * 1.2;
         
         setControlPoint();        
       }    
     }  
   }  
+  
+  boolean isHovering(){
+    if(dist(mouseX, mouseY, pos.x, pos.y) < radius){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
   void display() {
     
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.1;
+      radius += (finalRadius - radius) * 0.2;
+    }else{
+      radius = finalRadius;
     }
     
     noStroke();
-    fill(thisCountry.myColor);
+//    fill(thisCountry.myColor);
+    fill(currColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    
@@ -509,23 +591,23 @@ class Country{
 //    }
 
     //hue
-    if(groupInt % 2 == 0){
-      h = map(groupInt, 98, 104, 0, 60);
+    if(groupInt % 2 != 0){
+      h = map(groupInt, 98, 104, 0, 80);
       
     }else{
-      h = map(groupInt, 96, 103, 115, 235);
+      h = map(groupInt, 96, 104, 115, 235);
     }
 //    h += map(i % 4, 0, 3, 0, 20);
     
     //Saturation
-    if(i < 4*4){
-      s = map(i % 4, 0, 3, 255, 180);
-//      b = map(i % 4, 0, 3, 235, 255);    
-    }else{
-      s = map(i % 4, 0, 3, 180, 255);
-//      b = map(i % 4, 0, 3, 255, 235);
-    }
-//    s = 255;
+//    if(i < 4*4){
+//      s = map(i % 4, 0, 3, 255, 180);
+////      b = map(i % 4, 0, 3, 235, 255);    
+//    }else{
+//      s = map(i % 4, 0, 3, 180, 255);
+////      b = map(i % 4, 0, 3, 255, 235);
+//    }
+    s = 255;
     
     //Indigo blue
     if(140 < h && h < 190){

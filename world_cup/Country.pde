@@ -46,7 +46,8 @@ class Country{
       s -= 100;
     }    
     
-    b = 255;
+//    b = 255;
+    b = 225;
     
     if(groupInt < 97){  //gray
       s = 0;

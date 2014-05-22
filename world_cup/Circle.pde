@@ -54,22 +54,42 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.1;
-        pos.y += escape.y * 1.1;
+        pos.x += escape.x * 1.2;
+        pos.y += escape.y * 1.2;
         
         setControlPoint();        
       }    
     }  
   }  
+  
+  boolean isHovering(){
+    if(dist(mouseX, mouseY, pos.x, pos.y) < radius){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
   void display() {
     
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.1;
+      radius += (finalRadius - radius) * 0.2;
+    }else{
+      radius = finalRadius;
+    }
+    
+    color currColor = thisCountry.myColor;
+    if(isHovering()){
+//      println(thisCountry.name);
+      //If it' not one of the gray countries
+      if(brightness(currColor) > 170){
+        currColor = color(hue(currColor), saturation(currColor), 255);
+      }
     }
     
     noStroke();
-    fill(thisCountry.myColor);
+//    fill(thisCountry.myColor);
+    fill(currColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    

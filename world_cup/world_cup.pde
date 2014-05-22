@@ -85,7 +85,7 @@ void setup() {
   debug();
   
   interval = 1000;
-  transition1 = millis() + 6000;
+  transition1 = millis() + 3000;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
@@ -310,7 +310,7 @@ void debug() {
 //  }
 }
 
-boolean sketchFullScreen() {
-  return true;
-}
+//boolean sketchFullScreen() {
+//  return true;
+//}
 

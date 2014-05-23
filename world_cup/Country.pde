@@ -34,11 +34,12 @@ class Country{
     if(140 < hu && hu < 200){
       sa -= 100;
     }    
-    br = 255;
+    br = 240;
     
     if(groupInt < 97){  //gray
-      sa = 0;
-      br = 170;
+      hu = 40;
+      sa = 90;
+      br = 130;
     }
     myColor = color(hu, sa, br);
   }

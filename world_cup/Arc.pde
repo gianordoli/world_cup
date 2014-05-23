@@ -32,6 +32,9 @@ class Arc{
         if (p.current.name.equals(c.thisCountry.name)) {
           p.currCountry = c;
           c.totalPlayers ++;
+          c.clubPlayers.add(p);
+          
+          p.originCountry = this;
         }
       }
     }  
@@ -44,13 +47,18 @@ class Arc{
       Player p = teamPlayers.get(i);
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 20*mm;  //distance from arc to control point
-      float x1 = pos.x + cos(angle) * (radius - 4*mm);
-      float y1 = pos.y + sin(angle) * (radius - 4*mm);
-      float x2 = pos.x + cos(angle) * (radius - 4*mm - offset);
-      float y2 = pos.y + sin(angle) * (radius - 4*mm - offset);    
+      float offset = 40*mm;  //distance from arc to control point
+      PVector p1 = new PVector(0,0);
+      PVector p2 = new PVector(0,0);
+      p1.x = pos.x + cos(angle) * (radius - 4*mm);
+      p1.y = pos.y + sin(angle) * (radius - 4*mm);
+      p2.x = pos.x + cos(angle) * (radius - 4*mm - offset);
+      p2.y = pos.y + sin(angle) * (radius - 4*mm - offset);
+      
+      PVector p4 = p.currCountry.pos;
+      PVector p3 = PVector.lerp(p2, p4, 0.5);    
   
-      p.setPos(x1, y1, x2, y2);
+      p.setPos(p1, p2, p3, p4);
       p.setAngle(angle);
     }
   }  

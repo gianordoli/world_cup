@@ -59,7 +59,10 @@ void setup() {
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
 //  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
-  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
+  String[] sortedCountries = new String[allCountries.size()];
+  for(int i = 0; i < allCountries.size(); i++){
+    sortedCountries[i] = allCountries.get(i).name;
+  } 
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
   /*------ ARCS ------*/
@@ -72,18 +75,6 @@ void setup() {
     a.linkCircles();
     a.setPlayersPositions();
   }
-  
-  //Now setting connections from circle to arc, through players
-  for(Arc a : allArcs){
-    for(Player p : a.teamPlayers){
-      p.originCountry = a;
-      for(Circle c : allCircles){
-        if(p.currCountry == c){
-          c.clubPlayers.add(p);
-        }
-      }
-    }
-  }
 
   //Now that we've linked players and circles,
   //let's calculate the circle radius based on the number
@@ -93,19 +84,19 @@ void setup() {
     c.setRadius(maxPlayers);
   }  
 
-//  debug();
+  debug();
   
   selectedType = "";
   
   interval = 1000;
-  transition1 = millis() + 3000;
+  transition1 = millis() + 2*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
 void draw() {  
-  background(255);
-  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  background(50);
+//  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
     
@@ -116,7 +107,6 @@ void draw() {
           (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
           for(Player p : a.teamPlayers){
             p.display();
-            p.currCountry.currColor = p.currCountry.thisCountry.myColor;
           }
         }
       }      
@@ -144,6 +134,11 @@ void mousePressed(){
         selectedCountry = a.thisCountry;
         a.currColor = a.thisCountry.myColor;
         dimColors();
+        
+        for(Player p : a.teamPlayers){
+          p.currCountry.currColor = p.currCountry.thisCountry.myColor;
+        }
+        
       }else{
         selectedType = "";
       }
@@ -158,6 +153,12 @@ void mousePressed(){
         selectedCountry = c.thisCountry;
         c.currColor = c.thisCountry.myColor;
         dimColors();
+        
+        for(Player p : c.clubPlayers){
+//          println(p.name + "\t" + p.originCountry);
+          p.originCountry.currColor = p.originCountry.thisCountry.myColor;
+        }        
+        
       }else{
         selectedType = "";
       }
@@ -190,10 +191,10 @@ void mouseMoved(){
     if(c.isHovering()){
       changeCursor = true;
       //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
+      if(saturation(newColor) > 100){
         newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
       }else{
-        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
     }else{
       newColor = c.thisCountry.myColor;
@@ -213,12 +214,12 @@ void mouseMoved(){
 void dimColors(){
   for(Arc a: allArcs){
     if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
-      a.currColor = color(0, 0, 0, 30);
+      a.currColor = color(0, 0, 255, 30);
     }
   }  
   for(Circle c: allCircles){
     if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
-      c.currColor = color(0, 0, 0, 30);
+      c.currColor = color(0, 0, 255, 30);
     }
   }
 }
@@ -344,7 +345,9 @@ ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
       //Cleaned the list up
       tempPlayers = new ArrayList();
     }
-    
+//    if(p.origin.name.equals("Uruguai")){
+//      println(p.name + "\t" + p.current.name);
+//    }
     tempPlayers.add(p);
     
     //Wait! Was it the last player?
@@ -399,19 +402,24 @@ int getMax(ArrayList<Circle> myList) {
 }
 
 void debug() {
-  for(Country c : allCountries){
-    println(c.name + "\t" + c.group + "\t" + c.myColor);
-  }
-  for(Circle c: allCircles){
-    println(c.thisCountry.name);
-  }  
-  for (Player p : allPlayers) {
-    println(p.name + " \t" + p.origin.name);
-  }
-  for(Arc a: allArcs){
-    print(a.thisCountry.name + ":" + a.teamPlayers.size());
-    for(Player p : a.teamPlayers){
-      println("\t" + p.name);
-    }
-  }
+//  for(Country c : allCountries){
+//    println(c.name + "\t" + c.group + "\t" + c.myColor);
+//  }
+//  for(Circle c: allCircles){
+//    println(c.thisCountry.name);
+//  }  
+//  for (Player p : allPlayers) {
+//    if(p.origin.name.equals("Uruguai")){
+//      println(p.name + " \t" + p.origin.name + " \t" + p.current.name);
+//    }
+//  }
+
+//  for(Arc a: allArcs){
+//    if(a.thisCountry.name.equals("Uruguai")){
+//      print(a.thisCountry.name + ":" + a.teamPlayers.size());
+//      for(Player p : a.teamPlayers){
+//        println("\t" + p.name + "\t" + p.current.name);
+//      }
+//    }
+//  }
 }

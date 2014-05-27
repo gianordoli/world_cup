@@ -44,7 +44,8 @@ void setup() {
 
   //Loading and positioning map
   worldMap = loadImage("world_map_equirectangular.png");
-  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+//  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+  worldMapSize = new PVector(worldMap.width, worldMap.height);
   worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
   
   /*----- COUNTRIES -----*/
@@ -96,7 +97,8 @@ void setup() {
 
 void draw() {  
   background(50);
-//  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  tint(255, 50);
+  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
     

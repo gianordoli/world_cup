@@ -56,7 +56,11 @@ class Arc{
       p2.y = pos.y + sin(angle) * (radius - 4*mm - offset);
       
       PVector p4 = p.currCountry.pos;
-      PVector p3 = PVector.lerp(p2, p4, 0.5);    
+//      PVector p3 = PVector.lerp(p2, p4, 0.5);
+      //lerp on a vector doesn't work in javaScript mode
+      PVector p3 = new PVector(p2.x, p2.y);
+      p3.x = lerp(p2.x, p4.x, 0.5);
+      p3.y = lerp(p2.y, p4.y, 0.5);
   
       p.setPos(p1, p2, p3, p4);
       p.setAngle(angle);

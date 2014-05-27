@@ -83,7 +83,7 @@ class Circle {
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    
-    fill(0);
+    fill(255);
 //    textFont(glober);
     textSize(8);
     rectMode(CORNER);

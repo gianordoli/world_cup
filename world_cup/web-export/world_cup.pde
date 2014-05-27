@@ -44,7 +44,8 @@ void setup() {
 
   //Loading and positioning map
   worldMap = loadImage("world_map_equirectangular.png");
-  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+//  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
+  worldMapSize = new PVector(worldMap.width, worldMap.height);
   worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
   
   /*----- COUNTRIES -----*/
@@ -59,7 +60,10 @@ void setup() {
   allPlayers = loadPlayers("players_pt.tsv"); 
   //Players' positions in the arc will be based on this sorted list
 //  String[] sortedCountries = loadStrings("countries_sorted_by_angle_pt.txt");
-  String[] sortedCountries = loadStrings("countries_sorted_by_groups.txt");
+  String[] sortedCountries = new String[allCountries.size()];
+  for(int i = 0; i < allCountries.size(); i++){
+    sortedCountries[i] = allCountries.get(i).name;
+  } 
   allPlayers = sortPlayers(allPlayers, sortedCountries, "origin");  //Sorting the arcs
   
   /*------ ARCS ------*/
@@ -72,18 +76,6 @@ void setup() {
     a.linkCircles();
     a.setPlayersPositions();
   }
-  
-  //Now setting connections from circle to arc, through players
-  for(Arc a : allArcs){
-    for(Player p : a.teamPlayers){
-      p.originCountry = a;
-      for(Circle c : allCircles){
-        if(p.currCountry == c){
-          c.clubPlayers.add(p);
-        }
-      }
-    }
-  }
 
   //Now that we've linked players and circles,
   //let's calculate the circle radius based on the number
@@ -93,18 +85,19 @@ void setup() {
     c.setRadius(maxPlayers);
   }  
 
-//  debug();
+  debug();
   
   selectedType = "";
   
   interval = 1000;
-  transition1 = millis() + 3000;
+  transition1 = millis() + 2*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
 void draw() {  
-  background(255);
+  background(50);
+  tint(255, 50);
   image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
 
   if(millis() > transition1){
@@ -116,7 +109,6 @@ void draw() {
           (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
           for(Player p : a.teamPlayers){
             p.display();
-            p.currCountry.currColor = p.currCountry.thisCountry.myColor;
           }
         }
       }      
@@ -144,6 +136,11 @@ void mousePressed(){
         selectedCountry = a.thisCountry;
         a.currColor = a.thisCountry.myColor;
         dimColors();
+        
+        for(Player p : a.teamPlayers){
+          p.currCountry.currColor = p.currCountry.thisCountry.myColor;
+        }
+        
       }else{
         selectedType = "";
       }
@@ -158,6 +155,12 @@ void mousePressed(){
         selectedCountry = c.thisCountry;
         c.currColor = c.thisCountry.myColor;
         dimColors();
+        
+        for(Player p : c.clubPlayers){
+//          println(p.name + "\t" + p.originCountry);
+          p.originCountry.currColor = p.originCountry.thisCountry.myColor;
+        }        
+        
       }else{
         selectedType = "";
       }
@@ -190,10 +193,10 @@ void mouseMoved(){
     if(c.isHovering()){
       changeCursor = true;
       //If it' not one of the gray countries
-      if(saturation(newColor) > 0){
+      if(saturation(newColor) > 100){
         newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
       }else{
-        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 50);
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
     }else{
       newColor = c.thisCountry.myColor;
@@ -213,12 +216,12 @@ void mouseMoved(){
 void dimColors(){
   for(Arc a: allArcs){
     if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
-      a.currColor = color(0, 0, 0, 30);
+      a.currColor = color(0, 0, 255, 30);
     }
   }  
   for(Circle c: allCircles){
     if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
-      c.currColor = color(0, 0, 0, 30);
+      c.currColor = color(0, 0, 255, 30);
     }
   }
 }
@@ -344,7 +347,9 @@ ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
       //Cleaned the list up
       tempPlayers = new ArrayList();
     }
-    
+//    if(p.origin.name.equals("Uruguai")){
+//      println(p.name + "\t" + p.current.name);
+//    }
     tempPlayers.add(p);
     
     //Wait! Was it the last player?
@@ -399,21 +404,26 @@ int getMax(ArrayList<Circle> myList) {
 }
 
 void debug() {
-  for(Country c : allCountries){
-    println(c.name + "\t" + c.group + "\t" + c.myColor);
-  }
-  for(Circle c: allCircles){
-    println(c.thisCountry.name);
-  }  
-  for (Player p : allPlayers) {
-    println(p.name + " \t" + p.origin.name);
-  }
-  for(Arc a: allArcs){
-    print(a.thisCountry.name + ":" + a.teamPlayers.size());
-    for(Player p : a.teamPlayers){
-      println("\t" + p.name);
-    }
-  }
+//  for(Country c : allCountries){
+//    println(c.name + "\t" + c.group + "\t" + c.myColor);
+//  }
+//  for(Circle c: allCircles){
+//    println(c.thisCountry.name);
+//  }  
+//  for (Player p : allPlayers) {
+//    if(p.origin.name.equals("Uruguai")){
+//      println(p.name + " \t" + p.origin.name + " \t" + p.current.name);
+//    }
+//  }
+
+//  for(Arc a: allArcs){
+//    if(a.thisCountry.name.equals("Uruguai")){
+//      print(a.thisCountry.name + ":" + a.teamPlayers.size());
+//      for(Player p : a.teamPlayers){
+//        println("\t" + p.name + "\t" + p.current.name);
+//      }
+//    }
+//  }
 }
 //World cup teams
 //Linked to Country (only to read colors)
@@ -449,6 +459,9 @@ class Arc{
         if (p.current.name.equals(c.thisCountry.name)) {
           p.currCountry = c;
           c.totalPlayers ++;
+          c.clubPlayers.add(p);
+          
+          p.originCountry = this;
         }
       }
     }  
@@ -461,13 +474,22 @@ class Arc{
       Player p = teamPlayers.get(i);
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 20*mm;  //distance from arc to control point
-      float x1 = pos.x + cos(angle) * (radius - 4*mm);
-      float y1 = pos.y + sin(angle) * (radius - 4*mm);
-      float x2 = pos.x + cos(angle) * (radius - 4*mm - offset);
-      float y2 = pos.y + sin(angle) * (radius - 4*mm - offset);    
+      float offset = 40*mm;  //distance from arc to control point
+      PVector p1 = new PVector(0,0);
+      PVector p2 = new PVector(0,0);
+      p1.x = pos.x + cos(angle) * (radius - 4*mm);
+      p1.y = pos.y + sin(angle) * (radius - 4*mm);
+      p2.x = pos.x + cos(angle) * (radius - 4*mm - offset);
+      p2.y = pos.y + sin(angle) * (radius - 4*mm - offset);
+      
+      PVector p4 = p.currCountry.pos;
+//      PVector p3 = PVector.lerp(p2, p4, 0.5);
+      //lerp on a vector doesn't work in javaScript mode
+      PVector p3 = new PVector(p2.x, p2.y);
+      p3.x = lerp(p2.x, p4.x, 0.5);
+      p3.y = lerp(p2.y, p4.y, 0.5);
   
-      p.setPos(x1, y1, x2, y2);
+      p.setPos(p1, p2, p3, p4);
       p.setAngle(angle);
     }
   }  
@@ -611,7 +633,7 @@ class Circle {
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     PVector boxSize = new PVector(14*mm, 4*mm);    
-    fill(0);
+    fill(255);
 //    textFont(glober);
     textSize(8);
     rectMode(CORNER);
@@ -657,11 +679,12 @@ class Country{
     if(140 < hu && hu < 200){
       sa -= 100;
     }    
-    br = 255;
+    br = 240;
     
     if(groupInt < 97){  //gray
-      sa = 0;
-      br = 170;
+      hu = 40;
+      sa = 90;
+      br = 130;
     }
     myColor = color(hu, sa, br);
   }
@@ -684,9 +707,11 @@ class Player {
     anchors = new ArrayList<PVector>();
   }
 
-  void setPos(float x1, float y1, float x2, float y2) {
-    anchors.add(new PVector(x1, y1));
-    anchors.add(new PVector(x2, y2));    
+  void setPos(PVector p1, PVector p2, PVector p3, PVector p4) {
+    anchors.add(p1);
+    anchors.add(p2);    
+    anchors.add(p3); 
+    anchors.add(p4);    
   }
   
   void setAngle(float _angle){
@@ -710,8 +735,8 @@ class Player {
 //    line(anchors.get(0).x, anchors.get(0).y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
            anchors.get(1).x, anchors.get(1).y,
-           currCountry.pos.x, currCountry.pos.y,
-           currCountry.pos.x, currCountry.pos.y);
+           anchors.get(2).x, anchors.get(2).y,
+           anchors.get(3).x, anchors.get(3).y);
 //    bezier(anchors.get(0).x, anchors.get(0).y, 
 //           anchors.get(1).x, anchors.get(1).y,
 //           currCountry.controlPoint.x, currCountry.controlPoint.y,

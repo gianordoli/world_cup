@@ -241,10 +241,12 @@ ArrayList<Country> initCountries(String filename){
     for (String lineString : tableString) {
       String[] myLine = split(lineString, "\t");
       String name = trim(myLine[0]);
-      String group = trim(myLine[1]);
-      Country thisCountry = new Country(name, group);
+      String abbreviation = trim(myLine[1]);
+      String group = trim(myLine[2]);
+      Country thisCountry = new Country(name, abbreviation, group);
 //      thisCountry.setColor();
       tempList.add(thisCountry);
+      println(name + "\t" + abbreviation + "\t" + group);
     }
     return tempList;
 }
@@ -281,14 +283,14 @@ ArrayList<Player> loadPlayers(String filename) {
     String club = trim(myLine[2]);
     String currentString = trim(myLine[3]);
     
-    Country origin = new Country("", "");
+    Country origin = new Country("", "", "");
     for (Country c : allCountries) {
       if(originString.equals(c.name)){
         origin = c;
         break;
       }
     }
-    Country current = new Country("", "");
+    Country current = new Country("", "", "");
     for (Country c : allCountries) {
       if(currentString.equals(c.name)){
         current = c;
@@ -330,7 +332,7 @@ ArrayList<Arc> createArcs(ArrayList<Player> thesePlayers){
   
   ArrayList<Arc> tempList = new ArrayList<Arc>();
   
-  Country prevCountry = new Country("", "");
+  Country prevCountry = new Country("", "", "");
   ArrayList<Player> tempPlayers = new ArrayList<Player>();
   
   for(int i = 0; i < thesePlayers.size(); i++){
@@ -408,7 +410,10 @@ void debug() {
 //    println(c.name + "\t" + c.group + "\t" + c.myColor);
 //  }
 //  for(Circle c: allCircles){
-//    println(c.thisCountry.name);
+//    print(c.thisCountry.name);
+//    for(Player p : c.clubPlayers){
+//      println("\t" + p.name + " \t" + p.origin.name);
+//    }
 //  }  
 //  for (Player p : allPlayers) {
 //    if(p.origin.name.equals("Uruguai")){

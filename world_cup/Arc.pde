@@ -107,16 +107,16 @@ class Arc{
       textAlign(CENTER, CENTER);
 //      textFont(glober);      
 //      textSize(10);    
-      textLeading(10);  
+      textLeading(16);  
       fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }else{
           rotate(angle + PI/2);
-          text(thisCountry.name, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
         }
     popMatrix();
   }

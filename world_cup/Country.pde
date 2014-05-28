@@ -2,11 +2,13 @@
 //Only a sort of HashMap to store countries x colors
 class Country{
   String name;
+  String abbreviation;
   String group;
   color myColor;
   
-  Country(String _name, String _group){
+  Country(String _name, String _abbreviation, String _group){
     name = _name;
+    abbreviation = _abbreviation;
     group = _group;
   }
   

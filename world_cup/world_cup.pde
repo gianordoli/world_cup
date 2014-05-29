@@ -35,18 +35,19 @@ String selectedType; //"arc"/"circle"
 Country selectedCountry;
 
 void setup() {
-  size(800, 850);
+  size(920, 700);
   colorMode(HSB, 255, 255, 255);
   mm = 3;
 //  glober = createFont("GloberBold", 8);
   textSize(8);
-  center = new PVector(width/2, height/2);
+  center = new PVector(600, height/2);
 
   //Loading and positioning map
   worldMap = loadImage("world_map_equirectangular.png");
 //  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
-  worldMapSize = new PVector(worldMap.width, worldMap.height);
-  worldMapPos = new PVector((width - worldMapSize.x)/2 - 15*mm, (height - worldMapSize.y)/2 + 30*mm);
+//  worldMapSize = new PVector(worldMap.width, worldMap.height);
+  worldMapSize = new PVector(650, 400);
+  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 90, center.y - worldMapSize.y/2 + 85);
   
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");
@@ -90,15 +91,19 @@ void setup() {
   selectedType = "";
   
   interval = 1000;
-  transition1 = millis() + 2*interval;
+  transition1 = millis() + 3*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
 void draw() {  
   background(50);
-  tint(255, 50);
-  image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  if(millis() < transition2){
+    float alpha = map(transition2 - millis(), interval, 0, 100, 0);
+    alpha = constrain(alpha, 0, 100);
+    tint(255, alpha);
+    image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
+  }
 
   if(millis() > transition1){
     
@@ -370,7 +375,7 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   float angleOffset = 0.005 * PI; //Distance between each arc
     
   //Filling the lower part in
-  float radius = 135*mm;
+  float radius = 315;
   float x = center.x;
   float y = center.y;
   float startAngle = 0.15 * PI;

@@ -41,12 +41,12 @@ class Circle {
   }
   
   void setRadius(int max){
-    finalRadius = map(totalPlayers, 0, max, 2*mm, 20*mm);
+    finalRadius = map(totalPlayers, 1, max, 6, 50);
     setControlPoint();    
   }
   
   void update(){
-    float padding = 4*mm; //space in between the circles
+    float padding = 8; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -73,7 +73,7 @@ class Circle {
   void display() {
     
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.3;
+      radius += (finalRadius - radius) * 0.5;
     }else{
       radius = finalRadius;
     }

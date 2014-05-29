@@ -7,15 +7,19 @@ class Arc{
   float radius;
   float startAngle;
   float endAngle;
-  color currColor;
+  
+  boolean isOver;
+  boolean isActive;  
   
   Country thisCountry;
   ArrayList<Player> teamPlayers;
   
   Arc(Country _thisCountry, ArrayList<Player> _teamPlayers){
     thisCountry = _thisCountry;
-    currColor = thisCountry.myColor;
     teamPlayers = _teamPlayers;
+    
+    isOver = false;
+    isActive = true;
   }
 
   void setArcParam(float _x, float _y, float _r, float _startAngle, float _endAngle){
@@ -82,6 +86,7 @@ class Arc{
   }
   
   void display(){
+    //TRANSITION
     float currAngle = 0;
     float alpha = 0;
     if(millis() < transition2){
@@ -94,10 +99,18 @@ class Arc{
       alpha = 255;
     }
     
+    color newColor = thisCountry.myColor;
+    if(isOver){
+      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+    }
+    if(!isActive){
+      newColor = color(0, 0, 0, 30);
+    }
+    
     pushMatrix();
       translate(pos.x, pos.y);
       noFill();
-      stroke(currColor);
+      stroke(newColor);
       strokeWeight(8*mm);
       strokeCap(SQUARE);
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);

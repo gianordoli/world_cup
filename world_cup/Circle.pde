@@ -7,20 +7,24 @@ class Circle {
   float radius;
   float finalRadius;
   int totalPlayers;
-  color currColor;
+  
+  boolean isOver;
+  boolean isActive;  
   
   Country thisCountry;
   ArrayList<Player> clubPlayers;
 
   Circle(Country _thisCountry, float lat, float lng) {
     thisCountry = _thisCountry;
-    currColor = thisCountry.myColor;
     pos = new PVector();
     controlPoint = new PVector();
     setPos(lat, lng);
     radius = 1;
     totalPlayers = 0; 
-    clubPlayers = new ArrayList<Player>(); 
+    clubPlayers = new ArrayList<Player>();
+   
+    isOver = false;
+    isActive = true;    
   }
   
   void setPos(float lat, float lng){
@@ -71,26 +75,41 @@ class Circle {
   }
 
   void display() {
-    
+    //TRANSITION
     if(radius < finalRadius * 0.99){
       radius += (finalRadius - radius) * 1;
     }else{
       radius = finalRadius;
     }
     
+    color newColor = thisCountry.myColor;
+    if(isOver){
+      //If it's NOT one of the "gray" countries...
+      if(saturation(newColor) > 100){
+        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      }else{
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
+      }
+    }
+    if(!isActive){
+      newColor = color(0, 0, 0, 30);
+    }    
+    
     noStroke();  
-    fill(currColor);
+    fill(newColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
-    PVector boxSize = new PVector(14*mm, 6*mm);
-//    rect(pos.x - boxSize.x/2, pos.y - boxSize.y/2, boxSize.x, boxSize.y);
-    fill(0);
-//    textFont(glober);
-    textSize(8);
-    rectMode(CORNER);
-    textAlign(CENTER, CENTER);
-    textLeading(8);
-    text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+    if(isOver || isActive){
+      PVector boxSize = new PVector(14*mm, 6*mm);
+  //    rect(pos.x - boxSize.x/2, pos.y - boxSize.y/2, boxSize.x, boxSize.y);
+      fill(0);
+  //    textFont(glober);
+      textSize(8);
+      rectMode(CORNER);
+      textAlign(CENTER, CENTER);
+      textLeading(8);
+      text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+    }
   }
 }
 

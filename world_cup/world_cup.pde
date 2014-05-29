@@ -139,11 +139,11 @@ void mousePressed(){
       if(!selectedType.equals("arc") && selectedCountry != a.thisCountry){
         selectedType = "arc";
         selectedCountry = a.thisCountry;
-        a.currColor = a.thisCountry.myColor;
         dimColors();
+        a.isActive = true;
         
         for(Player p : a.teamPlayers){
-          p.currCountry.currColor = p.currCountry.thisCountry.myColor;
+          p.currCountry.isActive = true;
         }
         
       }else{
@@ -158,12 +158,12 @@ void mousePressed(){
       if(!selectedType.equals("circle") && selectedCountry != c.thisCountry){
         selectedType = "circle";
         selectedCountry = c.thisCountry;
-        c.currColor = c.thisCountry.myColor;
         dimColors();
+        c.isActive = true;
         
         for(Player p : c.clubPlayers){
 //          println(p.name + "\t" + p.originCountry);
-          p.originCountry.currColor = p.originCountry.thisCountry.myColor;
+          p.originCountry.isActive = true;
         }        
         
       }else{
@@ -181,15 +181,11 @@ void mouseMoved(){
   boolean changeCursor = false;
   
   for (Arc a : allArcs) {
-    color newColor = a.thisCountry.myColor;
     if(a.isHovering()){
       changeCursor = true;
-      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      a.isOver = true;
     }else{
-      newColor = a.thisCountry.myColor;
-    }
-    if(selectedType.equals("")){
-      a.currColor = newColor;
+      a.isOver = false;
     }
   }   
   
@@ -197,17 +193,9 @@ void mouseMoved(){
     color newColor = c.thisCountry.myColor;
     if(c.isHovering()){
       changeCursor = true;
-      //If it' not one of the gray countries
-      if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
-      }else{
-        newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
-      }
+      c.isOver = true;
     }else{
-      newColor = c.thisCountry.myColor;
-    }
-    if(selectedType.equals("")){
-      c.currColor = newColor;
+      c.isOver = false;
     }
   }  
 
@@ -220,23 +208,19 @@ void mouseMoved(){
 
 void dimColors(){
   for(Arc a: allArcs){
-    if(!selectedType.equals("arc") || selectedCountry != a.thisCountry){
-      a.currColor = color(0, 0, 255, 30);
-    }
+    a.isActive = false;
   }  
   for(Circle c: allCircles){
-    if(!selectedType.equals("circle") || selectedCountry != c.thisCountry){
-      c.currColor = color(0, 0, 255, 30);
-    }
+    c.isActive = false;
   }
 }
 
 void restoreColors(){
   for(Arc a: allArcs){
-    a.currColor = a.thisCountry.myColor;
+    a.isActive = true;
   }   
   for(Circle c: allCircles){
-    c.currColor = c.thisCountry.myColor;
+    c.isActive = true;
   }
 }
 

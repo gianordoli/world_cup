@@ -4,6 +4,7 @@ class Player {
   Country origin, current;
   ArrayList<PVector> anchors;
   float angle;
+  boolean isActive;  
   
   Circle currCountry;
   Arc originCountry;
@@ -14,6 +15,7 @@ class Player {
     club = _club;
     current = _current;
     anchors = new ArrayList<PVector>();
+    isActive = true;
   }
 
   void setPos(PVector p1, PVector p2, PVector p3, PVector p4) {

@@ -110,9 +110,14 @@ class Circle {
       textLeading(8);
       text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
       
+      int nPlayers = 0;
       if(selectedType.equals("circle") && isActive){
         text(clubPlayers.size(), pos.x, pos.y + boxSize.y/2);
       }
+      
+      if(selectedType.equals("arc") && isActive){
+//        for(Player p : )
+      }      
     }
   }
 }

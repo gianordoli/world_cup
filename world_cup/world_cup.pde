@@ -99,36 +99,37 @@ void draw() {
   PVector textPos = new PVector(20, 200);
   float leading = 10;  
 
-  //Arcs
-  if(millis() > transition1){
-    for(Arc a : allArcs){  
+  //Default/initial/show all
+  if(selectedType.equals("") && millis() > transition1){
+    for(Arc a : allArcs){
       if(millis() > transition2){
-        if(selectedType.equals("") ||
-          (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
-
-          if(!selectedType.equals("")){
-            fill(0);
-            textAlign(LEFT);
-            text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
-            textPos.y += leading;            
-          }
-          
-          for(Player p : a.teamPlayers){
-            p.display();
-            
-            if(!selectedType.equals("")){
-              text(p.name, textPos.x, textPos.y);
-              text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
-              textPos.y += leading;            
-            }
-          }
+        for(Player p : a.teamPlayers){
+          p.display();
         }
-      }      
+      }
       a.display();
     }
   }
-  
-  
+
+  //Arcs (selected)
+  for(Arc a : allArcs){  
+    if(selectedType.equals("arc") && selectedCountry == a.thisCountry){          
+
+      fill(0);
+      textAlign(LEFT);
+      text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
+      textPos.y += leading;
+      
+      for(Player p : a.teamPlayers){
+        p.display();
+        
+        text(p.name, textPos.x, textPos.y);
+        text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
+        textPos.y += leading;
+      }
+    }
+    a.display();
+  }
   
   //Circles
   textPos = new PVector(20, 200);
@@ -167,6 +168,7 @@ void mousePressed(){
         a.isActive = true;
         
         for(Player p : a.teamPlayers){
+          p.isActive = true;
           p.currCountry.isActive = true;
         }
         
@@ -186,7 +188,7 @@ void mousePressed(){
         c.isActive = true;
         
         for(Player p : c.clubPlayers){
-//          println(p.name + "\t" + p.originCountry);
+          p.isActive = true;
           p.originCountry.isActive = true;
         }        
         
@@ -237,6 +239,9 @@ void dimColors(){
   for(Circle c: allCircles){
     c.isActive = false;
   }
+  for(Player p: allPlayers){
+    p.isActive = false;
+  }  
 }
 
 void restoreColors(){
@@ -245,6 +250,9 @@ void restoreColors(){
   }   
   for(Circle c: allCircles){
     c.isActive = true;
+  }
+  for(Player p: allPlayers){
+    p.isActive = true;
   }
 }
 

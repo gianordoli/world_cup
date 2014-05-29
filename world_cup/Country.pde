@@ -30,7 +30,7 @@ class Country{
     }
     hu = constrain(hu, 0, 255);
     
-    sa = 255;
+    sa = 200;
     
     //Indigo blue
     if(140 < hu && hu < 200){

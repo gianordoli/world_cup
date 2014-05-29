@@ -18,7 +18,6 @@ ArrayList<Country> allCountries;
 ArrayList<Circle> allCircles;
 ArrayList<Arc> allArcs;
 
-PImage worldMap;
 PVector worldMapPos;
 PVector worldMapSize;
 PVector center;
@@ -43,12 +42,9 @@ void setup() {
 //  center = new PVector(600, height/2);
   center = new PVector(600, 350);
 
-  //Loading and positioning map
-  worldMap = loadImage("world_map_equirectangular.png");
-//  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
-//  worldMapSize = new PVector(worldMap.width, worldMap.height);
-  worldMapSize = new PVector(720, 420);
-  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 65, center.y - worldMapSize.y/2 + 65);
+  //positioning "map"
+  worldMapSize = new PVector(800, 420);
+  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 50, center.y - worldMapSize.y/2 + 65);
   
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");
@@ -92,20 +88,13 @@ void setup() {
   selectedType = "";
   
   interval = 1000;
-  transition1 = millis() + 3*interval;
+  transition1 = millis() + 2*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
 }
 
 void draw() {  
   background(255);
-  //Map
-  if(millis() < transition2){
-    float alpha = map(transition2 - millis(), interval, 0, 200, 0);
-    alpha = constrain(alpha, 0, 200);
-    tint(255, alpha);
-    image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
-  }
   
   PVector textPos = new PVector(20, 200);
   float leading = 10;  

@@ -109,6 +109,9 @@ class Circle {
       textAlign(CENTER, CENTER);
       textLeading(8);
       text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+      if(selectedType.equals("circle")){
+        text(clubPlayers.size(), pos.x, pos.y + boxSize.y/2);
+      }
     }
   }
 }

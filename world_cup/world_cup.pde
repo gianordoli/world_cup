@@ -35,12 +35,13 @@ String selectedType; //"arc"/"circle"
 Country selectedCountry;
 
 void setup() {
-  size(920, 700);
+  size(920, 1400);
   colorMode(HSB, 255, 255, 255);
   mm = 3;
 //  glober = createFont("GloberBold", 8);
   textSize(8);
-  center = new PVector(600, height/2);
+//  center = new PVector(600, height/2);
+  center = new PVector(600, 350);
 
   //Loading and positioning map
   worldMap = loadImage("world_map_equirectangular.png");
@@ -98,22 +99,39 @@ void setup() {
 
 void draw() {  
   background(255);
+  //Map
   if(millis() < transition2){
     float alpha = map(transition2 - millis(), interval, 0, 200, 0);
     alpha = constrain(alpha, 0, 200);
     tint(255, alpha);
     image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   }
+  
+  PVector textPos = new PVector(20, 200);
+  float leading = 10;  
 
+  //Arcs
   if(millis() > transition1){
-    
-    for(Arc a : allArcs){
-      
+    for(Arc a : allArcs){  
       if(millis() > transition2){
         if(selectedType.equals("") ||
           (selectedType.equals("arc") && selectedCountry == a.thisCountry)){
+
+          if(!selectedType.equals("")){
+            fill(0);
+            textAlign(LEFT);
+            text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
+            textPos.y += leading;            
+          }
+          
           for(Player p : a.teamPlayers){
             p.display();
+            
+            if(!selectedType.equals("")){
+              text(p.name, textPos.x, textPos.y);
+              text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
+              textPos.y += leading;            
+            }
           }
         }
       }      
@@ -121,10 +139,27 @@ void draw() {
     }
   }
   
+  
+  
+  //Circles
+  textPos = new PVector(20, 200);
   for (Circle c : allCircles) {
     if(selectedType.equals("circle") && selectedCountry == c.thisCountry){
+      
+      fill(0);
+      textAlign(LEFT);
+      text(c.thisCountry.name.toUpperCase() + ": " + c.clubPlayers.size() + " jogadores", textPos.x, textPos.y);
+      textPos.y += leading;
+      
       for(Player p : c.clubPlayers){
         p.display();
+
+        text(p.name, textPos.x, textPos.y);
+        textAlign(CENTER);
+        text(p.origin.abbreviation, textPos.x + 110, textPos.y);
+        textAlign(LEFT);
+        text(p.club, textPos.x + 130, textPos.y);
+        textPos.y += leading;
       }
     }    
     c.update();

@@ -126,7 +126,7 @@ class Arc{
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
         }else{
           rotate(angle + PI/2);
           text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      

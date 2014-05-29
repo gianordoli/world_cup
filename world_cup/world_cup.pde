@@ -46,8 +46,8 @@ void setup() {
   worldMap = loadImage("world_map_equirectangular.png");
 //  worldMapSize = new PVector(worldMap.width * 2.5, worldMap.height * 3);
 //  worldMapSize = new PVector(worldMap.width, worldMap.height);
-  worldMapSize = new PVector(650, 400);
-  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 90, center.y - worldMapSize.y/2 + 85);
+  worldMapSize = new PVector(720, 420);
+  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 65, center.y - worldMapSize.y/2 + 65);
   
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");
@@ -97,10 +97,10 @@ void setup() {
 }
 
 void draw() {  
-  background(50);
+  background(255);
   if(millis() < transition2){
-    float alpha = map(transition2 - millis(), interval, 0, 100, 0);
-    alpha = constrain(alpha, 0, 100);
+    float alpha = map(transition2 - millis(), interval, 0, 200, 0);
+    alpha = constrain(alpha, 0, 200);
     tint(255, alpha);
     image(worldMap, worldMapPos.x, worldMapPos.y, worldMapSize.x, worldMapSize.y);
   }
@@ -378,12 +378,12 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   float radius = 315;
   float x = center.x;
   float y = center.y;
-  float startAngle = 0.15 * PI;
+  float startAngle = 1.2 * PI;
   float endAngle = 0;
   
   for(int i = 0; i < tempList.size(); i++){
     Arc a = tempList.get(i);
-    float arcLength = (1.4*PI - (tempList.size() - 1) * angleOffset) / tempList.size();
+    float arcLength = (1.2*PI - (tempList.size() - 1) * angleOffset) / tempList.size();
     
     endAngle = startAngle + arcLength;
     
@@ -391,9 +391,9 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
     
     startAngle = endAngle + angleOffset;  //next
     
-    //Next arc
+    //LOWER arcs
     if(i == tempList.size()/2 - 1){
-      startAngle += 0.3 * PI;
+      startAngle -= 1.6 * PI;
     }
   }
   

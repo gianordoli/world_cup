@@ -25,7 +25,7 @@ class Country{
       hu = map(groupInt, 96, 104, 100, 235);
       hu = hu + (i%4)*4;
     }else{
-      hu = map(groupInt, 98, 104, 0, 60);
+      hu = map(groupInt, 98, 104, 0, 55);
       hu = hu - (i%4)*2;
     }
     hu = constrain(hu, 0, 255);
@@ -35,13 +35,17 @@ class Country{
     //Indigo blue
     if(140 < hu && hu < 200){
       sa -= 100;
-    }    
-    br = 240;
+    }
+       
+    br = 255;
     
     if(groupInt < 97){  //gray
+//      hu = 40;
+//      sa = 90;
+//      br = 130;
       hu = 40;
       sa = 90;
-      br = 130;
+      br = 200;
     }
     myColor = color(hu, sa, br);
   }

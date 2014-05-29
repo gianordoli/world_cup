@@ -46,7 +46,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 8; //space in between the circles
+    float padding = 10; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -73,7 +73,7 @@ class Circle {
   void display() {
     
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 0.5;
+      radius += (finalRadius - radius) * 1;
     }else{
       radius = finalRadius;
     }
@@ -82,8 +82,9 @@ class Circle {
     fill(currColor);
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
-    PVector boxSize = new PVector(14*mm, 4*mm);    
-    fill(255);
+    PVector boxSize = new PVector(14*mm, 6*mm);
+//    rect(pos.x - boxSize.x/2, pos.y - boxSize.y/2, boxSize.x, boxSize.y);
+    fill(0);
 //    textFont(glober);
     textSize(8);
     rectMode(CORNER);

@@ -399,20 +399,26 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs){
   float y = center.y;
   float startAngle = 1.2 * PI;
   float endAngle = 0;
+  float direction = 1;
   
   for(int i = 0; i < tempList.size(); i++){
     Arc a = tempList.get(i);
     float arcLength = (1.2*PI - (tempList.size() - 1) * angleOffset) / tempList.size();
     
-    endAngle = startAngle + arcLength;
+    endAngle = startAngle + arcLength * direction;
     
-    a.setArcParam(x, y, radius, startAngle, endAngle);
+    if(startAngle < endAngle){  //Upper arcs
+      a.setArcParam(x, y, radius, startAngle, endAngle);
+    }else{                      //Lower arcs
+      a.setArcParam(x, y, radius, endAngle, startAngle);
+    }
     
-    startAngle = endAngle + angleOffset;  //next
+    startAngle = endAngle + angleOffset * direction;  //next
     
-    //LOWER arcs
+    //lower arcs
     if(i == tempList.size()/2 - 1){
-      startAngle -= 1.6 * PI;
+      startAngle -= PI;
+      direction = -1;
     }
   }
   

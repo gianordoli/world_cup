@@ -270,7 +270,7 @@ ArrayList<Country> initCountries(String filename){
       Country thisCountry = new Country(name, abbreviation, group);
 //      thisCountry.setColor();
       tempList.add(thisCountry);
-      println(name + "\t" + abbreviation + "\t" + group);
+//      println(name + "\t" + abbreviation + "\t" + group);
     }
     return tempList;
 }

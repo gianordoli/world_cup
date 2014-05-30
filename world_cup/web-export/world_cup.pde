@@ -43,17 +43,18 @@ void setup() {
   mm = 3;
 
   //JS font loading
-  //  archivoNarrow = createFont("Archivo Narrow", 10);
-  //  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-  //  bitter = createFont("Bitter", 10);
-  //  bitterBold = createFont("Bitter Bold", 10);  
+  archivoNarrow = createFont("Archivo Narrow", 10);
+  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+  bitter = createFont("Bitter", 10);
+  bitterBold = createFont("Bitter Bold", 10);  
 
   //  printArray(PFont.list());
   //Processing font loading
-  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
-  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
-  bitter = createFont("Bitter-Regular", 10);
-  bitterBold = createFont("Bitter-Bold", 10);  
+//  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+//  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+//  bitter = createFont("Bitter-Regular", 10);
+//  bitterBold = createFont("Bitter-Bold", 10);  
+  
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");
 
@@ -115,7 +116,7 @@ void draw() {
   background(255);
 
   PVector textPos = new PVector(20, 200);
-  float leading = 10;  
+  float leading = 13;  
 
   //Default/initial/show all
   if (selectedType.equals("") && millis() > transition1) {
@@ -140,6 +141,8 @@ void draw() {
 
       fill(0);
       textAlign(LEFT);
+      textFont(archivoNarrowBold);
+      textSize(12);
       text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
       textPos.y += leading;      
 
@@ -147,6 +150,9 @@ void draw() {
         if (p.isActive) {
           p.display();
 
+          fill(100);
+          textFont(archivoNarrow);
+          textSize(12);
           text(p.name, textPos.x, textPos.y);
           text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
           textPos.y += leading;
@@ -163,12 +169,17 @@ void draw() {
 
       fill(0);
       textAlign(LEFT);
+      textFont(archivoNarrowBold);
+      textSize(12);      
       text(c.thisCountry.name.toUpperCase() + ": " + c.clubPlayers.size() + " jogadores", textPos.x, textPos.y);
       textPos.y += leading;
 
       for (Player p : c.clubPlayers) {
         p.display();
 
+        fill(100);
+        textFont(archivoNarrow);
+        textSize(12);
         text(p.name, textPos.x, textPos.y);
         textAlign(CENTER);
         text(p.origin.abbreviation, textPos.x + 110, textPos.y);
@@ -189,11 +200,12 @@ void draw() {
   }
 
   shape(galileu, 816, 668);
-  shape(diagram, 853, 15);
-  textFont(archivoNarrow);
+  shape(diagram, 848, 15);
+  fill(100);
+  textFont(archivoNarrowBold);
   textSize(13);
   textAlign(CENTER, TOP);
-  text("COMO LER", 853, 15)
+  text("COMO LER", 876, 81);
   }
 
   void mousePressed() {
@@ -504,7 +516,7 @@ void debug() {
 }
 
 void drawHeader() {
-  fill(0);
+  fill(100);
   textFont(archivoNarrow);
   textSize(42);
   textAlign(LEFT, TOP);
@@ -698,7 +710,7 @@ class Arc{
     
     color newColor = thisCountry.myColor;
     if(isOver){
-      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
     }
     if(!isActive){
       newColor = color(0, 0, 0, 30);
@@ -802,7 +814,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 12; //space in between the circles
+    float padding = 16; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -810,8 +822,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.2;
-        pos.y += escape.y * 1.2;
+        pos.x += escape.x * 1.5;
+        pos.y += escape.y * 1.5;
         
         setControlPoint();        
       }    
@@ -838,7 +850,7 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+        newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
@@ -930,6 +942,10 @@ class Country{
     //Indigo blue
     if(140 < hu && hu < 200){
       sa -= 50;
+      hu -= 5;
+      if(hu > 160){
+        sa -= 30;
+      }
     }
        
     br = 255;

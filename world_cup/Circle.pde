@@ -50,7 +50,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 12; //space in between the circles
+    float padding = 16; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -58,8 +58,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.2;
-        pos.y += escape.y * 1.2;
+        pos.x += escape.x * 1.5;
+        pos.y += escape.y * 1.5;
         
         setControlPoint();        
       }    
@@ -86,7 +86,7 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+        newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }

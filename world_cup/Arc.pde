@@ -101,7 +101,7 @@ class Arc{
     
     color newColor = thisCountry.myColor;
     if(isOver){
-      newColor = color(hue(newColor), saturation(newColor) - 100, brightness(newColor));
+      newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
     }
     if(!isActive){
       newColor = color(0, 0, 0, 30);

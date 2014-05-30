@@ -179,6 +179,8 @@ void draw() {
   
   if(showTutorial){
     drawHowToRead();
+  }else{
+    drawHeader();
   }
 }
 
@@ -462,12 +464,12 @@ void debug() {
 //  for(Country c : allCountries){
 //    println(c.name + "\t" + c.group + "\t" + c.myColor);
 //  }
-  for(Circle c: allCircles){
-    println(c.thisCountry.name);
+//  for(Circle c: allCircles){
+//    println(c.thisCountry.name);
 //    for(Player p : c.clubPlayers){
 //      println("\t" + p.name + " \t" + p.origin.name);
 //    }
-  }  
+//  }  
 //  for (Player p : allPlayers) {
 //    if(p.origin.name.equals("Uruguai")){
 //      println(p.name + " \t" + p.origin.name + " \t" + p.current.name);
@@ -482,6 +484,23 @@ void debug() {
 //      }
 //    }
 //  }
+}
+
+void drawHeader(){
+  fill(0);
+  textFont(archivoNarrow);
+  textSize(42);
+  textAlign(LEFT, TOP);
+  PVector textPos = new PVector(18, 26);
+  String msg = "Copa da Europa?";
+  text(msg, textPos.x, textPos.y);
+  
+  textPos.y = 75;
+  textFont(bitter);
+  textSize(13);
+  textLeading(15);
+  msg = "Três em cada quatro convocados jogam em clubes europeus; veja de quais países eles saem para atuar em suas seleções e quais são os esquadrões com menos atletas jogando em casa";
+  text(msg, textPos.x, textPos.y, 240, 200);
 }
 
 void drawHowToRead(){

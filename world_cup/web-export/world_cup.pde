@@ -25,6 +25,7 @@ int interval;
 int transition1;
 int transition2;
 int transition3;
+boolean showTutorial;
 
 PFont archivoNarrow;
 PFont archivoNarrowBold;
@@ -38,11 +39,19 @@ void setup() {
   size(920, 1400);
   colorMode(HSB, 255, 255, 255);
   mm = 3;
+
+  //JS font loading
+//  archivoNarrow = createFont("Archivo Narrow", 10);
+//  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+//  bitter = createFont("Bitter", 10);
+//  bitterBold = createFont("Bitter Bold", 10);  
+
 //  printArray(PFont.list());
-  archivoNarrow = createFont("Archivo Narrow", 10);
-  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-  bitter = createFont("Bitter", 10);
-  bitterBold = createFont("Bitter Bold", 10);  
+  //Processing font loading
+  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+  bitter = createFont("Bitter-Regular", 10);
+  bitterBold = createFont("Bitter-Bold", 10);  
 
   center = new PVector(600, 350);
 
@@ -92,9 +101,10 @@ void setup() {
   selectedType = "";
   
   interval = 1000;
-  transition1 = millis() + 2*interval;
+  transition1 = millis() + interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
+  showTutorial = false;
 }
 
 void draw() {  
@@ -107,39 +117,45 @@ void draw() {
   if(selectedType.equals("") && millis() > transition1){
     for(Arc a : allArcs){
       if(millis() > transition2){
+        a.display();
+        
+        //Players
         for(Player p : a.teamPlayers){
           p.display();
         }
       }
-      a.display();
     }
   }
 
   //Arcs (selected)
   for(Arc a : allArcs){
+    a.display();
+    
     //If "arc" is selected, draw players staring from arc  
-    if(selectedType.equals("arc") && selectedCountry == a.thisCountry){
+    if(selectedType.equals("arc") && a.isActive){
+      
       fill(0);
       textAlign(LEFT);
       text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
-      textPos.y += leading;
+      textPos.y += leading;      
       
       for(Player p : a.teamPlayers){
-        p.display();
+        if(p.isActive){
+          p.display();
         
-        text(p.name, textPos.x, textPos.y);
-        text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
-        textPos.y += leading;
+          text(p.name, textPos.x, textPos.y);
+          text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
+          textPos.y += leading;
+        }
       }
     }
-    a.display();
   }
   
   //Circles
   textPos = new PVector(20, 200);
   for (Circle c : allCircles) {
     //If "circle" is selected, draw players staring from circle
-    if(selectedType.equals("circle") && selectedCountry == c.thisCountry){
+    if(selectedType.equals("circle") && c.isActive){
       
       fill(0);
       textAlign(LEFT);
@@ -160,9 +176,14 @@ void draw() {
     c.update();
     c.display();    
   }  
+  
+  if(showTutorial){
+    howToRead();
+  }
 }
 
 void mousePressed(){
+  showTutorial = false;
   selectedType = "";
   for (Arc a : allArcs) {
     if(a.isHovering()){
@@ -462,6 +483,26 @@ void debug() {
 //    }
 //  }
 }
+
+void howToRead(){
+  fill(255, 150);
+  rect(0, 0, width, height);
+
+  fill(0);
+  textFont(archivoNarrow);
+  textSize(13);
+  textLeading(13);
+  textAlign(LEFT);
+  
+  PVector textPos = new PVector(85, 90);
+  PVector size = new PVector(140, 70);
+  String msg = "Ao clicar nos círculos,\nmostra o NÚMERO DE\nJOGADORES que atuam\nna seleção indicada";
+  text(msg, textPos.x, textPos.y, size.x, size.y);
+}
+
+void keyPressed(){
+  showTutorial = true;
+}
 //World cup teams
 //Linked to Country (only to read colors)
 //Contains list of Player
@@ -573,27 +614,28 @@ class Arc{
     
     pushMatrix();
       translate(pos.x, pos.y);
+      float arcWeight = 24;
       noFill();
       stroke(newColor);
-      strokeWeight(8*mm);
+      strokeWeight(arcWeight);
       strokeCap(SQUARE);
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
-      PVector boxSize = new PVector(15*mm, 4*mm);  
-      rectMode(CORNER);
-      textAlign(CENTER, CENTER);
-//      textFont(glober);      
-//      textSize(10);    
-      textLeading(16);  
-      fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
+      
+        float direction = 1;
         if(angle < PI){
-          rotate(angle - PI/2);
-        }else{
-          rotate(angle + PI/2);      
+          direction *= -1;
         }
-        text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
+        rotate(angle + PI/2 * direction);
+      
+        rectMode(CORNER);
+        textAlign(CENTER, CENTER);
+        textFont(archivoNarrowBold);
+        textSize(13);      
+        fill(0, alpha);
+        text(thisCountry.abbreviation, 0, 0);
         
         //NUMBER
         if(selectedType.equals("circle") && isActive){
@@ -603,11 +645,14 @@ class Arc{
               nPlayers ++;
             }
           }
-          float offset = boxSize.y;
-          if(angle < PI){
-            offset *= -1;
-          }
-          text(nPlayers, 0, offset);
+          
+          noStroke();
+          fill(newColor);
+          rectMode(CENTER);
+          rect(0, arcWeight * 0.8 * direction, 15, 15);
+          fill(0);
+          text(nPlayers, 0, arcWeight * 0.8 * direction);
+          
         }        
         
     popMatrix();
@@ -716,13 +761,23 @@ class Circle {
     
     if(isOver || isActive){
       float maxTextWidth = 42;
+      float leading = 9;
       fill(0);
       textFont(archivoNarrow);
       textSize(10);
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
       if(textWidth(thisCountry.name) < maxTextWidth){
-        text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2 - 2, boxSize.x, boxSize.x);
+        text(thisCountry.name, pos.x, pos.y);
+      }else{
+        String[] words = split(thisCountry.name, " ");
+        String msg = "";
+        for(int i = 0; i < words.length - 1; i++){
+          msg += words[i] + " ";
+        }
+        text(msg, pos.x, pos.y - leading);
+        msg = words[words.length - 1];
+        text(msg, pos.x, pos.y);
       }
       
       //NUMBER
@@ -734,14 +789,13 @@ class Circle {
           nPlayers = clubPlayers.size();
         
         }else if(selectedType.equals("arc")){
-          int nPlayers = 0;
           for(Player p : clubPlayers){
             if(p.isActive){
               nPlayers ++;
             }
           }
         }
-//        text(nPlayers, pos.x, pos.y + boxSize.y/2 + 2);
+        text(nPlayers, pos.x, pos.y + leading + 2);
       }
     }
   }

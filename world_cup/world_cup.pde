@@ -112,9 +112,9 @@ void draw() {
   }
 
   //Arcs (selected)
-  for(Arc a : allArcs){  
-    if(selectedType.equals("arc") && selectedCountry == a.thisCountry){          
-
+  for(Arc a : allArcs){
+    //If "arc" is selected, draw players staring from arc  
+    if(selectedType.equals("arc") && selectedCountry == a.thisCountry){
       fill(0);
       textAlign(LEFT);
       text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
@@ -134,6 +134,7 @@ void draw() {
   //Circles
   textPos = new PVector(20, 200);
   for (Circle c : allCircles) {
+    //If "circle" is selected, draw players staring from circle
     if(selectedType.equals("circle") && selectedCountry == c.thisCountry){
       
       fill(0);
@@ -235,24 +236,24 @@ void mouseMoved(){
 void dimColors(){
   for(Arc a: allArcs){
     a.isActive = false;
+    for(Player p: a.teamPlayers){
+      p.isActive = false;
+    }      
   }  
   for(Circle c: allCircles){
     c.isActive = false;
   }
-  for(Player p: allPlayers){
-    p.isActive = false;
-  }  
 }
 
 void restoreColors(){
   for(Arc a: allArcs){
     a.isActive = true;
+    for(Player p: a.teamPlayers){
+      p.isActive = true;
+    }
   }   
   for(Circle c: allCircles){
     c.isActive = true;
-  }
-  for(Player p: allPlayers){
-    p.isActive = true;
   }
 }
 

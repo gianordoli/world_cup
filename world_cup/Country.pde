@@ -34,7 +34,7 @@ class Country{
     
     //Indigo blue
     if(140 < hu && hu < 200){
-      sa -= 100;
+      sa -= 50;
     }
        
     br = 255;

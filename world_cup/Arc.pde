@@ -126,11 +126,26 @@ class Arc{
       translate(cos(angle) * radius, sin(angle) * radius);
         if(angle < PI){
           rotate(angle - PI/2);
-          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
         }else{
-          rotate(angle + PI/2);
-          text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);      
+          rotate(angle + PI/2);      
         }
+        text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
+        
+        //NUMBER
+        if(selectedType.equals("circle")){
+          int nPlayers = 0;
+          for(Player p : teamPlayers){
+            if(p.isActive){
+              nPlayers ++;
+            }
+          }
+          float offset = boxSize.y;
+          if(angle < PI){
+            offset *= -1;
+          }
+          text(nPlayers, 0, offset);
+        }        
+        
     popMatrix();
   }
 }

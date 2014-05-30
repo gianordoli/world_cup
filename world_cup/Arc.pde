@@ -132,7 +132,7 @@ class Arc{
         text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
         
         //NUMBER
-        if(selectedType.equals("circle")){
+        if(selectedType.equals("circle") && isActive){
           int nPlayers = 0;
           for(Player p : teamPlayers){
             if(p.isActive){

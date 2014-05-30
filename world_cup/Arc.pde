@@ -109,27 +109,28 @@ class Arc{
     
     pushMatrix();
       translate(pos.x, pos.y);
+      float arcWeight = 24;
       noFill();
       stroke(newColor);
-      strokeWeight(8*mm);
+      strokeWeight(arcWeight);
       strokeCap(SQUARE);
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
-      PVector boxSize = new PVector(15*mm, 4*mm);  
-      rectMode(CORNER);
-      textAlign(CENTER, CENTER);
-//      textFont(glober);      
-//      textSize(10);    
-      textLeading(16);  
-      fill(0, alpha);      
       float angle = (endAngle + startAngle)/2;
       translate(cos(angle) * radius, sin(angle) * radius);
+      
+        float direction = 1;
         if(angle < PI){
-          rotate(angle - PI/2);
-        }else{
-          rotate(angle + PI/2);      
+          direction *= -1;
         }
-        text(thisCountry.abbreviation, - boxSize.x/2, - boxSize.x/2, boxSize.x, boxSize.x);
+        rotate(angle + PI/2 * direction);
+      
+        rectMode(CORNER);
+        textAlign(CENTER, CENTER);
+        textFont(archivoNarrowBold);
+        textSize(13);      
+        fill(0, alpha);
+        text(thisCountry.abbreviation, 0, 0);
         
         //NUMBER
         if(selectedType.equals("circle") && isActive){
@@ -139,11 +140,14 @@ class Arc{
               nPlayers ++;
             }
           }
-          float offset = boxSize.y;
-          if(angle < PI){
-            offset *= -1;
-          }
-          text(nPlayers, 0, offset);
+          
+          noStroke();
+          fill(newColor);
+          rectMode(CENTER);
+          rect(0, arcWeight * 0.8 * direction, 15, 15);
+          fill(0);
+          text(nPlayers, 0, arcWeight * 0.8 * direction);
+          
         }        
         
     popMatrix();

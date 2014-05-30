@@ -50,7 +50,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 10; //space in between the circles
+    float padding = 12; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -100,30 +100,42 @@ class Circle {
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     if(isOver || isActive){
-      PVector boxSize = new PVector(14*mm, 6*mm);
-  //    rect(pos.x - boxSize.x/2, pos.y - boxSize.y/2, boxSize.x, boxSize.y);
+      float maxTextWidth = 42;
+      float leading = 9;
       fill(0);
-  //    textFont(glober);
-      textSize(8);
+      textFont(archivoNarrow);
+      textSize(10);
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
-      textLeading(8);
-      text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+      if(textWidth(thisCountry.name) < maxTextWidth){
+        text(thisCountry.name, pos.x, pos.y);
+      }else{
+        String[] words = split(thisCountry.name, " ");
+        String msg = "";
+        for(int i = 0; i < words.length - 1; i++){
+          msg += words[i] + " ";
+        }
+        text(msg, pos.x, pos.y - leading);
+        msg = words[words.length - 1];
+        text(msg, pos.x, pos.y);
+      }
       
       //NUMBER
-      if(isActive){
+      if(!selectedType.equals("") && isActive){
+        textFont(archivoNarrowBold);
+        textSize(12);
+        int nPlayers = 0;
         if(selectedType.equals("circle")){
-          text(clubPlayers.size(), pos.x, pos.y + boxSize.y/2);
+          nPlayers = clubPlayers.size();
         
         }else if(selectedType.equals("arc")){
-          int nPlayers = 0;
           for(Player p : clubPlayers){
             if(p.isActive){
               nPlayers ++;
             }
           }
-          text(nPlayers, pos.x, pos.y + boxSize.y/2);
         }
+        text(nPlayers, pos.x, pos.y + leading + 2);
       }
     }
   }

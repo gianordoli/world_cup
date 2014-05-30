@@ -1,5 +1,3 @@
-/* @pjs preload="world_map_equirectangular.png"; */
-
 /* ---------------------------------------------------------------------------
  World Cup 2014: Teams vs Clubs
  2014, for Galileu Magazine, Brazil
@@ -28,18 +26,24 @@ int transition1;
 int transition2;
 int transition3;
 
-PFont glober;
+PFont archivoNarrow;
+PFont archivoNarrowBold;
+PFont bitter;
+PFont bitterBold;
 
-String selectedType; //"arc"/"circle"
+String selectedType; //"arc" or "circle"
 Country selectedCountry;
 
 void setup() {
   size(920, 1400);
   colorMode(HSB, 255, 255, 255);
   mm = 3;
-//  glober = createFont("GloberBold", 8);
-  textSize(8);
-//  center = new PVector(600, height/2);
+//  printArray(PFont.list());
+  archivoNarrow = createFont("Archivo Narrow", 10);
+  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+  bitter = createFont("Bitter", 10);
+  bitterBold = createFont("Bitter Bold", 10);  
+
   center = new PVector(600, 350);
 
   //positioning "map"
@@ -661,7 +665,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 10; //space in between the circles
+    float padding = 12; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;
@@ -711,20 +715,23 @@ class Circle {
     ellipse(pos.x, pos.y, radius * 2, radius * 2);
     
     if(isOver || isActive){
-      PVector boxSize = new PVector(14*mm, 6*mm);
-  //    rect(pos.x - boxSize.x/2, pos.y - boxSize.y/2, boxSize.x, boxSize.y);
+      float maxTextWidth = 42;
       fill(0);
-  //    textFont(glober);
-      textSize(8);
+      textFont(archivoNarrow);
+      textSize(10);
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
-      textLeading(8);
-      text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2, boxSize.x, boxSize.x);
+      if(textWidth(thisCountry.name) < maxTextWidth){
+        text(thisCountry.name, pos.x - boxSize.x/2, pos.y - boxSize.x/2 - 2, boxSize.x, boxSize.x);
+      }
       
       //NUMBER
-      if(isActive){
+      if(!selectedType.equals("") && isActive){
+        textFont(archivoNarrowBold);
+        textSize(12);
+        int nPlayers = 0;
         if(selectedType.equals("circle")){
-          text(clubPlayers.size(), pos.x, pos.y + boxSize.y/2);
+          nPlayers = clubPlayers.size();
         
         }else if(selectedType.equals("arc")){
           int nPlayers = 0;
@@ -733,8 +740,8 @@ class Circle {
               nPlayers ++;
             }
           }
-          text(nPlayers, pos.x, pos.y + boxSize.y/2);
         }
+//        text(nPlayers, pos.x, pos.y + boxSize.y/2 + 2);
       }
     }
   }

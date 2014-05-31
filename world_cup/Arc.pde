@@ -130,7 +130,7 @@ class Arc{
         textFont(archivoNarrowBold);
         textSize(13);      
         fill(0, alpha);
-        text(thisCountry.abbreviation, 0, 0);
+        text(thisCountry.abbreviation.toUpperCase(), 0, 0);
         
         //NUMBER
         if(selectedType.equals("circle") && isActive){

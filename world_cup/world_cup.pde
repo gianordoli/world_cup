@@ -43,17 +43,16 @@ void setup() {
   mm = 3;
 
   //JS font loading
-  archivoNarrow = createFont("Archivo Narrow", 10);
-  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-  bitter = createFont("Bitter", 10);
-  bitterBold = createFont("Bitter Bold", 10);  
+//  archivoNarrow = createFont("Archivo Narrow", 10);
+//  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+//  bitter = createFont("Bitter", 10);
+//  bitterBold = createFont("Bitter Bold", 10);  
 
-  //  printArray(PFont.list());
   //Processing font loading
-//  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
-//  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
-//  bitter = createFont("Bitter-Regular", 10);
-//  bitterBold = createFont("Bitter-Bold", 10);  
+  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+  bitter = createFont("Bitter-Regular", 10);
+  bitterBold = createFont("Bitter-Bold", 10);  
   
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");
@@ -154,7 +153,7 @@ void draw() {
           textFont(archivoNarrow);
           textSize(12);
           text(p.name, textPos.x, textPos.y);
-          text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
+          text(p.club + " (" + p.current.abbreviation + ")", textPos.x + 100, textPos.y);
           textPos.y += leading;
         }
       }
@@ -182,7 +181,7 @@ void draw() {
         textSize(12);
         text(p.name, textPos.x, textPos.y);
         textAlign(CENTER);
-        text(p.origin.abbreviation, textPos.x + 110, textPos.y);
+        text(p.origin.abbreviation.toUpperCase(), textPos.x + 110, textPos.y);
         textAlign(LEFT);
         text(p.club, textPos.x + 130, textPos.y);
         textPos.y += leading;

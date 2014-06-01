@@ -142,8 +142,8 @@ class Arc{
         text("GRUPO " + thisCountry.group.toUpperCase(), 0, 0);
         
         //Undo!
+        rotate(- (titleAngle + PI/2 * direction));        
         translate(-(cos(titleAngle) * (radius + arcWeight)), -(sin(titleAngle) * (radius + arcWeight)));
-        rotate(- (titleAngle + PI/2 * direction));
       }
       
       translate(cos(angle) * radius, sin(angle) * radius);
@@ -152,8 +152,8 @@ class Arc{
       
         rectMode(CORNER);
         textAlign(CENTER, CENTER);
-        textFont(archivoNarrowBold);
-        textSize(13);      
+        textFont(archivoNarrow);
+        textSize(14);      
         fill(0, alpha);
         text(thisCountry.abbreviation.toUpperCase(), 0, 0);
         

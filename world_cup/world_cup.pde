@@ -65,7 +65,7 @@ void setup() {
   diagram = loadShape("diagram.svg");
   myTextArea = new TextArea(20, 240, 220, 420);
 
-  center = new PVector(620, 350);
+  center = new PVector(610, 350);
 
   //positioning "map"
   worldMapSize = new PVector(780, 420);
@@ -130,9 +130,9 @@ void draw() {
 //    for (Arc a : allArcs) {
   for(int i = 0; i < allArcs.size(); i++){
     Arc a = allArcs.get(i);
+    a.display(i);
+    
       if (millis() > transition2) {
-        a.display(i);
-
         //Players
         for (Player p : a.teamPlayers) {
           p.display();
@@ -143,18 +143,20 @@ void draw() {
 
   //Arcs (selected)
 //  for (Arc a : allArcs) {
-  for(int i = 0; i < allArcs.size(); i++){
-    Arc a = allArcs.get(i);
-    a.display(i);
-
-    //If "arc" is selected, draw players staring from arc  
-    if (selectedType.equals("arc") && a.isActive) {
-
-      drawPlayersList(a.thisCountry, 0);      
-
-      for (Player p : a.teamPlayers) {
-        if (p.isActive) {
-          p.display();
+  if (!selectedType.equals("")){
+    for(int i = 0; i < allArcs.size(); i++){
+      Arc a = allArcs.get(i);
+      a.display(i);
+      
+      //If "arc" is selected, draw players starting from arc  
+      if (a.isActive) {
+  
+        drawPlayersList(a.thisCountry, 0);      
+  
+        for (Player p : a.teamPlayers) {
+          if (p.isActive) {
+            p.display();
+          }
         }
       }
     }
@@ -189,12 +191,12 @@ void draw() {
   shape(galileu, 816, 668);
   
   //Tutorial
-  shape(diagram, 848, 15);
+  shape(diagram, 852, 15);
   fill(255);
   textFont(archivoNarrowBold);
   textSize(13);
   textAlign(CENTER, TOP);
-  text("COMO LER", 876, 81);
+  text("COMO LER", 880, 81);
 }
 
 void keyPressed() {

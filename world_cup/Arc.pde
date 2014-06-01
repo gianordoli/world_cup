@@ -123,14 +123,28 @@ class Arc{
       }      
       
       if(i % 4 == 0){
+        float titleAngle = 0;
         Arc lastArc = allArcs.get(i + 3);
         strokeWeight(1);
         if(direction > 0){
           arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, startAngle, lastArc.endAngle);
+          titleAngle = (startAngle + lastArc.endAngle)/2;
         }else{
           arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, lastArc.startAngle, endAngle);
+          titleAngle = (endAngle + lastArc.startAngle)/2;
         }
-      }      
+        translate(cos(titleAngle) * (radius + arcWeight), sin(titleAngle) * (radius + arcWeight));
+        rotate(titleAngle + PI/2 * direction);
+        fill(labelColor);
+        textAlign(CENTER, CENTER);
+        textFont(bitter);
+        textSize(10);
+        text("GRUPO " + thisCountry.group.toUpperCase(), 0, 0);
+        
+        //Undo!
+        translate(-(cos(titleAngle) * (radius + arcWeight)), -(sin(titleAngle) * (radius + arcWeight)));
+        rotate(- (titleAngle + PI/2 * direction));
+      }
       
       translate(cos(angle) * radius, sin(angle) * radius);
         

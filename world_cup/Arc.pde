@@ -50,7 +50,7 @@ class Arc{
   
       Player p = teamPlayers.get(i);
       
-      float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
+      float angle = map(i, 0, teamPlayers.size() - 1, startAngle + 0.003*PI, endAngle - 0.003*PI);   
       float offset = 120;  //distance from arc to control point
       PVector p1 = new PVector(0,0);
       PVector p2 = new PVector(0,0);
@@ -126,6 +126,7 @@ class Arc{
         float titleAngle = 0;
         Arc lastArc = allArcs.get(i + 3);
         strokeWeight(1);
+        stroke(thisCountry.myColor);
         if(direction > 0){
           arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, startAngle, lastArc.endAngle);
           titleAngle = (startAngle + lastArc.endAngle)/2;
@@ -169,10 +170,14 @@ class Arc{
           noStroke();
           fill(newColor);
           rectMode(CENTER);
-          rect(0, arcWeight * 0.8 * direction, 15, 20, 5);
+          rect(0, arcWeight * 0.8 * direction, 17, 20, 5);
           fill(0);
-          text(nPlayers, 0, arcWeight * 0.8 * direction);
-          
+          textAlign(CENTER, CENTER);
+          if(direction > 0){
+            text(nPlayers, -1, arcWeight - 7);
+          }else{
+            text(nPlayers, -2, -(arcWeight - 2));
+          }
         }        
         
     popMatrix();

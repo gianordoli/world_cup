@@ -69,7 +69,7 @@ void setup() {
 
   //positioning "map"
   worldMapSize = new PVector(780, 420);
-  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 50, center.y - worldMapSize.y/2 + 65);
+  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 40, center.y - worldMapSize.y/2 + 65);
 
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");
@@ -127,11 +127,9 @@ void draw() {
 
   //Default/initial/show all
   if (selectedType.equals("") && millis() > transition1) {
-//    for (Arc a : allArcs) {
   for(int i = 0; i < allArcs.size(); i++){
     Arc a = allArcs.get(i);
     a.display(i);
-    
       if (millis() > transition2) {
         //Players
         for (Player p : a.teamPlayers) {
@@ -140,43 +138,46 @@ void draw() {
       }
     }
   }
+  
+  //Players
+  if (selectedType.equals("arc")){
+    for(int i = 0; i < allArcs.size(); i++){
+      Arc a = allArcs.get(i);  
+      if (a.isActive) {
+        drawPlayersList(a.thisCountry, 0);      
+        for (Player p : a.teamPlayers) {
+//          if (p.isActive) {
+            p.display();
+//          }
+        }
+      }
+    }
+  }else if(selectedType.equals("circle")){
+    for (Circle c : allCircles) {
+      if(c.isActive) {
+        drawPlayersList(c.thisCountry, c.clubPlayers.size());      
+        for (Player p : c.clubPlayers) {
+          p.display();
+        }
+      }      
+    }
+  }
 
   //Arcs (selected)
-//  for (Arc a : allArcs) {
   if (!selectedType.equals("")){
     for(int i = 0; i < allArcs.size(); i++){
       Arc a = allArcs.get(i);
       a.display(i);
-      
-      //If "arc" is selected, draw players starting from arc  
-      if (a.isActive) {
-  
-        drawPlayersList(a.thisCountry, 0);      
-  
-        for (Player p : a.teamPlayers) {
-          if (p.isActive) {
-            p.display();
-          }
-        }
-      }
     }
   }
 
   //Circles
-  for (Circle c : allCircles) {
-    //If "circle" is selected, draw players staring from circle
-    if (selectedType.equals("circle") && c.isActive) {
-
-      drawPlayersList(c.thisCountry, c.clubPlayers.size());      
-
-      for (Player p : c.clubPlayers) {
-        p.display();
-      }
-    }    
+  for (Circle c : allCircles) {    
     c.update();
     c.display();
   }  
 
+  //Tutorial?
   if (showTutorial) {
     drawTutorial();
   }
@@ -197,13 +198,6 @@ void draw() {
   textSize(13);
   textAlign(CENTER, TOP);
   text("COMO LER", 880, 81);
-}
-
-void keyPressed() {
-  showTutorial = true;
-  selectedType = "";
-  selectedCountry = null;
-  restoreColors();
 }
 
 void mouseReleased() {
@@ -258,6 +252,12 @@ void mouseReleased() {
       }
     }
     
+    //COMO LER
+    if(852 < mouseX && mouseX < 852 + diagram.width &&
+       15 < mouseY && mouseY < 15 + diagram.height){
+        showTutorial = true;
+    }
+    
     //I I went trhough it all and no selection was made,
     //I was really trying to deselect everything. So...
     if (!click) {  
@@ -307,6 +307,12 @@ void mouseMoved() {
   
   if(myTextArea.isHovering()){
     changeCursor = true;
+  }
+
+  //COMO LER
+  if(852 < mouseX && mouseX < 852 + diagram.width &&
+     15 < mouseY && mouseY < 15 + diagram.height + 20){
+      changeCursor = true;
   }
 
   if (changeCursor) {

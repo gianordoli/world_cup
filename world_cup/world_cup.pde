@@ -37,6 +37,8 @@ PShape diagram;
 String selectedType; //"arc" or "circle"
 Country selectedCountry;
 
+TextArea myTextArea;
+
 void setup() {
   size(920, 1400);
   colorMode(HSB, 255, 255, 255);
@@ -100,8 +102,6 @@ void setup() {
     c.setRadius(maxPlayers);
   }  
 
-  debug();
-
   selectedType = "";
 
   interval = 1000;
@@ -109,6 +109,10 @@ void setup() {
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
   showTutorial = false;
+  
+  myTextArea = new TextArea(20, 240, 200, 420);
+  
+  debug();  
 }
 
 void draw() {  
@@ -144,17 +148,19 @@ void draw() {
       textSize(12);
       text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
       textPos.y += leading;      
+      
+      myTextArea.display();
 
       for (Player p : a.teamPlayers) {
         if (p.isActive) {
           p.display();
 
-          fill(100);
-          textFont(archivoNarrow);
-          textSize(12);
-          text(p.name, textPos.x, textPos.y);
-          text(p.club + " (" + p.current.abbreviation + ")", textPos.x + 100, textPos.y);
-          textPos.y += leading;
+//          fill(100);
+//          textFont(archivoNarrow);
+//          textSize(12);
+//          text(p.name, textPos.x, textPos.y);
+//          text(p.club + " (" + p.current.abbreviation + ")", textPos.x + 100, textPos.y);
+//          textPos.y += leading;
         }
       }
     }
@@ -205,54 +211,182 @@ void draw() {
   textSize(13);
   textAlign(CENTER, TOP);
   text("COMO LER", 876, 81);
-  }
+}
 
-  void mousePressed() {
-    showTutorial = false;
-    selectedType = "";
-    for (Arc a : allArcs) {
-      if (a.isHovering()) {
-        if (!selectedType.equals("arc") && selectedCountry != a.thisCountry) {
-          selectedType = "arc";
-          selectedCountry = a.thisCountry;
-          dimColors();
-          a.isActive = true;
-
-          for (Player p : a.teamPlayers) {
-            p.isActive = true;
-            p.currCountry.isActive = true;
+void createTextArea(){
+  int nLines = 0;
+  String[] col1 = new String[0];
+  String[] col2 = new String[0];  
+  if(selectedType.equals("arc")){
+    for (Arc a : allArcs) {  
+      if (a.isActive) {
+        for (Player p : a.teamPlayers) {
+          if (p.isActive) {
+            nLines ++;
+            col1 = expand(col1, col1.length + 1);
+            col2 = expand(col2, col2.length + 1);
+            col1[col1.length - 1] = p.name;
+            col2[col2.length - 1] = p.club + " (" + p.current.abbreviation + ")"; 
           }
-        }
-        else {
-          selectedType = "";
         }
       }
     }
+  }else if(selectedType.equals("circle")){
+  
+  }  
+  printArray(col1);
+  printArray(col2);
+  myTextArea.setText(col1, col2);
+}
 
-    for (Circle c : allCircles) {
-      if (c.isHovering()) {
-        //If it' not already selected... Select!
-        if (!selectedType.equals("circle") && selectedCountry != c.thisCountry) {
-          selectedType = "circle";
-          selectedCountry = c.thisCountry;
-          dimColors();
-          c.isActive = true;
+void drawHeader() {
+  fill(100);
+  textFont(archivoNarrow);
+  textSize(42);
+  textAlign(LEFT, TOP);
+  PVector textPos = new PVector(18, 26);
+  String msg = "Copa da Europa?";
+  text(msg, textPos.x, textPos.y);
 
-          for (Player p : c.clubPlayers) {
-            p.isActive = true;
-            p.originCountry.isActive = true;
-          }
+  textPos.y = 75;
+  textFont(bitter);
+  textSize(13);
+  textLeading(15);
+  msg = "Três em cada quatro convocados jogam em clubes europeus; veja de quais países eles saem para atuar em suas seleções e quais são os esquadrões com menos atletas jogando em casa";
+  text(msg, textPos.x, textPos.y, 240, 200);
+}
+
+void drawHowToRead() {
+  fill(255, 150);
+  rect(0, 0, width, height);
+
+  fill(0);
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);
+  stroke(0);
+  strokeWeight(1);  
+
+  PVector textPos = new PVector(85, 90);
+  PVector arrowPos = new PVector(0, 0);
+  String msg = "Ao clicar nos círculos,\nmostra o NÚMERO DE\nJOGADORES que atuam\nna seleção indicada";
+  text(msg, textPos.x, textPos.y);
+
+  Arc a = allArcs.get(0);
+  float angle = (a.endAngle + a.startAngle)/2;
+  arrowPos.x = a.pos.x + cos(angle) * a.radius * 0.95;
+  arrowPos.y = a.pos.y + sin(angle) * a.radius * 0.95;
+  line(textPos.x + 130, textPos.y + 15, arrowPos.x, arrowPos.y);
+  ellipse(arrowPos.x, arrowPos.y, 3, 3);
+
+  pushMatrix();
+  translate(arrowPos.x, arrowPos.y);
+  rotate(angle + PI/2);  
+  textFont(archivoNarrowBold);
+  textSize(12);
+  textAlign(CENTER, TOP);
+  text("6", 0, 0);  
+  popMatrix();
+
+  Circle c = allCircles.get(5);
+  textPos.y = c.pos.y;
+  msg = "Ao clicar nas seleções, mostra a\nQUANTIDADE DE CONVOCADOS\nem atuação nos clubes do país";
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);  
+  text(msg, textPos.x, textPos.y);
+
+  arrowPos.x = c.pos.x - 15;
+  arrowPos.y = c.pos.y + 15;  
+  line(textPos.x + 200, textPos.y + 15, arrowPos.x, arrowPos.y);
+  ellipse(arrowPos.x, arrowPos.y, 3, 3);
+  textFont(archivoNarrowBold);
+  textSize(12);
+  textAlign(CENTER, TOP);
+  text("122", c.pos.x, c.pos.y + 10);
+
+  textPos.y = 570;
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);
+  msg = "A área do círculo corresponde\nao NÚMERO DE CONVOCADOS\nque jogam nos clubes daquele país";
+  text(msg, textPos.x, textPos.y);
+
+  c = allCircles.get(2);
+  arrowPos.x = c.pos.x;
+  arrowPos.y = c.pos.y + c.radius;
+  line(textPos.x + 190, textPos.y + 15, arrowPos.x, textPos.y + 15);
+  line(arrowPos.x, textPos.y + 15, arrowPos.x, arrowPos.y);
+  noFill();
+  ellipse(arrowPos.x, arrowPos.y - c.radius, c.radius*2, c.radius*2);
+}
+
+void keyPressed() {
+  showTutorial = true;
+  selectedType = "";
+  selectedCountry = null;
+  restoreColors();
+}
+
+void mousePressed() {
+  showTutorial = false;  
+  Boolean click = false;
+  
+  for (Arc a : allArcs) {
+    if (a.isHovering()) {
+      if (!selectedType.equals("arc") && selectedCountry != a.thisCountry) {
+        selectedType = "arc";
+        selectedCountry = a.thisCountry;
+        dimColors();        
+        a.isActive = true;
+
+        for (Player p : a.teamPlayers) {
+          p.isActive = true;
+          p.currCountry.isActive = true;
         }
-        else {
-          selectedType = "";
-        }
+//        createTextArea();
+        click = true;
+      }else{
+        click = false;
       }
     }
-    if (selectedType.equals("")) {
-      selectedCountry = null;
-      restoreColors();
+  }
+
+  for (Circle c : allCircles) {
+    if (c.isHovering()) {
+      //If it' not already selected... Select!
+      if (!selectedType.equals("circle") && selectedCountry != c.thisCountry) {
+        selectedType = "circle";
+        selectedCountry = c.thisCountry;
+        dimColors();
+        c.isActive = true;
+
+        for (Player p : c.clubPlayers) {
+          p.isActive = true;
+          p.originCountry.isActive = true;
+        }
+        
+        click = true;
+      }else{
+//        click = false;
+      }
     }
   }
+  
+//  myTextArea.check();
+//  if(myTextArea.isDragging){
+//    click = true;
+//  }  
+  
+//  if (!click) {
+//    selectedCountry = null;
+//    selectedType = "";
+//    restoreColors();
+//  }
+}
 
 void mouseMoved() {
   boolean changeCursor = false;
@@ -287,6 +421,7 @@ void mouseMoved() {
 }
 
 void dimColors() {
+  
   for (Arc a: allArcs) {
     a.isActive = false;
     for (Player p: a.teamPlayers) {
@@ -513,96 +648,3 @@ void debug() {
   //    }
   //  }
 }
-
-void drawHeader() {
-  fill(100);
-  textFont(archivoNarrow);
-  textSize(42);
-  textAlign(LEFT, TOP);
-  PVector textPos = new PVector(18, 26);
-  String msg = "Copa da Europa?";
-  text(msg, textPos.x, textPos.y);
-
-  textPos.y = 75;
-  textFont(bitter);
-  textSize(13);
-  textLeading(15);
-  msg = "Três em cada quatro convocados jogam em clubes europeus; veja de quais países eles saem para atuar em suas seleções e quais são os esquadrões com menos atletas jogando em casa";
-  text(msg, textPos.x, textPos.y, 240, 200);
-}
-
-void drawHowToRead() {
-  fill(255, 150);
-  rect(0, 0, width, height);
-
-  fill(0);
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);
-  stroke(0);
-  strokeWeight(1);  
-
-  PVector textPos = new PVector(85, 90);
-  PVector arrowPos = new PVector(0, 0);
-  String msg = "Ao clicar nos círculos,\nmostra o NÚMERO DE\nJOGADORES que atuam\nna seleção indicada";
-  text(msg, textPos.x, textPos.y);
-
-  Arc a = allArcs.get(0);
-  float angle = (a.endAngle + a.startAngle)/2;
-  arrowPos.x = a.pos.x + cos(angle) * a.radius * 0.95;
-  arrowPos.y = a.pos.y + sin(angle) * a.radius * 0.95;
-  line(textPos.x + 130, textPos.y + 15, arrowPos.x, arrowPos.y);
-  ellipse(arrowPos.x, arrowPos.y, 3, 3);
-
-  pushMatrix();
-  translate(arrowPos.x, arrowPos.y);
-  rotate(angle + PI/2);  
-  textFont(archivoNarrowBold);
-  textSize(12);
-  textAlign(CENTER, TOP);
-  text("6", 0, 0);  
-  popMatrix();
-
-  Circle c = allCircles.get(5);
-  textPos.y = c.pos.y;
-  msg = "Ao clicar nas seleções, mostra a\nQUANTIDADE DE CONVOCADOS\nem atuação nos clubes do país";
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);  
-  text(msg, textPos.x, textPos.y);
-
-  arrowPos.x = c.pos.x - 15;
-  arrowPos.y = c.pos.y + 15;  
-  line(textPos.x + 200, textPos.y + 15, arrowPos.x, arrowPos.y);
-  ellipse(arrowPos.x, arrowPos.y, 3, 3);
-  textFont(archivoNarrowBold);
-  textSize(12);
-  textAlign(CENTER, TOP);
-  text("122", c.pos.x, c.pos.y + 10);
-
-  textPos.y = 570;
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);
-  msg = "A área do círculo corresponde\nao NÚMERO DE CONVOCADOS\nque jogam nos clubes daquele país";
-  text(msg, textPos.x, textPos.y);
-
-  c = allCircles.get(2);
-  arrowPos.x = c.pos.x;
-  arrowPos.y = c.pos.y + c.radius;
-  line(textPos.x + 190, textPos.y + 15, arrowPos.x, textPos.y + 15);
-  line(arrowPos.x, textPos.y + 15, arrowPos.x, arrowPos.y);
-  noFill();
-  ellipse(arrowPos.x, arrowPos.y - c.radius, c.radius*2, c.radius*2);
-}
-
-void keyPressed() {
-  showTutorial = true;
-  selectedType = "";
-  selectedCountry = null;
-  restoreColors();
-}
-

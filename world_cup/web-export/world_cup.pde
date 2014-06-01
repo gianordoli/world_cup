@@ -48,7 +48,6 @@ void setup() {
   bitter = createFont("Bitter", 10);
   bitterBold = createFont("Bitter Bold", 10);  
 
-  //  printArray(PFont.list());
   //Processing font loading
 //  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
 //  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
@@ -154,7 +153,7 @@ void draw() {
           textFont(archivoNarrow);
           textSize(12);
           text(p.name, textPos.x, textPos.y);
-          text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
+          text(p.club + " (" + p.current.abbreviation + ")", textPos.x + 100, textPos.y);
           textPos.y += leading;
         }
       }
@@ -182,7 +181,7 @@ void draw() {
         textSize(12);
         text(p.name, textPos.x, textPos.y);
         textAlign(CENTER);
-        text(p.origin.abbreviation, textPos.x + 110, textPos.y);
+        text(p.origin.abbreviation.toUpperCase(), textPos.x + 110, textPos.y);
         textAlign(LEFT);
         text(p.club, textPos.x + 130, textPos.y);
         textPos.y += leading;
@@ -739,7 +738,7 @@ class Arc{
         textFont(archivoNarrowBold);
         textSize(13);      
         fill(0, alpha);
-        text(thisCountry.abbreviation, 0, 0);
+        text(thisCountry.abbreviation.toUpperCase(), 0, 0);
         
         //NUMBER
         if(selectedType.equals("circle") && isActive){

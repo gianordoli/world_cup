@@ -22,11 +22,11 @@ class Country{
 
 //    //hue
     if(groupInt % 2 != 0){
-      hu = map(groupInt, 96, 104, 100, 235);
-      hu = hu + (i%4)*4;
-    }else{
       hu = map(groupInt, 98, 104, 0, 55);
-      hu = hu - (i%4)*2;
+      hu = hu + (i%4)*2;
+    }else{
+      hu = map(groupInt, 96, 104, 100, 235);      
+      hu = hu - (i%4)*4;
     }
     hu = constrain(hu, 0, 255);
     sa = 255;
@@ -45,6 +45,11 @@ class Country{
     if(30 < hu && hu < 140){
       br -= 30;
     }
+    
+    //Orange
+    if(0 < hu && hu < 20){
+      hu += 10;
+    }    
     
     if(groupInt < 97){  //gray
       hu = 40;

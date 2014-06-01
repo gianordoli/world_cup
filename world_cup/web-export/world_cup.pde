@@ -253,7 +253,7 @@ void mouseReleased() {
     }
     
     //COMO LER
-    if(825 < mouseX && mouseX < 825 + diagram.width &&
+    if(852 < mouseX && mouseX < 852 + diagram.width &&
        15 < mouseY && mouseY < 15 + diagram.height){
         showTutorial = true;
     }
@@ -307,6 +307,12 @@ void mouseMoved() {
   
   if(myTextArea.isHovering()){
     changeCursor = true;
+  }
+
+  //COMO LER
+  if(852 < mouseX && mouseX < 852 + diagram.width &&
+     15 < mouseY && mouseY < 15 + diagram.height + 20){
+      changeCursor = true;
   }
 
   if (changeCursor) {
@@ -692,7 +698,7 @@ class Arc{
     
     color newColor = thisCountry.myColor;
     if(isOver){
-      newColor = color(hue(newColor), saturation(newColor), 255);
+      newColor = color(hue(newColor), saturation(newColor), brightness(newColor)*1.2);
     }
     if(!isActive){
       newColor = inactiveColor;
@@ -717,6 +723,7 @@ class Arc{
         float titleAngle = 0;
         Arc lastArc = allArcs.get(i + 3);
         strokeWeight(1);
+        stroke(thisCountry.myColor);
         if(direction > 0){
           arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, startAngle, lastArc.endAngle);
           titleAngle = (startAngle + lastArc.endAngle)/2;
@@ -760,10 +767,14 @@ class Arc{
           noStroke();
           fill(newColor);
           rectMode(CENTER);
-          rect(0, arcWeight * 0.8 * direction, 15, 20, 5);
+          rect(0, arcWeight * 0.8 * direction, 17, 20, 5);
           fill(0);
-          text(nPlayers, 0, arcWeight * 0.8 * direction);
-          
+          textAlign(CENTER, CENTER);
+          if(direction > 0){
+            text(nPlayers, -1, arcWeight - 7);
+          }else{
+            text(nPlayers, -2, -(arcWeight - 2));
+          }
         }        
         
     popMatrix();
@@ -857,7 +868,7 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor), 255);
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor)*1.2);
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
@@ -936,11 +947,11 @@ class Country{
 
 //    //hue
     if(groupInt % 2 != 0){
-      hu = map(groupInt, 96, 104, 100, 235);
-      hu = hu + (i%4)*4;
-    }else{
       hu = map(groupInt, 98, 104, 0, 55);
-      hu = hu - (i%4)*2;
+      hu = hu + (i%4)*2;
+    }else{
+      hu = map(groupInt, 96, 104, 100, 235);      
+      hu = hu - (i%4)*4;
     }
     hu = constrain(hu, 0, 255);
     sa = 255;
@@ -959,6 +970,11 @@ class Country{
     if(30 < hu && hu < 140){
       br -= 30;
     }
+    
+    //Orange
+    if(0 < hu && hu < 20){
+      hu += 10;
+    }    
     
     if(groupInt < 97){  //gray
       hu = 40;
@@ -1009,7 +1025,7 @@ class Player {
       alpha = map(transition3 - millis(), interval, 0, 0, 100);
       alpha = constrain(alpha, 0, 100);
     }else{
-      alpha = 120;
+      alpha = 100;
     }  
     
     //Line
@@ -1162,6 +1178,7 @@ void drawHeader() {
   text(msg, textPos.x, textPos.y, 270, 200);    
 }
 void drawLabels(){
+  fill(255);
   textAlign(CENTER, CENTER);
   textFont(bitterBold);
   textSize(54);
@@ -1177,33 +1194,26 @@ void drawLabels(){
   line(405, 65, 410, 60);
   line(405, 65, 400, 60);  
   
-
+  fill(255);
   textAlign(CENTER, CENTER);
   textFont(bitterBold);
   textSize(30);
-  text("145", 285, 350);
+  text("145", 290, 350);
   textFont(archivoNarrowBold);
   textSize(11);
-  text("CLUBES DE", 285, 373);
+  text("CLUBES DE", 290, 373);
   textFont(bitterBold);
   textSize(52);
-  text("53", 285, 400);
+  text("53", 290, 400);
   textFont(archivoNarrowBold);
   textSize(19);
-  text("PAÍSES", 283, 435);
+  text("PAÍSES", 288, 435);
   
   stroke(255);
   strokeWeight(1);
-  line(315, 395, 335, 395);
-  line(335, 395, 330, 390);
-  line(335, 395, 330, 400);
-  
-//  pushMatrix();
-//    translate(center.x, center.y);
-//    float increment = 0.8*PI/4
-//    for(int angle = 0.2)
-////    arc(0, 0, 680, 680, 0, PI);
-//  popMatrix();
+  line(320, 395, 340, 395);
+  line(340, 395, 335, 390);
+  line(340, 395, 335, 400);
 }
 void drawPlayersList(Country c, int nPlayers){
   

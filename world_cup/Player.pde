@@ -36,7 +36,7 @@ class Player {
       alpha = map(transition3 - millis(), interval, 0, 0, 100);
       alpha = constrain(alpha, 0, 100);
     }else{
-      alpha = 120;
+      alpha = 100;
     }  
     
     //Line

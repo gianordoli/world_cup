@@ -86,7 +86,7 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor), 255);
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor)*1.2);
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }

@@ -74,6 +74,7 @@ class TextArea {
   void scrollbar(){
     fill(240);
     noStroke();
+    rectMode(CORNER);
     rect(areaX + areaWidth + 6, areaY, 3, areaHeight);
     
     fill(100);

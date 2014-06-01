@@ -104,7 +104,7 @@ class Circle {
       float leading = 9;
       fill(0);
       textFont(archivoNarrow);
-      textSize(10);
+      textSize(11);
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
       if(textWidth(thisCountry.name) < maxTextWidth){

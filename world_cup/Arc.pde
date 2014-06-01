@@ -51,13 +51,13 @@ class Arc{
       Player p = teamPlayers.get(i);
       
       float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 40*mm;  //distance from arc to control point
+      float offset = 120;  //distance from arc to control point
       PVector p1 = new PVector(0,0);
       PVector p2 = new PVector(0,0);
-      p1.x = pos.x + cos(angle) * (radius - 4*mm);
-      p1.y = pos.y + sin(angle) * (radius - 4*mm);
-      p2.x = pos.x + cos(angle) * (radius - 4*mm - offset);
-      p2.y = pos.y + sin(angle) * (radius - 4*mm - offset);
+      p1.x = pos.x + cos(angle) * (radius - 12);
+      p1.y = pos.y + sin(angle) * (radius - 12);
+      p2.x = pos.x + cos(angle) * (radius - 12 - offset);
+      p2.y = pos.y + sin(angle) * (radius - 12 - offset);
       
       PVector p4 = p.currCountry.pos;
 //      PVector p3 = PVector.lerp(p2, p4, 0.5);
@@ -78,7 +78,7 @@ class Arc{
     }
     float distance = dist(mouseX, mouseY, center.x, center.y); 
     if(startAngle < mouseAngle && mouseAngle < endAngle &&
-       radius - 4*mm < distance && distance < radius + 4*mm){
+       radius - 12 < distance && distance < radius + 12){
       return true;
     }else{
       return false;
@@ -101,10 +101,10 @@ class Arc{
     
     color newColor = thisCountry.myColor;
     if(isOver){
-      newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
+      newColor = color(hue(newColor), saturation(newColor), 255);
     }
     if(!isActive){
-      newColor = color(0, 0, 0, 30);
+      newColor = inactiveColor;
     }
     
     pushMatrix();

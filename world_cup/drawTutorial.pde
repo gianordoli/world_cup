@@ -1,13 +1,15 @@
 void drawTutorial() {
-  fill(255, 150);
+  fill(bgColor, 150);
   rect(0, 0, width, height);
-
-  fill(0);
+  
+  color tutorialColor = color(40, 255, 255);
+  
+  fill(tutorialColor);
   textFont(archivoNarrow);
   textSize(15);
   textLeading(15);
   textAlign(LEFT);
-  stroke(0);
+  stroke(tutorialColor);
   strokeWeight(1);  
 
   PVector textPos = new PVector(85, 90);

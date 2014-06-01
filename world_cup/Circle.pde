@@ -34,7 +34,7 @@ class Circle {
   }
   
   void setControlPoint(){
-      float offset = 30*mm;
+      float offset = 90;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -58,8 +58,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.5;
-        pos.y += escape.y * 1.5;
+        pos.x += escape.x * 1.3;
+        pos.y += escape.y * 1.3;
         
         setControlPoint();        
       }    
@@ -77,7 +77,7 @@ class Circle {
   void display() {
     //TRANSITION
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 1;
+      radius += (finalRadius - radius) * 1.3;
     }else{
       radius = finalRadius;
     }
@@ -86,13 +86,13 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
+        newColor = color(hue(newColor), saturation(newColor), 255);
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
     }
     if(!isActive){
-      newColor = color(0, 0, 0, 30);
+      newColor = inactiveColor;
     }    
     
     noStroke();  
@@ -102,7 +102,7 @@ class Circle {
     if(isOver || isActive){
       float maxTextWidth = 42;
       float leading = 9;
-      fill(0);
+      fill(255);
       textFont(archivoNarrow);
       textSize(11);
       rectMode(CORNER);

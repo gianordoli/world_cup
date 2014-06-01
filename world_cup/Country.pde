@@ -29,10 +29,10 @@ class Country{
       hu = hu - (i%4)*2;
     }
     hu = constrain(hu, 0, 255);
+    sa = 255;
+    br = 225;
     
-    sa = 200;
-    
-    //Indigo blue
+    //Indigo blue/purple
     if(140 < hu && hu < 200){
       sa -= 50;
       hu -= 5;
@@ -40,16 +40,19 @@ class Country{
         sa -= 30;
       }
     }
-       
-    br = 255;
+
+    //Yellow/green
+    if(30 < hu && hu < 140){
+      br -= 30;
+    }
     
     if(groupInt < 97){  //gray
-//      hu = 40;
-//      sa = 90;
-//      br = 130;
       hu = 40;
       sa = 90;
-      br = 200;
+      br = 120;
+//      hu = 40;
+//      sa = 90;
+//      br = 200;
     }
     myColor = color(hu, sa, br);
   }

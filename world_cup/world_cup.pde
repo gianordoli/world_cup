@@ -8,7 +8,9 @@
  http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
  --------------------------------------------------------------------------- */
 
-int mm;
+color bgColor;
+color labelColor;
+color inactiveColor;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -42,7 +44,10 @@ TextArea myTextArea;
 void setup() {
   size(920, 700);
   colorMode(HSB, 255, 255, 255);
-  mm = 3;
+
+  bgColor = color(60);
+  labelColor = color(150);
+  inactiveColor = color(255, 80);
 
   //JS font loading
 //  archivoNarrow = createFont("Archivo Narrow", 10);
@@ -60,10 +65,10 @@ void setup() {
   diagram = loadShape("diagram.svg");
   myTextArea = new TextArea(20, 240, 220, 420);
 
-  center = new PVector(600, 350);
+  center = new PVector(620, 350);
 
   //positioning "map"
-  worldMapSize = new PVector(800, 420);
+  worldMapSize = new PVector(780, 420);
   worldMapPos = new PVector(center.x - worldMapSize.x/2 - 50, center.y - worldMapSize.y/2 + 65);
 
   /*----- COUNTRIES -----*/
@@ -115,7 +120,7 @@ void setup() {
 }
 
 void draw() {  
-  background(255);
+  background(bgColor);
 
   PVector textPos = new PVector(20, 200);
   float leading = 13;  
@@ -141,14 +146,7 @@ void draw() {
     //If "arc" is selected, draw players staring from arc  
     if (selectedType.equals("arc") && a.isActive) {
 
-      fill(0);
-      textAlign(LEFT);
-      textFont(archivoNarrowBold);
-      textSize(12);
-      text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
-      textPos.y += leading;      
-      
-      myTextArea.display();
+      drawPlayersList(a.thisCountry, 0);      
 
       for (Player p : a.teamPlayers) {
         if (p.isActive) {
@@ -159,19 +157,11 @@ void draw() {
   }
 
   //Circles
-  textPos = new PVector(20, 200);
   for (Circle c : allCircles) {
     //If "circle" is selected, draw players staring from circle
     if (selectedType.equals("circle") && c.isActive) {
 
-      fill(0);
-      textAlign(LEFT);
-      textFont(archivoNarrowBold);
-      textSize(12);      
-      text(c.thisCountry.name.toUpperCase() + ": " + c.clubPlayers.size() + " jogadores", textPos.x, textPos.y);
-      textPos.y += leading;
-
-      myTextArea.display();      
+      drawPlayersList(c.thisCountry, c.clubPlayers.size());      
 
       for (Player p : c.clubPlayers) {
         p.display();
@@ -190,7 +180,7 @@ void draw() {
 
   shape(galileu, 816, 668);
   shape(diagram, 848, 15);
-  fill(100);
+  fill(255);
   textFont(archivoNarrowBold);
   textSize(13);
   textAlign(CENTER, TOP);

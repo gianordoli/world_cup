@@ -27,7 +27,7 @@ class TextArea {
     areaY = _areaY;
     areaWidth = _areaWidth;
     areaHeight = _areaHeight;
-    leading = 15;
+    leading = 14;
     
     textRect = createGraphics(areaWidth, areaHeight);
   }
@@ -48,13 +48,13 @@ class TextArea {
  
     //Reset scroll!
     textY = 0;
-    scrollbarY = areaY;
+    scrollbarY = areaY + 7;
     isDragging = false;  
   }  
 
   boolean isHovering(){
-    if(scrollbarY < mouseY && mouseY < scrollbarY + 15
-    && areaX + areaWidth < mouseX && mouseX < areaX + areaWidth + 15
+    if(scrollbarY - 7 < mouseY && mouseY < scrollbarY + 7
+    && areaX + areaWidth < mouseX && mouseX < areaX + areaWidth + 14
     && hasScroll){
       return true;
     }else{
@@ -65,20 +65,21 @@ class TextArea {
   
   void drag(){
     if(isDragging){
-      scrollbarY = constrain(mouseY, areaY, areaY + areaHeight - 15);
-      textY = map(scrollbarY, areaY, areaY + areaHeight - 15, 0, areaHeight - textHeight);
-//      textY = constrain(textY, areaHeight - textHeight, 0);    
+      scrollbarY = constrain(mouseY, areaY + 7, areaY + areaHeight - 7);
+      textY = map(scrollbarY, areaY + 7, areaY + areaHeight - 7, 0, areaHeight - textHeight);
     }  
   }
   
   void scrollbar(){
-    fill(240);
-    noStroke();
-    rectMode(CORNER);
-    rect(areaX + areaWidth + 6, areaY, 3, areaHeight);
+    strokeWeight(2);
+    stroke(labelColor, 100);
+    noFill();
+    line(areaX + areaWidth + 7, areaY, areaX + areaWidth + 6, areaY + areaHeight);
     
-    fill(100);
-    rect(areaX + areaWidth, scrollbarY, 15, 15);
+    noStroke();
+    fill(labelColor);
+    rectMode(CENTER);
+    rect(areaX + areaWidth + 7, scrollbarY, 14, 14, 3);
   }
 
   void display() {
@@ -88,8 +89,8 @@ class TextArea {
     }
     
     textRect.beginDraw();
-    textRect.background(255);
-    textRect.fill(100);
+    textRect.background(bgColor);
+    textRect.fill(255);
     textRect.textFont(archivoNarrow);
     textRect.textSize(12);
     

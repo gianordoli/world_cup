@@ -36,12 +36,12 @@ class Player {
       alpha = map(transition3 - millis(), interval, 0, 0, 100);
       alpha = constrain(alpha, 0, 100);
     }else{
-      alpha = 100;
+      alpha = 120;
     }  
     
     //Line
     noFill();
-    strokeWeight(0.3*mm);
+    strokeWeight(1);
     stroke(currCountry.thisCountry.myColor, alpha);
 //    line(anchors.get(0).x, anchors.get(0).y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 

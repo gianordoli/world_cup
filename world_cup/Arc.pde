@@ -85,7 +85,7 @@ class Arc{
     }
   }
   
-  void display(){
+  void display(int i){
     //TRANSITION
     float currAngle = 0;
     float alpha = 0;
@@ -117,12 +117,23 @@ class Arc{
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
       float angle = (endAngle + startAngle)/2;
-      translate(cos(angle) * radius, sin(angle) * radius);
+      float direction = 1;
+      if(angle < PI){
+        direction *= -1;
+      }      
       
-        float direction = 1;
-        if(angle < PI){
-          direction *= -1;
+      if(i % 4 == 0){
+        Arc lastArc = allArcs.get(i + 3);
+        strokeWeight(1);
+        if(direction > 0){
+          arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, startAngle, lastArc.endAngle);
+        }else{
+          arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, lastArc.startAngle, endAngle);
         }
+      }      
+      
+      translate(cos(angle) * radius, sin(angle) * radius);
+        
         rotate(angle + PI/2 * direction);
       
         rectMode(CORNER);
@@ -144,7 +155,7 @@ class Arc{
           noStroke();
           fill(newColor);
           rectMode(CENTER);
-          rect(0, arcWeight * 0.8 * direction, 15, 15);
+          rect(0, arcWeight * 0.8 * direction, 15, 20, 5);
           fill(0);
           text(nPlayers, 0, arcWeight * 0.8 * direction);
           

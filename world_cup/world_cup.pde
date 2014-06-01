@@ -127,9 +127,11 @@ void draw() {
 
   //Default/initial/show all
   if (selectedType.equals("") && millis() > transition1) {
-    for (Arc a : allArcs) {
+//    for (Arc a : allArcs) {
+  for(int i = 0; i < allArcs.size(); i++){
+    Arc a = allArcs.get(i);
       if (millis() > transition2) {
-        a.display();
+        a.display(i);
 
         //Players
         for (Player p : a.teamPlayers) {
@@ -140,8 +142,10 @@ void draw() {
   }
 
   //Arcs (selected)
-  for (Arc a : allArcs) {
-    a.display();
+//  for (Arc a : allArcs) {
+  for(int i = 0; i < allArcs.size(); i++){
+    Arc a = allArcs.get(i);
+    a.display(i);
 
     //If "arc" is selected, draw players staring from arc  
     if (selectedType.equals("arc") && a.isActive) {
@@ -177,8 +181,14 @@ void draw() {
   else {
     drawHeader();
   }
+  
+  //Labels
+  drawLabels();
 
+  //Logo
   shape(galileu, 816, 668);
+  
+  //Tutorial
   shape(diagram, 848, 15);
   fill(255);
   textFont(archivoNarrowBold);

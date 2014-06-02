@@ -1,3 +1,5 @@
+/* @pjs preload="galileu.svg, diagram.svg"; */ 
+
 /* ---------------------------------------------------------------------------
  World Cup 2014: Teams vs Clubs
  2014, for Galileu Magazine, Brazil
@@ -50,16 +52,16 @@ void setup() {
   inactiveColor = color(255, 80);
 
   //JS font loading
-//  archivoNarrow = createFont("Archivo Narrow", 10);
-//  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-//  bitter = createFont("Bitter", 10);
-//  bitterBold = createFont("Bitter Bold", 10);  
+  archivoNarrow = createFont("Archivo Narrow", 10);
+  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+  bitter = createFont("Bitter", 10);
+  bitterBold = createFont("Bitter Bold", 10);  
 
   //Processing font loading
-  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
-  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
-  bitter = createFont("Bitter-Regular", 10);
-  bitterBold = createFont("Bitter-Bold", 10);  
+//  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+//  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+//  bitter = createFont("Bitter-Regular", 10);
+//  bitterBold = createFont("Bitter-Bold", 10);  
   
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");

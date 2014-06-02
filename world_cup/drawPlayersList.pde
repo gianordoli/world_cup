@@ -36,8 +36,8 @@ void drawPlayersList(Country c, int nPlayers){
   textFont(archivoNarrowBold);
   textSize(13);
   if(selectedType.equals("arc")){
-    text(c.name.toUpperCase() + " - GRUPO " + c.group.toUpperCase(), 24, 213);
+    text(c.name.toUpperCase() + " - GRUPO " + c.group.toUpperCase(), 24, 215);
   }else if(selectedType.equals("circle")){
-    text(c.name.toUpperCase() + ": " + nPlayers + " jogadores", 24, 213);
+    text(c.name.toUpperCase() + ": " + nPlayers + " jogadores", 24, 215);
   }
 }

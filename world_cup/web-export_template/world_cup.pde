@@ -1,3 +1,5 @@
+/* @pjs preload="galileu.svg, diagram.svg"; */ 
+
 /* ---------------------------------------------------------------------------
  World Cup 2014: Teams vs Clubs
  2014, for Galileu Magazine, Brazil
@@ -8,7 +10,9 @@
  http://btk.tillnagel.com/tutorials/geo-tagging-placemaker.html 
  --------------------------------------------------------------------------- */
 
-int mm;
+color bgColor;
+color labelColor;
+color inactiveColor;
 
 ArrayList<Player> allPlayers;
 ArrayList<Country> allCountries;
@@ -37,10 +41,15 @@ PShape diagram;
 String selectedType; //"arc" or "circle"
 Country selectedCountry;
 
+TextArea myTextArea;
+
 void setup() {
-  size(920, 1400);
+  size(920, 700);
   colorMode(HSB, 255, 255, 255);
-  mm = 3;
+
+  bgColor = color(60);
+  labelColor = color(150);
+  inactiveColor = color(255, 80);
 
   //JS font loading
   archivoNarrow = createFont("Archivo Narrow", 10);
@@ -48,7 +57,6 @@ void setup() {
   bitter = createFont("Bitter", 10);
   bitterBold = createFont("Bitter Bold", 10);  
 
-  //  printArray(PFont.list());
   //Processing font loading
 //  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
 //  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
@@ -57,12 +65,13 @@ void setup() {
   
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");
+  myTextArea = new TextArea(20, 240, 220, 420);
 
-  center = new PVector(600, 350);
+  center = new PVector(610, 350);
 
   //positioning "map"
-  worldMapSize = new PVector(800, 420);
-  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 50, center.y - worldMapSize.y/2 + 65);
+  worldMapSize = new PVector(780, 420);
+  worldMapPos = new PVector(center.x - worldMapSize.x/2 - 40, center.y - worldMapSize.y/2 + 65);
 
   /*----- COUNTRIES -----*/
   allCountries = initCountries("countries_groups.tsv");
@@ -101,8 +110,6 @@ void setup() {
     c.setRadius(maxPlayers);
   }  
 
-  debug();
-
   selectedType = "";
 
   interval = 1000;
@@ -110,20 +117,22 @@ void setup() {
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
   showTutorial = false;
+  
+  debug();  
 }
 
 void draw() {  
-  background(255);
+  background(bgColor);
 
   PVector textPos = new PVector(20, 200);
   float leading = 13;  
 
   //Default/initial/show all
   if (selectedType.equals("") && millis() > transition1) {
-    for (Arc a : allArcs) {
+  for(int i = 0; i < allArcs.size(); i++){
+    Arc a = allArcs.get(i);
+    a.display(i);
       if (millis() > transition2) {
-        a.display();
-
         //Players
         for (Player p : a.teamPlayers) {
           p.display();
@@ -131,105 +140,101 @@ void draw() {
       }
     }
   }
-
-  //Arcs (selected)
-  for (Arc a : allArcs) {
-    a.display();
-
-    //If "arc" is selected, draw players staring from arc  
-    if (selectedType.equals("arc") && a.isActive) {
-
-      fill(0);
-      textAlign(LEFT);
-      textFont(archivoNarrowBold);
-      textSize(12);
-      text(a.thisCountry.name.toUpperCase() + ": grupo " + a.thisCountry.group.toUpperCase(), textPos.x, textPos.y);
-      textPos.y += leading;      
-
-      for (Player p : a.teamPlayers) {
-        if (p.isActive) {
-          p.display();
-
-          fill(100);
-          textFont(archivoNarrow);
-          textSize(12);
-          text(p.name, textPos.x, textPos.y);
-          text(p.club + " (" + p.current.name + ")", textPos.x + 100, textPos.y);
-          textPos.y += leading;
+  
+  //Players
+  if (selectedType.equals("arc")){
+    for(int i = 0; i < allArcs.size(); i++){
+      Arc a = allArcs.get(i);  
+      if (a.isActive) {
+        drawPlayersList(a.thisCountry, 0);      
+        for (Player p : a.teamPlayers) {
+//          if (p.isActive) {
+            p.display();
+//          }
         }
       }
+    }
+  }else if(selectedType.equals("circle")){
+    for (Circle c : allCircles) {
+      if(c.isActive) {
+        drawPlayersList(c.thisCountry, c.clubPlayers.size());      
+        for (Player p : c.clubPlayers) {
+          p.display();
+        }
+      }      
+    }
+  }
+
+  //Arcs (selected)
+  if (!selectedType.equals("")){
+    for(int i = 0; i < allArcs.size(); i++){
+      Arc a = allArcs.get(i);
+      a.display(i);
     }
   }
 
   //Circles
-  textPos = new PVector(20, 200);
-  for (Circle c : allCircles) {
-    //If "circle" is selected, draw players staring from circle
-    if (selectedType.equals("circle") && c.isActive) {
-
-      fill(0);
-      textAlign(LEFT);
-      textFont(archivoNarrowBold);
-      textSize(12);      
-      text(c.thisCountry.name.toUpperCase() + ": " + c.clubPlayers.size() + " jogadores", textPos.x, textPos.y);
-      textPos.y += leading;
-
-      for (Player p : c.clubPlayers) {
-        p.display();
-
-        fill(100);
-        textFont(archivoNarrow);
-        textSize(12);
-        text(p.name, textPos.x, textPos.y);
-        textAlign(CENTER);
-        text(p.origin.abbreviation, textPos.x + 110, textPos.y);
-        textAlign(LEFT);
-        text(p.club, textPos.x + 130, textPos.y);
-        textPos.y += leading;
-      }
-    }    
+  for (Circle c : allCircles) {    
     c.update();
     c.display();
   }  
 
+  //Tutorial?
   if (showTutorial) {
-    drawHowToRead();
+    drawTutorial();
   }
   else {
     drawHeader();
   }
+  
+  //Labels
+  drawLabels();
 
+  //Logo
   shape(galileu, 816, 668);
-  shape(diagram, 848, 15);
-  fill(100);
+  
+  //Tutorial
+  shape(diagram, 852, 15);
+  fill(255);
   textFont(archivoNarrowBold);
   textSize(13);
   textAlign(CENTER, TOP);
-  text("COMO LER", 876, 81);
-  }
+  text("COMO LER", 880, 81);
+}
 
-  void mousePressed() {
-    showTutorial = false;
-    selectedType = "";
+void mouseReleased() {
+  
+  //Have I just finished dragging my scrollbar? 
+  //If yes, no need to mess with my selection.
+  //If not, let's check what I am trying to select
+  if(!myTextArea.isDragging){
+    
+    //Let's assume that I'll deselct everything anyway
+    selectedType = ""; 
+    Boolean click = false;
+    
     for (Arc a : allArcs) {
+      
+      //It looks like my mouse was over something when I pressed it!
       if (a.isHovering()) {
+        
+        //Ok, select this something — unless it is the smae thing I had before
         if (!selectedType.equals("arc") && selectedCountry != a.thisCountry) {
           selectedType = "arc";
           selectedCountry = a.thisCountry;
-          dimColors();
+          dimColors();        
           a.isActive = true;
-
+  
           for (Player p : a.teamPlayers) {
             p.isActive = true;
             p.currCountry.isActive = true;
           }
-        }
-        else {
-          selectedType = "";
+          setTextArea();
+          click = true;
         }
       }
     }
-
+  
     for (Circle c : allCircles) {
       if (c.isHovering()) {
         //If it' not already selected... Select!
@@ -238,22 +243,45 @@ void draw() {
           selectedCountry = c.thisCountry;
           dimColors();
           c.isActive = true;
-
+  
           for (Player p : c.clubPlayers) {
             p.isActive = true;
             p.originCountry.isActive = true;
           }
-        }
-        else {
-          selectedType = "";
+          setTextArea();
+          click = true;
         }
       }
     }
-    if (selectedType.equals("")) {
+    
+    //COMO LER
+    if(852 < mouseX && mouseX < 852 + diagram.width &&
+       15 < mouseY && mouseY < 15 + diagram.height){
+        showTutorial = true;
+    }
+    
+    //I I went trhough it all and no selection was made,
+    //I was really trying to deselect everything. So...
+    if (!click) {  
       selectedCountry = null;
       restoreColors();
     }
   }
+  
+  //Whatever I was doing, I' not dragging my scrollbar anymore!
+  myTextArea.isDragging = false;  
+}
+
+void mousePressed(){
+  showTutorial = false; 
+  if(myTextArea.isHovering()){
+    myTextArea.isDragging = true;
+  }
+}
+
+void mouseDragged(){
+  myTextArea.drag();
+}
 
 void mouseMoved() {
   boolean changeCursor = false;
@@ -278,6 +306,16 @@ void mouseMoved() {
       c.isOver = false;
     }
   }  
+  
+  if(myTextArea.isHovering()){
+    changeCursor = true;
+  }
+
+  //COMO LER
+  if(852 < mouseX && mouseX < 852 + diagram.width &&
+     15 < mouseY && mouseY < 15 + diagram.height + 20){
+      changeCursor = true;
+  }
 
   if (changeCursor) {
     cursor(HAND);
@@ -288,6 +326,7 @@ void mouseMoved() {
 }
 
 void dimColors() {
+  
   for (Arc a: allArcs) {
     a.isActive = false;
     for (Player p: a.teamPlayers) {
@@ -479,6 +518,50 @@ ArrayList<Arc> setArcs(ArrayList<Arc> theseArcs) {
   return tempList;
 }
 
+void setTextArea(){
+  int nLines = 0;
+  String[] col1 = new String[0];
+  String[] col2 = new String[0]; 
+  String[] col3 = new String[0];
+  
+  if(selectedType.equals("arc")){
+    for (Arc a : allArcs) {  
+      if (a.isActive) {
+        for (Player p : a.teamPlayers) {
+          if (p.isActive) {
+            nLines ++;
+            col1 = expand(col1, col1.length + 1);
+            col2 = expand(col2, col2.length + 1);
+            col1[col1.length - 1] = p.name;
+            col2[col2.length - 1] = p.club + " (" + p.current.abbreviation + ")"; 
+          }
+        }
+      }
+    }
+    
+  }else if(selectedType.equals("circle")){
+
+    for (Circle c : allCircles) {  
+      if (c.isActive) {
+        for (Player p : c.clubPlayers) {
+          if (p.isActive) {
+            nLines ++;
+            col1 = expand(col1, col1.length + 1);
+            col2 = expand(col2, col2.length + 1);
+            col3 = expand(col3, col3.length + 1);
+            col1[col1.length - 1] = p.name;
+            col2[col2.length - 1] = p.origin.abbreviation.toUpperCase();
+            col3[col3.length - 1] = p.club; 
+          }
+        }
+      }
+    }
+  }  
+//  printArray(col1);
+//  printArray(col2);
+  myTextArea.setText(col1, col2, col3);
+}
+
 int getMax(ArrayList<Circle> myList) {
   int max = 0;
   for (Circle c : myList) {
@@ -514,99 +597,6 @@ void debug() {
   //    }
   //  }
 }
-
-void drawHeader() {
-  fill(100);
-  textFont(archivoNarrow);
-  textSize(42);
-  textAlign(LEFT, TOP);
-  PVector textPos = new PVector(18, 26);
-  String msg = "Copa da Europa?";
-  text(msg, textPos.x, textPos.y);
-
-  textPos.y = 75;
-  textFont(bitter);
-  textSize(13);
-  textLeading(15);
-  msg = "Três em cada quatro convocados jogam em clubes europeus; veja de quais países eles saem para atuar em suas seleções e quais são os esquadrões com menos atletas jogando em casa";
-  text(msg, textPos.x, textPos.y, 240, 200);
-}
-
-void drawHowToRead() {
-  fill(255, 150);
-  rect(0, 0, width, height);
-
-  fill(0);
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);
-  stroke(0);
-  strokeWeight(1);  
-
-  PVector textPos = new PVector(85, 90);
-  PVector arrowPos = new PVector(0, 0);
-  String msg = "Ao clicar nos círculos,\nmostra o NÚMERO DE\nJOGADORES que atuam\nna seleção indicada";
-  text(msg, textPos.x, textPos.y);
-
-  Arc a = allArcs.get(0);
-  float angle = (a.endAngle + a.startAngle)/2;
-  arrowPos.x = a.pos.x + cos(angle) * a.radius * 0.95;
-  arrowPos.y = a.pos.y + sin(angle) * a.radius * 0.95;
-  line(textPos.x + 130, textPos.y + 15, arrowPos.x, arrowPos.y);
-  ellipse(arrowPos.x, arrowPos.y, 3, 3);
-
-  pushMatrix();
-  translate(arrowPos.x, arrowPos.y);
-  rotate(angle + PI/2);  
-  textFont(archivoNarrowBold);
-  textSize(12);
-  textAlign(CENTER, TOP);
-  text("6", 0, 0);  
-  popMatrix();
-
-  Circle c = allCircles.get(5);
-  textPos.y = c.pos.y;
-  msg = "Ao clicar nas seleções, mostra a\nQUANTIDADE DE CONVOCADOS\nem atuação nos clubes do país";
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);  
-  text(msg, textPos.x, textPos.y);
-
-  arrowPos.x = c.pos.x - 15;
-  arrowPos.y = c.pos.y + 15;  
-  line(textPos.x + 200, textPos.y + 15, arrowPos.x, arrowPos.y);
-  ellipse(arrowPos.x, arrowPos.y, 3, 3);
-  textFont(archivoNarrowBold);
-  textSize(12);
-  textAlign(CENTER, TOP);
-  text("122", c.pos.x, c.pos.y + 10);
-
-  textPos.y = 570;
-  textFont(archivoNarrow);
-  textSize(15);
-  textLeading(15);
-  textAlign(LEFT);
-  msg = "A área do círculo corresponde\nao NÚMERO DE CONVOCADOS\nque jogam nos clubes daquele país";
-  text(msg, textPos.x, textPos.y);
-
-  c = allCircles.get(2);
-  arrowPos.x = c.pos.x;
-  arrowPos.y = c.pos.y + c.radius;
-  line(textPos.x + 190, textPos.y + 15, arrowPos.x, textPos.y + 15);
-  line(arrowPos.x, textPos.y + 15, arrowPos.x, arrowPos.y);
-  noFill();
-  ellipse(arrowPos.x, arrowPos.y - c.radius, c.radius*2, c.radius*2);
-}
-
-void keyPressed() {
-  showTutorial = true;
-  selectedType = "";
-  selectedCountry = null;
-  restoreColors();
-}
-
 //World cup teams
 //Linked to Country (only to read colors)
 //Contains list of Player
@@ -659,14 +649,14 @@ class Arc{
   
       Player p = teamPlayers.get(i);
       
-      float angle = map(i, 0, teamPlayers.size() - 1, startAngle, endAngle);   
-      float offset = 40*mm;  //distance from arc to control point
+      float angle = map(i, 0, teamPlayers.size() - 1, startAngle + 0.003*PI, endAngle - 0.003*PI);   
+      float offset = 120;  //distance from arc to control point
       PVector p1 = new PVector(0,0);
       PVector p2 = new PVector(0,0);
-      p1.x = pos.x + cos(angle) * (radius - 4*mm);
-      p1.y = pos.y + sin(angle) * (radius - 4*mm);
-      p2.x = pos.x + cos(angle) * (radius - 4*mm - offset);
-      p2.y = pos.y + sin(angle) * (radius - 4*mm - offset);
+      p1.x = pos.x + cos(angle) * (radius - 12);
+      p1.y = pos.y + sin(angle) * (radius - 12);
+      p2.x = pos.x + cos(angle) * (radius - 12 - offset);
+      p2.y = pos.y + sin(angle) * (radius - 12 - offset);
       
       PVector p4 = p.currCountry.pos;
 //      PVector p3 = PVector.lerp(p2, p4, 0.5);
@@ -687,14 +677,14 @@ class Arc{
     }
     float distance = dist(mouseX, mouseY, center.x, center.y); 
     if(startAngle < mouseAngle && mouseAngle < endAngle &&
-       radius - 4*mm < distance && distance < radius + 4*mm){
+       radius - 12 < distance && distance < radius + 12){
       return true;
     }else{
       return false;
     }
   }
   
-  void display(){
+  void display(int i){
     //TRANSITION
     float currAngle = 0;
     float alpha = 0;
@@ -710,10 +700,10 @@ class Arc{
     
     color newColor = thisCountry.myColor;
     if(isOver){
-      newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
+      newColor = color(hue(newColor), saturation(newColor), brightness(newColor)*1.2);
     }
     if(!isActive){
-      newColor = color(0, 0, 0, 30);
+      newColor = inactiveColor;
     }
     
     pushMatrix();
@@ -726,20 +716,46 @@ class Arc{
       arc(0, 0, radius*2, radius*2, startAngle, currAngle);
       
       float angle = (endAngle + startAngle)/2;
-      translate(cos(angle) * radius, sin(angle) * radius);
+      float direction = 1;
+      if(angle < PI){
+        direction *= -1;
+      }      
       
-        float direction = 1;
-        if(angle < PI){
-          direction *= -1;
+      if(i % 4 == 0){
+        float titleAngle = 0;
+        Arc lastArc = allArcs.get(i + 3);
+        strokeWeight(1);
+        stroke(thisCountry.myColor);
+        if(direction > 0){
+          arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, startAngle, lastArc.endAngle);
+          titleAngle = (startAngle + lastArc.endAngle)/2;
+        }else{
+          arc(0, 0, radius*2 + arcWeight + 6, radius*2 + arcWeight + 6, lastArc.startAngle, endAngle);
+          titleAngle = (endAngle + lastArc.startAngle)/2;
         }
+        translate(cos(titleAngle) * (radius + arcWeight), sin(titleAngle) * (radius + arcWeight));
+        rotate(titleAngle + PI/2 * direction);
+        fill(labelColor);
+        textAlign(CENTER, CENTER);
+        textFont(bitter);
+        textSize(10);
+        text("GRUPO " + thisCountry.group.toUpperCase(), 0, 0);
+        
+        //Undo!
+        rotate(- (titleAngle + PI/2 * direction));        
+        translate(-(cos(titleAngle) * (radius + arcWeight)), -(sin(titleAngle) * (radius + arcWeight)));
+      }
+      
+      translate(cos(angle) * radius, sin(angle) * radius);
+        
         rotate(angle + PI/2 * direction);
       
         rectMode(CORNER);
         textAlign(CENTER, CENTER);
-        textFont(archivoNarrowBold);
-        textSize(13);      
+        textFont(archivoNarrow);
+        textSize(14);      
         fill(0, alpha);
-        text(thisCountry.abbreviation, 0, 0);
+        text(thisCountry.abbreviation.toUpperCase(), 0, 0);
         
         //NUMBER
         if(selectedType.equals("circle") && isActive){
@@ -753,10 +769,10 @@ class Arc{
           noStroke();
           fill(newColor);
           rectMode(CENTER);
-          rect(0, arcWeight * 0.8 * direction, 15, 15);
+          rect(0, arcWeight * 0.8 * direction, 17, 20, 5);
           fill(0);
-          text(nPlayers, 0, arcWeight * 0.8 * direction);
-          
+          textAlign(CENTER, CENTER);
+          text(nPlayers, 0, (arcWeight - 5)*direction);
         }        
         
     popMatrix();
@@ -798,7 +814,7 @@ class Circle {
   }
   
   void setControlPoint(){
-      float offset = 30*mm;
+      float offset = 90;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -822,8 +838,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.5;
-        pos.y += escape.y * 1.5;
+        pos.x += escape.x * 1.3;
+        pos.y += escape.y * 1.3;
         
         setControlPoint();        
       }    
@@ -841,7 +857,7 @@ class Circle {
   void display() {
     //TRANSITION
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 1;
+      radius += (finalRadius - radius) * 1.3;
     }else{
       radius = finalRadius;
     }
@@ -850,13 +866,13 @@ class Circle {
     if(isOver){
       //If it's NOT one of the "gray" countries...
       if(saturation(newColor) > 100){
-        newColor = color(hue(newColor), saturation(newColor)*0.5, brightness(newColor));
+        newColor = color(hue(newColor), saturation(newColor), brightness(newColor)*1.2);
       }else{
         newColor = color(hue(newColor), saturation(newColor), brightness(newColor) + 20);
       }
     }
     if(!isActive){
-      newColor = color(0, 0, 0, 30);
+      newColor = inactiveColor;
     }    
     
     noStroke();  
@@ -866,9 +882,9 @@ class Circle {
     if(isOver || isActive){
       float maxTextWidth = 42;
       float leading = 9;
-      fill(0);
+      fill(255);
       textFont(archivoNarrow);
-      textSize(10);
+      textSize(11);
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
       if(textWidth(thisCountry.name) < maxTextWidth){
@@ -929,17 +945,17 @@ class Country{
 
 //    //hue
     if(groupInt % 2 != 0){
-      hu = map(groupInt, 96, 104, 100, 235);
-      hu = hu + (i%4)*4;
-    }else{
       hu = map(groupInt, 98, 104, 0, 55);
-      hu = hu - (i%4)*2;
+      hu = hu + (i%4)*2;
+    }else{
+      hu = map(groupInt, 96, 104, 100, 235);      
+      hu = hu - (i%4)*4;
     }
     hu = constrain(hu, 0, 255);
+    sa = 255;
+    br = 225;
     
-    sa = 200;
-    
-    //Indigo blue
+    //Indigo blue/purple
     if(140 < hu && hu < 200){
       sa -= 50;
       hu -= 5;
@@ -947,16 +963,24 @@ class Country{
         sa -= 30;
       }
     }
-       
-    br = 255;
+
+    //Yellow/green
+    if(30 < hu && hu < 140){
+      br -= 30;
+    }
+    
+    //Orange
+    if(0 < hu && hu < 20){
+      hu += 10;
+    }    
     
     if(groupInt < 97){  //gray
-//      hu = 40;
-//      sa = 90;
-//      br = 130;
       hu = 40;
       sa = 90;
-      br = 200;
+      br = 120;
+//      hu = 40;
+//      sa = 90;
+//      br = 200;
     }
     myColor = color(hu, sa, br);
   }
@@ -1004,7 +1028,7 @@ class Player {
     
     //Line
     noFill();
-    strokeWeight(0.3*mm);
+    strokeWeight(1);
     stroke(currCountry.thisCountry.myColor, alpha);
 //    line(anchors.get(0).x, anchors.get(0).y, currCountry.pos.x, currCountry.pos.y);
     bezier(anchors.get(0).x, anchors.get(0).y, 
@@ -1018,4 +1042,287 @@ class Player {
   }
 }
 
+class TextArea {
+  
+  PGraphics textRect;  //Mask. The text is drawn inside of it
+  String[] col1;
+  String[] col2;
+  String[] col3;
+  
+  //These vars don't vary
+  int areaX;           //Mask X
+  int areaY;           //Mask y
+  int areaWidth;       //Mask width
+  int areaHeight;      //Mask height
+  int leading;
+  
+  //These vars vary!
+  float textY;         //Actual text area y
+  float textHeight;    //Actual text area height. Needs to be calculated counting the rows
+  float scrollbarY;    //Scrollbar changing coordinate;
+
+  boolean isDragging;  //Checks if the scrollbar is being dragged
+  boolean hasScroll;   //Checks if the text height is greater then the area, i.e., if it needs a scrollbar
+
+//  TextArea(String[] tempText, int tempAreaX, int tempAreaY, int tempAreaWidth, int tempAreaHeight) {
+  TextArea(int _areaX, int _areaY, int _areaWidth, int _areaHeight) {
+    
+    areaX = _areaX;
+    areaY = _areaY;
+    areaWidth = _areaWidth;
+    areaHeight = _areaHeight;
+    leading = 14;
+    
+    textRect = createGraphics(areaWidth, areaHeight);
+  }
+  
+  //Calculates text height
+  void setText(String[] _col1, String[] _col2, String[] _col3){
+    
+    col1 = _col1;
+    col2 = _col2; 
+    col3 = _col3;
+ 
+    textHeight = col1.length * leading;
+    if(textHeight > areaHeight){
+      hasScroll = true;
+    }else{
+      hasScroll = false;
+    }
+ 
+    //Reset scroll!
+    textY = 0;
+    scrollbarY = areaY + 7;
+    isDragging = false;  
+  }  
+
+  boolean isHovering(){
+    if(scrollbarY - 7 < mouseY && mouseY < scrollbarY + 7
+    && areaX + areaWidth < mouseX && mouseX < areaX + areaWidth + 14
+    && hasScroll){
+      return true;
+    }else{
+      return false;
+    }
+//    println(isDragging);    
+  }
+  
+  void drag(){
+    if(isDragging){
+      scrollbarY = constrain(mouseY, areaY + 7, areaY + areaHeight - 7);
+      textY = map(scrollbarY, areaY + 7, areaY + areaHeight - 7, 0, areaHeight - textHeight);
+    }  
+  }
+  
+  void scrollbar(){
+    strokeWeight(2);
+    stroke(labelColor, 100);
+    noFill();
+    line(areaX + areaWidth + 7, areaY, areaX + areaWidth + 6, areaY + areaHeight);
+    
+    noStroke();
+    fill(labelColor);
+    rectMode(CENTER);
+    rect(areaX + areaWidth + 7, scrollbarY, 14, 14, 3);
+  }
+
+  void display() {
+
+    if(hasScroll){
+      scrollbar();
+    }
+    
+    textRect.beginDraw();
+    textRect.background(bgColor);
+    textRect.fill(255);
+    textRect.textFont(archivoNarrow);
+    textRect.textSize(12);
+    
+    if(selectedType.equals("arc")){
+      textRect.textAlign(LEFT, TOP);  
+      for(int i = 0; i < col1.length; i++){
+        textRect.text(col1[i], 0, textY + i*leading);
+        textRect.text(col2[i], 110, textY + i*leading);
+      }
+    }else if(selectedType.equals("circle")){
+      for(int i = 0; i < col1.length; i++){
+        textRect.textAlign(LEFT, TOP);
+        textRect.text(col1[i], 0, textY + i*leading);
+        textRect.textAlign(CENTER, TOP);
+        textRect.text(col2[i], 110, textY + i*leading);
+        textRect.textAlign(LEFT, TOP);
+        textRect.text(col3[i], 130, textY + i*leading);
+      }
+    }
+    textRect.endDraw();    
+    
+    image(textRect, areaX, areaY);
+  }
+}
+void drawHeader() {
+  fill(255);
+  textFont(archivoNarrow);
+  textSize(42);
+  textAlign(LEFT, TOP);
+  PVector textPos = new PVector(18, 26);
+  String msg = "Copa da Europa?";
+  text(msg, textPos.x, textPos.y);
+
+  textPos.y = 75;
+  textFont(bitter);
+  textSize(14);
+  textLeading(17);
+  msg = "Três em cada quatro convocados jogam em clubes europeus; veja de quais países eles saem para atuar em suas seleções e quais são os esquadrões com menos atletas jogando em casa";
+  text(msg, textPos.x, textPos.y, 270, 200);    
+}
+void drawLabels(){
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textFont(bitterBold);
+  textSize(54);
+  text("32", 344, 48);
+  textFont(archivoNarrowBold);
+  textSize(13);
+  text("SELEÇÕES", 344, 80);
+  
+  noFill();
+  stroke(255);
+  strokeWeight(1);  
+  arc(380, 65, 50, 50, -PI/2, 0);
+  line(405, 65, 410, 60);
+  line(405, 65, 400, 60);  
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textFont(bitterBold);
+  textSize(30);
+  text("145", 290, 350);
+  textFont(archivoNarrowBold);
+  textSize(11);
+  text("CLUBES DE", 290, 373);
+  textFont(bitterBold);
+  textSize(52);
+  text("53", 290, 400);
+  textFont(archivoNarrowBold);
+  textSize(19);
+  text("PAÍSES", 288, 435);
+  
+  stroke(255);
+  strokeWeight(1);
+  line(320, 395, 340, 395);
+  line(340, 395, 335, 390);
+  line(340, 395, 335, 400);
+}
+void drawPlayersList(Country c, int nPlayers){
+  
+  myTextArea.display();
+  
+  rectMode(CORNER);
+  
+  noStroke();
+  fill(labelColor);
+  rect(105, 186, 60, 14, 5, 5, 0, 0);
+  fill(bgColor);
+  textFont(archivoNarrowBold);
+  textSize(10.5);
+  textAlign(CENTER, CENTER);
+  if(selectedType.equals("arc")){
+    text("SELEÇÃO", 135, 193);
+  }else if(selectedType.equals("circle")){
+    text("PAÍS", 135, 193);
+  }
+  
+  stroke(labelColor);
+  strokeWeight(1);
+  line(20, 200, 253, 200);
+  line(20, 230, 253, 230);
+  if(!myTextArea.hasScroll){
+    line(20, myTextArea.areaY + myTextArea.textHeight + 15, 253, myTextArea.areaY + myTextArea.textHeight + 15);
+  }else{
+    line(20, myTextArea.areaY + myTextArea.areaHeight + 15, 253, myTextArea.areaY + myTextArea.areaHeight + 15);
+  }
+  
+  noStroke();
+  fill(c.myColor);
+  rect(20, 204, 233, 22);
+  
+  fill(255);
+  textAlign(LEFT, CENTER);
+  textFont(archivoNarrowBold);
+  textSize(13);
+  if(selectedType.equals("arc")){
+    text(c.name.toUpperCase() + " - GRUPO " + c.group.toUpperCase(), 24, 215);
+  }else if(selectedType.equals("circle")){
+    text(c.name.toUpperCase() + ": " + nPlayers + " jogadores", 24, 215);
+  }
+}
+void drawTutorial() {
+  fill(bgColor, 150);
+  rect(0, 0, width, height);
+  
+  color tutorialColor = color(40, 255, 255);
+  
+  fill(tutorialColor);
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);
+  stroke(tutorialColor);
+  strokeWeight(1);  
+
+  PVector textPos = new PVector(85, 90);
+  PVector arrowPos = new PVector(0, 0);
+  String msg = "Ao clicar nos círculos,\nmostra o NÚMERO DE\nJOGADORES que atuam\nna seleção indicada";
+  text(msg, textPos.x, textPos.y);
+
+  Arc a = allArcs.get(0);
+  float angle = (a.endAngle + a.startAngle)/2;
+  arrowPos.x = a.pos.x + cos(angle) * a.radius * 0.95;
+  arrowPos.y = a.pos.y + sin(angle) * a.radius * 0.95;
+  line(textPos.x + 130, textPos.y + 15, arrowPos.x, arrowPos.y);
+  ellipse(arrowPos.x, arrowPos.y, 3, 3);
+
+  pushMatrix();
+  translate(arrowPos.x, arrowPos.y);
+  rotate(angle + PI/2);  
+  textFont(archivoNarrowBold);
+  textSize(12);
+  textAlign(CENTER, TOP);
+  text("6", 0, 0);  
+  popMatrix();
+
+  Circle c = allCircles.get(5);
+  textPos.y = c.pos.y;
+  msg = "Ao clicar nas seleções, mostra a\nQUANTIDADE DE CONVOCADOS\nem atuação nos clubes do país";
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);  
+  text(msg, textPos.x, textPos.y);
+
+  arrowPos.x = c.pos.x - 15;
+  arrowPos.y = c.pos.y + 15;  
+  line(textPos.x + 200, textPos.y + 15, arrowPos.x, arrowPos.y);
+  ellipse(arrowPos.x, arrowPos.y, 3, 3);
+  textFont(archivoNarrowBold);
+  textSize(12);
+  textAlign(CENTER, TOP);
+  text("122", c.pos.x, c.pos.y + 10);
+
+  textPos.y = 570;
+  textFont(archivoNarrow);
+  textSize(15);
+  textLeading(15);
+  textAlign(LEFT);
+  msg = "A área do círculo corresponde\nao NÚMERO DE CONVOCADOS\nque jogam nos clubes daquele país";
+  text(msg, textPos.x, textPos.y);
+
+  c = allCircles.get(2);
+  arrowPos.x = c.pos.x;
+  arrowPos.y = c.pos.y + c.radius;
+  line(textPos.x + 190, textPos.y + 15, arrowPos.x, textPos.y + 15);
+  line(arrowPos.x, textPos.y + 15, arrowPos.x, arrowPos.y);
+  noFill();
+  ellipse(arrowPos.x, arrowPos.y - c.radius, c.radius*2, c.radius*2);
+}
 

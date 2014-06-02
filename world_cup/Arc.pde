@@ -173,11 +173,7 @@ class Arc{
           rect(0, arcWeight * 0.8 * direction, 17, 20, 5);
           fill(0);
           textAlign(CENTER, CENTER);
-          if(direction > 0){
-            text(nPlayers, -1, arcWeight - 7);
-          }else{
-            text(nPlayers, -2, -(arcWeight - 2));
-          }
+          text(nPlayers, 0, (arcWeight - 5)*direction);
         }        
         
     popMatrix();

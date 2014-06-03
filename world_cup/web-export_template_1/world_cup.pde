@@ -928,12 +928,11 @@ class Circle {
       float leading = 9;
       fill(255);
       textFont(archivoNarrow);
-      if(finalRadius > 10 || isOver || (!selectedType.equals("") && isActive)){
+//      if(finalRadius > 10){
         textSize(11);
-      }
-      else{
-        textSize(0);
-      }
+//      }else{
+//        textSize(9.5);
+//      }
       
       rectMode(CORNER);
       textAlign(CENTER, CENTER);

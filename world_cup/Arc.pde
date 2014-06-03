@@ -92,7 +92,7 @@ class Arc{
     if(millis() < transition2){
       currAngle = map(transition2 - millis(), interval, 0, startAngle, endAngle);
       currAngle = constrain(currAngle, 0, endAngle);
-      alpha = map(transition2 - millis(), interval, 0, 0, 255);
+      alpha = map(transition1 - millis(), interval, 0, 0, 255);
       alpha = constrain(alpha, 0, 255);
     }else{
       currAngle = endAngle;

@@ -29,6 +29,7 @@ int interval;
 int transition1;
 int transition2;
 int transition3;
+int transition4;
 int showTutorial;
 boolean showList;
 
@@ -53,16 +54,16 @@ void setup() {
   inactiveColor = color(255, 80);
 
   //JS font loading
-//  archivoNarrow = createFont("Archivo Narrow", 10);
-//  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-//  bitter = createFont("Bitter", 10);
-//  bitterBold = createFont("Bitter Bold", 10);  
+  archivoNarrow = createFont("Archivo Narrow", 10);
+  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+  bitter = createFont("Bitter", 10);
+  bitterBold = createFont("Bitter Bold", 10);  
 
   //Processing font loading
-  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
-  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
-  bitter = createFont("Bitter-Regular", 10);
-  bitterBold = createFont("Bitter-Bold", 10);  
+//  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+//  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+//  bitter = createFont("Bitter-Regular", 10);
+//  bitterBold = createFont("Bitter-Bold", 10);  
   
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");
@@ -117,6 +118,7 @@ void setup() {
   transition1 = millis() + 3*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
+  transition4 = transition3 + interval;
   showTutorial = 0;
   showList = false;
   
@@ -138,6 +140,9 @@ void draw() {
         //Players
         for (Player p : a.teamPlayers) {
           p.display();
+        }
+        if (transition3 < millis() && millis() < transition4) {
+          showTutorial = 1;
         }
       }
     }
@@ -187,7 +192,7 @@ void draw() {
   if (showTutorial > 0) {
     drawTutorial();
   }
-  else {
+  else if(millis() > transition4){
     drawHeader();
     drawLabels();
   }
@@ -209,12 +214,14 @@ void mouseReleased() {
   //Have I just finished dragging my scrollbar? 
   //If yes, no need to mess with my selection.
   //If not, let's check what I am trying to select
-  if(!myTextArea.isDragging){
+    //Also, I need to check if not in "tutorial mode"
+  if(!myTextArea.isDragging && showTutorial == 0){
     
-    //Let's assume that I'll deselct everything anyway
+    //Let's assume that I'll deselect everything anyway
     selectedType = ""; 
     Boolean click = false;
     
+    //Checking arcs
     for (Arc a : allArcs) {
       
       //It looks like my mouse was over something when I pressed it!
@@ -238,6 +245,7 @@ void mouseReleased() {
       }
     }
   
+    //Checking circles
     for (Circle c : allCircles) {
       if (c.isHovering()) {
         //If it' not already selected... Select!
@@ -256,29 +264,59 @@ void mouseReleased() {
           click = true;
         }
       }
+      
+      //I I went trhough it all and no selection was made,
+      //I was really trying to deselect everything. So...
+      if (!click) {
+        selectedCountry = null;
+        restoreColors();
+        showList = false;      
+      }      
     }
+  }
+  
+  //TUTORIAL
+  if(showTutorial > 0){
+    Arc a = allArcs.get(16);
+    selectedType = "arc";
+    selectedCountry = a.thisCountry;
+    dimColors();
+    a.isActive = true;
+    for (Player p : a.teamPlayers) {
+      p.isActive = true;
+      p.currCountry.isActive = true;
+    }         
+    showTutorial ++;    
     
-    //COMO LER
-    if(852 < mouseX && mouseX < 852 + diagram.width &&
-       15 < mouseY && mouseY < 15 + diagram.height){
-        showTutorial = 1;
-    }
-    
-    //I I went trhough it all and no selection was made,
-    //I was really trying to deselect everything. So...
-    if (!click) {  
+    if(showTutorial > 2){
+      showTutorial = 0;
       selectedCountry = null;
       restoreColors();
       showList = false;
+      selectedType = "";
     }
   }
+  
+  if(852 < mouseX && mouseX < 852 + diagram.width &&
+     15 < mouseY && mouseY < 15 + diagram.height){
+      Circle c = allCircles.get(5);
+      selectedType = "circle";
+      selectedCountry = c.thisCountry;
+      dimColors();
+      c.isActive = true;
+      for (Player p : c.clubPlayers) {
+        p.isActive = true;
+        p.originCountry.isActive = true;
+      }         
+      showTutorial = 1;
+      showList = false;
+  }  
   
   //Whatever I was doing, I' not dragging my scrollbar anymore!
   myTextArea.isDragging = false;  
 }
 
-void mousePressed(){
-  showTutorial = 0; 
+void mousePressed(){ 
   if(myTextArea.isHovering()){
     myTextArea.isDragging = true;
   }

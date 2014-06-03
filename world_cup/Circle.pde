@@ -59,8 +59,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.5;
-        pos.y += escape.y * 1.5;
+        pos.x += escape.x * 1.3;
+        pos.y += escape.y * 1.3;
         
         setControlPoint();        
       }    
@@ -105,7 +105,13 @@ class Circle {
       float leading = 9;
       fill(255);
       textFont(archivoNarrow);
-      textSize(11);
+      if(finalRadius > 10 || isOver || (!selectedType.equals("") && isActive)){
+        textSize(11);
+      }
+      else{
+        textSize(0);
+      }
+      
       rectMode(CORNER);
       textAlign(CENTER, CENTER);
       if(textWidth(thisCountry.name) < maxTextWidth){

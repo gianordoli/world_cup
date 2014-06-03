@@ -19,7 +19,7 @@ void drawLabels(){
   textAlign(CENTER, CENTER);
   textFont(bitterBold);
   textSize(30);
-  text("145", 290, 350);
+  text("354", 290, 350);
   textFont(archivoNarrowBold);
   textSize(11);
   text("CLUBES DE", 290, 373);

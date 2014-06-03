@@ -34,7 +34,7 @@ class Circle {
   }
   
   void setControlPoint(){
-      float offset = 30;
+      float offset = 90;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -51,7 +51,7 @@ class Circle {
   }
   
   void update(){
-    float padding = 16; //space in between the circles
+    float padding = 10; //space in between the circles
     for(Circle c : allCircles){
       float distance = dist(c.pos.x, c.pos.y, pos.x, pos.y);
       float minDistance = c.radius + radius + padding;

@@ -29,7 +29,8 @@ int interval;
 int transition1;
 int transition2;
 int transition3;
-boolean showTutorial;
+int showTutorial;
+boolean showList;
 
 PFont archivoNarrow;
 PFont archivoNarrowBold;
@@ -52,22 +53,22 @@ void setup() {
   inactiveColor = color(255, 80);
 
   //JS font loading
-  archivoNarrow = createFont("Archivo Narrow", 10);
-  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
-  bitter = createFont("Bitter", 10);
-  bitterBold = createFont("Bitter Bold", 10);  
+//  archivoNarrow = createFont("Archivo Narrow", 10);
+//  archivoNarrowBold = createFont("Archivo Narrow Bold", 10);
+//  bitter = createFont("Bitter", 10);
+//  bitterBold = createFont("Bitter Bold", 10);  
 
   //Processing font loading
-//  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
-//  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
-//  bitter = createFont("Bitter-Regular", 10);
-//  bitterBold = createFont("Bitter-Bold", 10);  
+  archivoNarrow = createFont("ArchivoNarrow-Regular", 10);
+  archivoNarrowBold = createFont("ArchivoNarrow-Bold", 10);
+  bitter = createFont("Bitter-Regular", 10);
+  bitterBold = createFont("Bitter-Bold", 10);  
   
   galileu = loadShape("galileu.svg");
   diagram = loadShape("diagram.svg");
   myTextArea = new TextArea(20, 240, 220, 420);
 
-  center = new PVector(610, 350);
+  center = new PVector(620, 350);
 
   //positioning "map"
   worldMapSize = new PVector(780, 420);
@@ -113,10 +114,11 @@ void setup() {
   selectedType = "";
 
   interval = 1000;
-  transition1 = millis() + interval;
+  transition1 = millis() + 3*interval;
   transition2 = transition1 + interval;
   transition3 = transition2 + interval;
-  showTutorial = false;
+  showTutorial = 0;
+  showList = false;
   
   debug();  
 }
@@ -145,22 +147,24 @@ void draw() {
   if (selectedType.equals("arc")){
     for(int i = 0; i < allArcs.size(); i++){
       Arc a = allArcs.get(i);  
-      if (a.isActive) {
-        drawPlayersList(a.thisCountry, 0);      
+      if (a.isActive) {      
         for (Player p : a.teamPlayers) {
-//          if (p.isActive) {
-            p.display();
-//          }
+          p.display();
+        }
+        if(showList){
+          drawPlayersList(a.thisCountry, 0);
         }
       }
     }
   }else if(selectedType.equals("circle")){
     for (Circle c : allCircles) {
-      if(c.isActive) {
-        drawPlayersList(c.thisCountry, c.clubPlayers.size());      
+      if(c.isActive) {      
         for (Player p : c.clubPlayers) {
           p.display();
         }
+        if(showList){
+          drawPlayersList(c.thisCountry, c.clubPlayers.size());
+        }        
       }      
     }
   }
@@ -180,26 +184,24 @@ void draw() {
   }  
 
   //Tutorial?
-  if (showTutorial) {
+  if (showTutorial > 0) {
     drawTutorial();
   }
   else {
     drawHeader();
+    drawLabels();
   }
-  
-  //Labels
-  drawLabels();
 
   //Logo
   shape(galileu, 816, 668);
   
   //Tutorial
-  shape(diagram, 852, 15);
+  shape(diagram, 852, 10);
   fill(255);
   textFont(archivoNarrowBold);
   textSize(13);
   textAlign(CENTER, TOP);
-  text("COMO LER", 880, 81);
+  text("COMO LER", 880, 76);
 }
 
 void mouseReleased() {
@@ -229,6 +231,7 @@ void mouseReleased() {
             p.isActive = true;
             p.currCountry.isActive = true;
           }
+          showList = true;
           setTextArea();
           click = true;
         }
@@ -248,6 +251,7 @@ void mouseReleased() {
             p.isActive = true;
             p.originCountry.isActive = true;
           }
+          showList = true;
           setTextArea();
           click = true;
         }
@@ -257,7 +261,7 @@ void mouseReleased() {
     //COMO LER
     if(852 < mouseX && mouseX < 852 + diagram.width &&
        15 < mouseY && mouseY < 15 + diagram.height){
-        showTutorial = true;
+        showTutorial = 1;
     }
     
     //I I went trhough it all and no selection was made,
@@ -265,6 +269,7 @@ void mouseReleased() {
     if (!click) {  
       selectedCountry = null;
       restoreColors();
+      showList = false;
     }
   }
   
@@ -273,7 +278,7 @@ void mouseReleased() {
 }
 
 void mousePressed(){
-  showTutorial = false; 
+  showTutorial = 0; 
   if(myTextArea.isHovering()){
     myTextArea.isDragging = true;
   }
@@ -576,12 +581,12 @@ void debug() {
   //  for(Country c : allCountries){
   //    println(c.name + "\t" + c.group + "\t" + c.myColor);
   //  }
-  //  for(Circle c: allCircles){
-  //    println(c.thisCountry.name);
-  //    for(Player p : c.clubPlayers){
-  //      println("\t" + p.name + " \t" + p.origin.name);
-  //    }
-  //  }  
+//  for(Circle c: allCircles){
+//    println(c.thisCountry.name);
+//    for(Player p : c.clubPlayers){
+//      println("\t" + p.name + " \t" + p.origin.name);
+//    }
+//  }  
   //  for (Player p : allPlayers) {
   //    if(p.origin.name.equals("Uruguai")){
   //      println(p.name + " \t" + p.origin.name + " \t" + p.current.name);

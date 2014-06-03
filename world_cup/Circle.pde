@@ -34,7 +34,7 @@ class Circle {
   }
   
   void setControlPoint(){
-      float offset = 90;
+      float offset = 30;
       float distance = dist(pos.x, pos.y, center.x, center.y);
       float angle = atan2(pos.y - center.y, pos.x - center.x);
       if(angle < 0) {
@@ -45,8 +45,9 @@ class Circle {
   }
   
   void setRadius(int max){
-    finalRadius = map(totalPlayers, 1, max, 6, 50);
-    setControlPoint();    
+//    float area = map(totalPlayers, 1, max, 100, 5000);
+    finalRadius = sqrt(totalPlayers/PI) * 7;
+    setControlPoint();
   }
   
   void update(){
@@ -58,8 +59,8 @@ class Circle {
         PVector escape = new PVector(pos.x - c.pos.x,
                                      pos.y - c.pos.y);
         escape.normalize();
-        pos.x += escape.x * 1.3;
-        pos.y += escape.y * 1.3;
+        pos.x += escape.x * 1.5;
+        pos.y += escape.y * 1.5;
         
         setControlPoint();        
       }    
@@ -77,7 +78,7 @@ class Circle {
   void display() {
     //TRANSITION
     if(radius < finalRadius * 0.99){
-      radius += (finalRadius - radius) * 1.3;
+      radius += (finalRadius - radius) * 0.1;
     }else{
       radius = finalRadius;
     }

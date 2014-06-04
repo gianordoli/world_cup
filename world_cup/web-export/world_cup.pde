@@ -142,7 +142,17 @@ void draw() {
           p.display();
         }
         if (transition3 < millis() && millis() < transition4) {
+          Circle c = allCircles.get(5);
+          selectedType = "circle";
+          selectedCountry = c.thisCountry;
+          dimColors();
+          c.isActive = true;
+          for (Player p : c.clubPlayers) {
+            p.isActive = true;
+            p.originCountry.isActive = true;
+          }         
           showTutorial = 1;
+          showList = false;
         }
       }
     }

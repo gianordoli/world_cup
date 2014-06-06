@@ -32,8 +32,8 @@ class Player {
   void display() {
     
     float alpha = 0;
-    if(millis() < transition3){
-      alpha = map(transition3 - millis(), interval, 0, 0, 100);
+    if(millis() < transition){
+      alpha = map(transition - millis(), interval, 0, 0, 100);
       alpha = constrain(alpha, 0, 100);
     }else{
       alpha = 100;

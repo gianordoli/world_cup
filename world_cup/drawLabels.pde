@@ -19,13 +19,13 @@ void drawLabels(){
   textAlign(CENTER, CENTER);
   textFont(bitterBold);
   textSize(30);
-  text("354", 290, 350);
+  text("323", 290, 350);
   textFont(archivoNarrowBold);
   textSize(11);
   text("CLUBES DE", 290, 373);
   textFont(bitterBold);
   textSize(52);
-  text("53", 290, 400);
+  text("52", 290, 400);
   textFont(archivoNarrowBold);
   textSize(19);
   text("PAÍSES", 288, 435);

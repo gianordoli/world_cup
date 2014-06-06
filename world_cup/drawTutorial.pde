@@ -2,8 +2,8 @@ void drawTutorial() {
   
   //Alpha layer
   float alpha = 0;
-  if(millis() < transition4){
-    alpha = map(transition4 - millis(), interval, 0, 0, 100);
+  if(millis() < transition){
+    alpha = map(transition - millis(), interval, 0, 0, 100);
     alpha = constrain(alpha, 0, 100);
     fill(bgColor, alpha);
     rect(0, 0, width, height);    

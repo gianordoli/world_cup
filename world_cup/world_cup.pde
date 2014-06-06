@@ -24,12 +24,12 @@ PVector worldMapPos;
 PVector worldMapSize;
 PVector center;
 
-//animation
-int interval;
-int transition1;
-int transition2;
-int transition3;
-int transition4;
+
+//Animation
+int transition;
+int interval = 1000;
+
+//Tutorial
 int showTutorial;
 boolean showList;
 
@@ -112,15 +112,22 @@ void setup() {
     c.setRadius(maxPlayers);
   }  
 
-  selectedType = "";
+//  selectedType = "";
 
-  interval = 1000;
-  transition1 = millis() + 3*interval;
-  transition2 = transition1 + interval;
-  transition3 = transition2 + interval;
-  transition4 = transition3 + interval;
-  showTutorial = 0;
-  showList = false;
+  transition = millis() + interval;
+  
+  //Initialize
+  Circle c = allCircles.get(5);
+  selectedType = "circle";
+  selectedCountry = c.thisCountry;
+  dimColors();
+  c.isActive = true;
+  for (Player p : c.clubPlayers) {
+    p.isActive = true;
+    p.originCountry.isActive = true;
+  }         
+  showTutorial = 1;
+  showList = false;  
   
   debug();  
 }
@@ -132,28 +139,13 @@ void draw() {
   float leading = 13;  
 
   //Default/initial/show all
-  if (selectedType.equals("") && millis() > transition1) {
+  if (selectedType.equals("")) {    
   for(int i = 0; i < allArcs.size(); i++){
     Arc a = allArcs.get(i);
     a.display(i);
-      if (millis() > transition2) {
-        //Players
-        for (Player p : a.teamPlayers) {
-          p.display();
-        }
-        if (transition3 < millis() && millis() < transition4) {
-          Circle c = allCircles.get(5);
-          selectedType = "circle";
-          selectedCountry = c.thisCountry;
-          dimColors();
-          c.isActive = true;
-          for (Player p : c.clubPlayers) {
-            p.isActive = true;
-            p.originCountry.isActive = true;
-          }         
-          showTutorial = 1;
-          showList = false;
-        }
+      //Players
+      for (Player p : a.teamPlayers) {
+        p.display();
       }
     }
   }
@@ -201,10 +193,9 @@ void draw() {
   //Tutorial?
   if (showTutorial > 0) {
     drawTutorial();
-  }
-  else if(millis() > transition4){
+  }else{
     drawHeader();
-    drawLabels();
+    drawLabels();  
   }
 
   //Logo

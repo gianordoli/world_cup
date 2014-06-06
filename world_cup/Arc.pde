@@ -86,18 +86,6 @@ class Arc{
   }
   
   void display(int i){
-    //TRANSITION
-    float currAngle = 0;
-    float alpha = 0;
-    if(millis() < transition2){
-      currAngle = map(transition2 - millis(), interval, 0, startAngle, endAngle);
-      currAngle = constrain(currAngle, 0, endAngle);
-      alpha = map(transition1 - millis(), interval, 0, 0, 255);
-      alpha = constrain(alpha, 0, 255);
-    }else{
-      currAngle = endAngle;
-      alpha = 255;
-    }
     
     color newColor = thisCountry.myColor;
     if(isOver){
@@ -114,7 +102,7 @@ class Arc{
       stroke(newColor);
       strokeWeight(arcWeight);
       strokeCap(SQUARE);
-      arc(0, 0, radius*2, radius*2, startAngle, currAngle);
+      arc(0, 0, radius*2, radius*2, startAngle, endAngle);
       
       float angle = (endAngle + startAngle)/2;
       float direction = 1;
@@ -155,7 +143,7 @@ class Arc{
         textAlign(CENTER, CENTER);
         textFont(archivoNarrow);
         textSize(14);      
-        fill(0, alpha);
+        fill(0);
         text(thisCountry.abbreviation.toUpperCase(), 0, 0);
         
         //NUMBER

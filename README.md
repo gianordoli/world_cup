@@ -2,7 +2,11 @@
 -------------------------------------------------------------------
 ## Visualization of the World Cup 2014: Teams vs Clubs
 2014, for Galileu Magazine, Brazil<br>
-Both print and [online](http://revistagalileu.globo.com/Multimidia/Infograficos/noticia/2014/06/copa-da-europa.html)
+Both print...
+![Print](https://github.com/gianordoli/world_cup/blob/master/img/world_cup_print.png)
+
+...and [online](http://revistagalileu.globo.com/Multimidia/Infograficos/noticia/2014/06/copa-da-europa.html):
+
 
 * **Visualization**: Gabriel Gianordoli 
 * **Design:** Gabriela Oliveira and Fábio Dias

@@ -6,6 +6,7 @@ Both print...
 ![Print](https://raw.githubusercontent.com/gianordoli/world_cup/master/img/world_cup_print.png)
 
 ...and [online](http://revistagalileu.globo.com/Multimidia/Infograficos/noticia/2014/06/copa-da-europa.html):
+![Web](https://raw.githubusercontent.com/gianordoli/world_cup/master/img/world_cup_web.png)
 
 
 * **Visualization**: Gabriel Gianordoli 

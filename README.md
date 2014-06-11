@@ -1,7 +1,7 @@
 # Copa da Europa? / European Cup?
 -------------------------------------------------------------------
 ## Visualization of the World Cup 2014: Teams vs Clubs
-2014, for Galileu Magazine, Brazil
+2014, for Galileu Magazine, Brazil<br>
 Both print and [online](http://revistagalileu.globo.com/Multimidia/Infograficos/noticia/2014/06/copa-da-europa.html)
 
 * **Visualization**: Gabriel Gianordoli 
